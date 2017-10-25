@@ -4,7 +4,7 @@
 
 ## Installation
 
-The package can be installed by adding `map_sorter` to your list of
+The package can be installed by adding `:map_sorter` to your list of
 dependencies in `mix.exs`:
 
 ```elixir
@@ -49,8 +49,10 @@ people = [
 MapSorter.sort(people, asc: :dob, desc: :likes)
 ```
 
-The above code will sort `people` as follows:
+The above code will sort `people` ascendingly by `:dob` and
+descendingly by `:likes` as follows:
 
+```elixir
 [
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
   %{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
@@ -60,3 +62,4 @@ The above code will sort `people` as follows:
   %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
   %{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
 ]
+```
