@@ -6,12 +6,12 @@ defmodule MapSorter do
   require Logger
 
   @doc """
-  Takes a list of maps and either a list of sort specs or an AST
-  that will evaluate to a list of sort specs at runtime.
+  Takes a list of `maps` and either a list of `sort specs` or an AST
+  that will evaluate to a list of `sort specs` at runtime.
 
-  Returns the AST to sort the maps per the sort specs.
+  Returns the AST to sort the `maps` per the `sort specs`.
 
-  Sort specs can be implicit, explicit or mixed:
+  'sort specs` can be implicit, explicit or mixed:
 
     - [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
     - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]

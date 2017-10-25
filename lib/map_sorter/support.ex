@@ -10,9 +10,9 @@ defmodule MapSorter.Support do
   @type sort_spec :: Map.key | {sort_dir, Map.key}
 
   @doc """
-  Takes a list of sort specs (ascending/descending map keys).
+  Takes a list of `sort specs` (ascending/descending map keys).
 
-  Returns the AST of a sort function based on the given sort specs
+  Returns the AST of a sort function based on the given `sort specs`
   allowing to sort a list of maps (compile time expansion).
 
   The sort function must compare two maps and return true
@@ -21,7 +21,7 @@ defmodule MapSorter.Support do
   **Or:**
 
   Takes the AST of an expression that should evaluate at runtime
-  to a list of sort specs (ascending/descending map keys).
+  to a list of `sort specs` (ascending/descending map keys).
 
   Returns the AST of a function call to evaluate the sort function
   at runtime (compile time injection).
@@ -84,7 +84,7 @@ defmodule MapSorter.Support do
   end
 
   @doc """
-  Takes a list of sort specs (ascending/descending map keys).
+  Takes a list of `sort specs` (ascending/descending map keys).
 
   Returns the sort function which should compare two maps
   and return true if the first map precedes the second one.
@@ -119,9 +119,13 @@ defmodule MapSorter.Support do
 
   @spec cond_fun([sort_spec]) :: String.t
   defp cond_fun(sort_specs) do
+    cond_clauses =
+      sort_specs
+      |> Enum.map_join(&cond_clauses/1)
+      |> String.trim_trailing()
     here_doc = """
       & cond do
-      #{sort_specs |> Enum.map_join(&cond_clauses/1) |> String.trim_trailing()}
+      #{cond_clauses}
       true -> true
       end
       """
