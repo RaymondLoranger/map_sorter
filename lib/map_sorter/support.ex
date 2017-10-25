@@ -86,8 +86,8 @@ defmodule MapSorter.Support do
   @doc """
   Takes a list of `sort specs` (ascending/descending map keys).
 
-  Returns the sort function which should compare two maps
-  and return true if the first map precedes the second one.
+  Returns a sort function based on the given `sort specs` comparing two
+  maps and returning true if the first map precedes the second one.
 
   ## Examples
 
