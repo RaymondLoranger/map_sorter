@@ -10,7 +10,7 @@ dependencies in `mix.exs`:
 ```elixir
 def deps() do
   [
-    {:map_sorter, "~> 0.1.0"}
+    {:map_sorter, "~> 0.1"}
   ]
 end
 ```
