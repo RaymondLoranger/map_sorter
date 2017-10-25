@@ -5,9 +5,9 @@ defmodule MapSorter.Support do
 
   require Logger
 
-  @type sort_attr :: :asc | :desc
+  @type sort_dir :: :asc | :desc
   @type sort_fun :: (map, map -> boolean)
-  @type sort_spec :: Map.key | {sort_attr, Map.key}
+  @type sort_spec :: Map.key | {sort_dir, Map.key}
 
   @doc """
   Takes a list of sort specs (ascending/descending map keys).
