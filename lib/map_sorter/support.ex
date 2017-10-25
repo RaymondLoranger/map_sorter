@@ -113,7 +113,10 @@ defmodule MapSorter.Support do
   @spec eval_sort_fun([sort_spec]) :: sort_fun
   def eval_sort_fun(sort_specs) when is_list(sort_specs) do
     Logger.debug("running: eval_sort_fun(#{inspect sort_specs})...")
-    {sort_fun, []} = sort_specs |> cond_fun() |> Code.eval_string()
+    {sort_fun, []} =
+      sort_specs
+      |> cond_fun()
+      |> Code.eval_string()
     sort_fun
   end
 
@@ -123,13 +126,14 @@ defmodule MapSorter.Support do
       sort_specs
       |> Enum.map_join(&cond_clauses/1)
       |> String.trim_trailing()
-    here_doc = """
+    here_doc =
+      """
       & cond do
       #{cond_clauses}
       true -> true
       end
       """
-    Logger.debug here_doc
+    Logger.debug(here_doc)
     here_doc
   end
 
