@@ -8,7 +8,7 @@ The package can be installed by adding `:map_sorter` to your list of
 dependencies in `mix.exs`:
 
 ```elixir
-def deps do
+def deps() do
   [
     {:map_sorter, "~> 0.1.0"}
   ]
