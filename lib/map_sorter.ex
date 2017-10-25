@@ -11,7 +11,7 @@ defmodule MapSorter do
 
   Returns the AST to sort the `maps` per the `sort specs`.
 
-  'sort specs` can be implicit, explicit or mixed:
+  `sort specs` can be implicit, explicit or mixed:
 
     - [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
     - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
@@ -62,7 +62,7 @@ defmodule MapSorter do
   end
 
   @doc """
-  Allows to change the log level at compile time.
+  Allows to change the log `level` at compile time.
   """
   defmacro log_level(level), do: Logger.configure(level: level)
 end
