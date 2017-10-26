@@ -31,9 +31,9 @@ Returns the AST to sort the `maps`¹ as per the `sort specs`.
 
 `sort specs` can be implicit, explicit or mixed:
 
-- [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
-- [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
-- [asc: :dob, desc: :name] is explicit
+- [:dob, :name] is <em>implicit</em> ⇒ [asc: :dob, asc: :name]
+- [:dob, desc: :name] is <em>mixed</em> ⇒ [asc: :dob, desc: :name]
+- [asc: :dob, desc: :name] is <em>explicit</em>
 
 ¹<em>Also keywords or structures implementing the Access behaviour.</em>
 
