@@ -5,21 +5,10 @@ defmodule Person do
 
   defstruct [:name, :likes, :dob]
 
-  def fetch(person, key) do
-    Map.fetch(person, key)
-  end
-
-  def get(person, key, default \\ nil) do
-    Map.get(person, key, default)
-  end
-
-  def get_and_update(person, key, fun) do
-    Map.get_and_update(person, key, fun)
-  end
-
-  def pop(person, key) do
-    Map.pop(person, key)
-  end
+  defdelegate fetch(person, key), to: Map
+  defdelegate get(person, key, default), to: Map
+  defdelegate get_and_update(person, key, fun), to: Map
+  defdelegate pop(person, key), to: Map
 end
 
 defmodule MapSorterTest do
