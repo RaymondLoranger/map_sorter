@@ -3,7 +3,7 @@ defmodule MapSorter do
   Sorts a list of `maps`¹ as per a list of `sort specs`
   (ascending/descending keys).
 
-  ¹__Also keywords or structures implementing the Access behaviour.__
+  ¹_Also keywords or structures implementing the Access behaviour._
   """
 
   require Logger
@@ -20,7 +20,7 @@ defmodule MapSorter do
   - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
   - [asc: :dob, desc: :name] is explicit
 
-  ¹__Also keywords or structures implementing the Access behaviour.__
+  ¹_Also keywords or structures implementing the Access behaviour._
 
   ## Examples
 

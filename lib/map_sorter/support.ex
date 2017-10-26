@@ -26,7 +26,7 @@ defmodule MapSorter.Support do
   Returns the AST of a function call to evaluate the sort function
   at runtime (compile time injection).
 
-  ¹__Also keywords or structures implementing the Access behaviour.__
+  ¹_Also keywords or structures implementing the Access behaviour._
 
   ## Examples
 
@@ -91,7 +91,7 @@ defmodule MapSorter.Support do
   Returns a sort function based on the given `sort specs` that compares
   two `maps`¹ and returns true if the first `map` precedes the second one.
 
-  ¹__Also keywords or structures implementing the Access behaviour.__
+  ¹_Also keywords or structures implementing the Access behaviour._
 
   ## Examples
 

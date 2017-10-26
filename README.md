@@ -3,7 +3,7 @@
 Sorts a list of `maps`¹ as per a list of sort specs
 (ascending/descending keys).
 
-¹__Also keywords or structures implementing the Access behaviour.__
+¹<em>Also keywords or structures implementing the Access behaviour.</em>
 ## Installation
 
 The package can be installed by adding `:map_sorter` to your list of
@@ -34,6 +34,8 @@ Returns the AST to sort the `maps`¹ as per the `sort specs`.
 - [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
 - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
 - [asc: :dob, desc: :name] is explicit
+
+¹<em>Also keywords or structures implementing the Access behaviour.</em>
 
 ## Examples
 
