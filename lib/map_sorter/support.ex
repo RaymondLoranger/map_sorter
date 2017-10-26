@@ -10,18 +10,18 @@ defmodule MapSorter.Support do
   @type sort_spec :: Map.key | {sort_dir, Map.key}
 
   @doc """
-  Takes a list of `sort specs` (ascending/descending map keys).
+  Takes a list of `sort specs` (ascending/descending keys).
 
   Returns the AST of a sort function based on the given `sort specs`
   allowing to sort a list of maps (compile time expansion).
 
-  The sort function compares two maps and returns true
+  The sort function will compare two maps and return true
   if the first map precedes the second one.
 
   **Or:**
 
   Takes the AST of an expression that will evaluate at runtime
-  to a list of `sort specs` (ascending/descending map keys).
+  to a list of `sort specs` (ascending/descending keys).
 
   Returns the AST of a function call to evaluate the sort function
   at runtime (compile time injection).
@@ -84,7 +84,7 @@ defmodule MapSorter.Support do
   end
 
   @doc """
-  Takes a list of `sort specs` (ascending/descending map keys).
+  Takes a list of `sort specs` (ascending/descending keys).
 
   Returns a sort function based on the given `sort specs` that compares
   two maps and returns true if the first map precedes the second one.
