@@ -1,7 +1,9 @@
 # Map Sorter
 
-Generates the AST to sort maps as per sort specs (ascending/descending keys).
+Sorts a list of `maps`¹ as per a list of sort specs
+(ascending/descending keys).
 
+¹_Also keywords or structures implementing the Access behaviour._
 ## Installation
 
 The package can be installed by adding `:map_sorter` to your list of
@@ -22,10 +24,10 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-Takes a list of `maps` and either a list of `sort specs` or an AST
+Takes a list of `maps`¹ and either a list of `sort specs` or an AST
 that will evaluate to a list of `sort specs` at runtime.
 
-Returns the AST to sort the `maps` as per the `sort specs`.
+Returns the AST to sort the `maps`¹ as per the `sort specs`.
 
 `sort specs` can be implicit, explicit or mixed:
 
