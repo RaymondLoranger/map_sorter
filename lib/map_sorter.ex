@@ -1,6 +1,6 @@
 defmodule MapSorter do
   @moduledoc """
-  Generates the AST to sort maps per sort specs (ascending/descending keys).
+  Generates the AST to sort maps as per sort specs (ascending/descending keys).
   """
 
   require Logger
@@ -9,13 +9,13 @@ defmodule MapSorter do
   Takes a list of `maps` and either a list of `sort specs` or an AST
   that will evaluate to a list of `sort specs` at runtime.
 
-  Returns the AST to sort the `maps` per the `sort specs`.
+  Returns the AST to sort the `maps` as per the `sort specs`.
 
   `sort specs` can be implicit, explicit or mixed:
 
-    - [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
-    - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
-    - [asc: :dob, desc: :name] is explicit
+      - [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
+      - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
+      - [asc: :dob, desc: :name] is explicit
 
   ## Examples
 

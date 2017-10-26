@@ -1,6 +1,6 @@
 defmodule MapSorter.Support do
   @moduledoc """
-  Generates a sort function from sort specs allowing to sort maps.
+  Generates a sort function from a list of sort specs.
   """
 
   require Logger
@@ -15,12 +15,12 @@ defmodule MapSorter.Support do
   Returns the AST of a sort function based on the given `sort specs`
   allowing to sort a list of maps (compile time expansion).
 
-  The sort function must compare two maps and return true
+  The sort function compares two maps and returns true
   if the first map precedes the second one.
 
   **Or:**
 
-  Takes the AST of an expression that should evaluate at runtime
+  Takes the AST of an expression that will evaluate at runtime
   to a list of `sort specs` (ascending/descending map keys).
 
   Returns the AST of a function call to evaluate the sort function
@@ -86,8 +86,8 @@ defmodule MapSorter.Support do
   @doc """
   Takes a list of `sort specs` (ascending/descending map keys).
 
-  Returns a sort function based on the given `sort specs` comparing two
-  maps and returning true if the first map precedes the second one.
+  Returns a sort function based on the given `sort specs` that compares
+  two maps and returns true if the first map precedes the second one.
 
   ## Examples
 

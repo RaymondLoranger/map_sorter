@@ -1,6 +1,6 @@
 # Map Sorter
 
-**Generates the AST to sort maps per sort specs (ascending/descending keys).**
+Generates the AST to sort maps as per sort specs (ascending/descending keys).
 
 ## Installation
 
@@ -25,7 +25,7 @@ MapSorter.sort(maps, sort_specs)
 Takes a list of `maps` and either a list of `sort specs` or an AST
 that will evaluate to a list of `sort specs` at runtime.
 
-Returns the AST to sort the `maps` per the `sort specs`.
+Returns the AST to sort the `maps` as per the `sort specs`.
 
 `sort specs` can be implicit, explicit or mixed:
 
