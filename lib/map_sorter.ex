@@ -16,9 +16,9 @@ defmodule MapSorter do
 
   `sort specs` can be implicit, explicit or mixed:
 
-  - [:dob, :name] is implicit ⇒ [asc: :dob, asc: :name]
-  - [:dob, desc: :name] is mixed ⇒ [asc: :dob, desc: :name]
-  - [asc: :dob, desc: :name] is explicit
+  - [:dob, :name] is _implicit_ ⇒ [asc: :dob, asc: :name]
+  - [:dob, desc: :name] is _mixed_ ⇒ [asc: :dob, desc: :name]
+  - [asc: :dob, desc: :name] is _explicit_
 
   ¹_Also keywords or structures implementing the Access behaviour._
 
