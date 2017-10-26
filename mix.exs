@@ -22,7 +22,10 @@ defmodule MapSorter.Mixfile do
 
   defp description() do
     """
-    Generates the AST to sort maps per sort specs (ascending/descending keys).
+    Sorts a list of `maps`¹ as per a list of `sort specs`
+    (ascending/descending keys).
+
+    ¹_Also keywords or structures implementing the Access behaviour._
     """
   end
 
