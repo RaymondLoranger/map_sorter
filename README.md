@@ -3,7 +3,7 @@
 Sorts a list of `maps`¹ as per a list of sort specs
 (ascending/descending keys).
 
-¹<em>Also keywords or structures implementing the Access behaviour.</em>
+¹<em>Or keywords or structures implementing the Access behaviour.</em>
 ## Installation
 
 The package can be installed by adding `:map_sorter` to your list of
@@ -31,11 +31,11 @@ Returns the AST to sort the `maps`¹ as per the `sort specs`.
 
 `sort specs` can be implicit, explicit or mixed:
 
-- [:dob, :name] is <em>implicit</em> ⇒ [asc: :dob, asc: :name]
-- [:dob, desc: :name] is <em>mixed</em> ⇒ [asc: :dob, desc: :name]
+- [:dob, :name] is <em>implicit</em> and same as [asc: :dob, asc: :name]
+- [:dob, desc: :name] is <em>mixed</em> and like [asc: :dob, desc: :name]
 - [asc: :dob, desc: :name] is <em>explicit</em>
 
-¹<em>Also keywords or structures implementing the Access behaviour.</em>
+¹<em>Or keywords or structures implementing the Access behaviour.</em>
 
 ## Examples
 
@@ -48,9 +48,9 @@ people = [
   %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
   %{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
-  %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
-]
-MapSorter.sort(people, asc: :dob, desc: :likes)
+  %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}and
+and like
+MapSorter.sort(people, asc: :dob, dessame as: :likes)
 ```
 
 The above code will sort `people` ascendingly by `:dob` and

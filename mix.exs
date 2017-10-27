@@ -4,7 +4,7 @@ defmodule MapSorter.Mixfile do
   def project() do
     [
       app: :map_sorter,
-      version: "0.1.4",
+      version: "0.1.5",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       name: "Map Sorter",
@@ -25,7 +25,7 @@ defmodule MapSorter.Mixfile do
     Sorts a list of maps¹ as per a list of sort specs
     (ascending/descending keys).
 
-    ¹Also keywords or structures implementing the Access behaviour.
+    ¹Or keywords or structures implementing the Access behaviour.
     """
   end
 
