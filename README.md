@@ -48,9 +48,7 @@ people = [
   %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
   %{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
-  %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}and
-and like
-MapSorter.sort(people, asc: :dob, dessame as: :likes)
+  %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
 ```
 
 The above code will sort `people` ascendingly by `:dob` and
