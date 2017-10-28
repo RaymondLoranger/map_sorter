@@ -49,6 +49,7 @@ people = [
   %{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
+]
 ```
 
 The above code will sort `people` ascendingly by `:dob` and
