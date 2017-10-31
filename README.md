@@ -50,7 +50,7 @@ people = [
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
 ]
-MapSorter.sort(people, asc: :dob, desc: :likes),
+MapSorter.sort(people, asc: :dob, desc: :likes)
 ```
 
 The above code will sort `people` ascendingly by `:dob` and
