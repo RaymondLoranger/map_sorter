@@ -16,15 +16,16 @@ defmodule MapSorter do
 
   `sort specs` can be implicit, explicit or mixed:
 
-  - [:dob, :name] is _implicit_ and same as [asc: :dob, asc: :name]
-  - [:dob, desc: :name] is _mixed_ and like [asc: :dob, desc: :name]
+  - [:dob, :name] is _implicit_ and same as ⟹ [asc: :dob, asc: :name]
+  - [:dob, desc: :name] is _mixed_ and like ⟹ [asc: :dob, desc: :name]
   - [asc: :dob, desc: :name] is _explicit_
 
   ¹_Or keywords or structures implementing the Access behaviour._
 
   ## Examples
 
-      iex> require MapSorter ### sorting maps...
+      iex> # Sorting maps...
+      iex> require MapSorter
       iex> people = [
       ...>   %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
       ...>   %{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
@@ -34,16 +35,16 @@ defmodule MapSorter do
       ...>   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
       ...>   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
       ...> ]
-      iex> MapSorter.log_level(:info) # :debug ⇒ debug messages
       iex> fun = & &1
+      iex> MapSorter.log_level(:info) # :debug ⟹ debug messages
       iex> sorted = %{
       ...>   explicit: MapSorter.sort(people, asc: :dob, desc: :likes),
-      ...>   implicit: MapSorter.sort(people, [:dob, desc: :likes]),
-      ...>   function: MapSorter.sort(people, fun.([:dob, desc: :likes]))
+      ...>   mixed:    MapSorter.sort(people, [:dob, desc: :likes]),
+      ...>   runtime:  MapSorter.sort(people, fun.([:dob, desc: :likes]))
       ...> }
-      iex> MapSorter.log_level(:info) # :info ⇒ no debug messages
-      iex> sorted.explicit == sorted.implicit and
-      ...> sorted.explicit == sorted.function and
+      iex> MapSorter.log_level(:info) # :info ⟹ no debug messages
+      iex> sorted.explicit == sorted.mixed and
+      ...> sorted.explicit == sorted.runtime and
       ...> sorted.explicit
       [
         %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
@@ -55,7 +56,8 @@ defmodule MapSorter do
         %{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
       ]
 
-      iex> require MapSorter ### sorting keywords...
+      iex> # Sorting keywords...
+      iex> require MapSorter
       iex> people = [
       ...>   [name: "Mike", likes: "ski, arts", dob: "1992-04-15"],
       ...>   [name: "Mary", likes: "travels"  , dob: "1992-04-15"],
@@ -65,16 +67,16 @@ defmodule MapSorter do
       ...>   [name: "Joe" , likes: "boxing"   , dob: "1977-08-28"],
       ...>   [name: "Jill", likes: "cooking"  , dob: "1976-09-28"]
       ...> ]
-      iex> MapSorter.log_level(:info) # :debug ⇒ debug messages
       iex> fun = & &1
+      iex> MapSorter.log_level(:info) # :debug ⟹ debug messages
       iex> sorted = %{
       ...>   explicit: MapSorter.sort(people, asc: :dob, desc: :name),
-      ...>   implicit: MapSorter.sort(people, [:dob, desc: :name]),
-      ...>   function: MapSorter.sort(people, fun.([:dob, desc: :name]))
+      ...>   mixed:    MapSorter.sort(people, [:dob, desc: :name]),
+      ...>   runtime:  MapSorter.sort(people, fun.([:dob, desc: :name]))
       ...> }
-      iex> MapSorter.log_level(:info) # :info ⇒ no debug messages
-      iex> sorted.explicit == sorted.implicit and
-      ...> sorted.explicit == sorted.function and
+      iex> MapSorter.log_level(:info) # :info ⟹ no debug messages
+      iex> sorted.explicit == sorted.mixed and
+      ...> sorted.explicit == sorted.runtime and
       ...> sorted.explicit
       [
         [name: "Jill", likes: "cooking"  , dob: "1976-09-28"],
@@ -87,7 +89,7 @@ defmodule MapSorter do
       ]
   """
   defmacro sort(maps, sort_specs) do
-    Logger.debug("sort specs: #{inspect sort_specs}...")
+    Logger.debug("sort specs: #{inspect(sort_specs)}...")
     sort_fun_ast =
       case sort_specs do
         specs when is_list(specs) -> specs

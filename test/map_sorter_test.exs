@@ -28,6 +28,7 @@ defmodule MapSorterTest do
       %Person{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
     ]
+    # Sorted ascendingly by :dob and descendingly by :likes
     sorted_people = [
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
       %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},

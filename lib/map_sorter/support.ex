@@ -31,10 +31,12 @@ defmodule MapSorter.Support do
   ## Examples
 
       iex> alias MapSorter.Support
-      iex> Logger.configure(level: :info) # :debug ⇒ debug messages
+      iex> level = :info
+      iex> Logger.configure(level: level) # :debug ⟹ debug messages
       iex> sort_fun_ast = Support.sort_fun_ast([:height, desc: :likes])
-      iex> Logger.configure(level: :info) # :info ⇒ no debug messages
-      iex> here_doc = \"""
+      iex> Logger.configure(level: :info) # :info ⟹ no debug messages
+      iex> here_doc =
+      ...>   \"""
       ...>   & cond do
       ...>   &1[:height] < &2[:height] -> true
       ...>   &1[:height] > &2[:height] -> false
@@ -49,13 +51,15 @@ defmodule MapSorter.Support do
       true
 
       iex> alias MapSorter.Support
-      iex> Logger.configure(level: :info) # :debug ⇒ debug messages
+      iex> level = :info
+      iex> Logger.configure(level: level) # :debug ⟹ debug messages
       iex> {sort_fun, []} =
       iex>   [:weight, desc: :likes]
       ...>   |> Support.sort_fun_ast()
       ...>   |> Code.eval_quoted()
-      iex> Logger.configure(level: :info) # :info ⇒ no debug messages
-      iex> here_doc = \"""
+      iex> Logger.configure(level: :info) # :info ⟹ no debug messages
+      iex> here_doc =
+      ...>   \"""
       ...>   & cond do
       ...>   &1[:weight] < &2[:weight] -> true
       ...>   &1[:weight] > &2[:weight] -> false
@@ -68,10 +72,26 @@ defmodule MapSorter.Support do
       iex> sort_fun == here_fun and
       ...> is_function(sort_fun, 2)
       true
+
+      iex> alias MapSorter.Support
+      iex> level = :info
+      iex> tuple = {:dept, {:desc, :dob}}
+      iex> sort_specs_ast = quote do: Tuple.to_list(unquote(tuple))
+      iex> Logger.configure(level: level) # :debug ⟹ debug messages
+      iex> sort_fun_ast = Support.sort_fun_ast(sort_specs_ast)
+      iex> Logger.configure(level: :info) # :info ⟹ no debug messages
+      iex> {sort_fun, []} = Code.eval_quoted(sort_fun_ast)
+      iex> Logger.configure(level: level) # :debug ⟹ debug messages
+      iex> eval_sort_fun = Support.eval_sort_fun([:dept, desc: :dob])
+      iex> Logger.configure(level: :info) # :info ⟹ no debug messages
+      iex> Tuple.to_list(tuple) == [:dept, desc: :dob] and
+      ...> sort_fun == eval_sort_fun and
+      ...> is_function(sort_fun, 2)
+      true
   """
   @spec sort_fun_ast([sort_spec]) :: {:&, any, any}
   def sort_fun_ast(sort_specs) when is_list(sort_specs) do
-    Logger.debug("expanding: sort_fun_ast(#{inspect sort_specs})...")
+    Logger.debug("expanding: sort_fun_ast(#{inspect(sort_specs)})...")
     {:ok, sort_fun_ast} =
       sort_specs
       |> cond_fun()
@@ -81,7 +101,7 @@ defmodule MapSorter.Support do
 
   @spec sort_fun_ast({any, any, any}) :: {{:., any, any}, any, any}
   def sort_fun_ast(sort_specs_ast) do
-    Logger.debug(":injecting: eval_sort_fun(#{inspect sort_specs_ast})...")
+    Logger.debug("injecting: eval_sort_fun(#{inspect(sort_specs_ast)})...")
     quote do: MapSorter.Support.eval_sort_fun(unquote(sort_specs_ast))
   end
 
@@ -96,9 +116,10 @@ defmodule MapSorter.Support do
   ## Examples
 
       iex> alias MapSorter.Support
-      iex> Logger.configure(level: :info) # :debug ⇒ debug messages
+      iex> level = :info
+      iex> Logger.configure(level: level) # :debug ⟹ debug messages
       iex> sort_fun = Support.eval_sort_fun([:bmi, desc: :likes])
-      iex> Logger.configure(level: :info) # :info ⇒ no debug messages
+      iex> Logger.configure(level: :info) # :info ⟹ no debug messages
       iex> here_doc =
       ...>   \"""
       ...>   & cond do
@@ -116,7 +137,7 @@ defmodule MapSorter.Support do
   """
   @spec eval_sort_fun([sort_spec]) :: sort_fun
   def eval_sort_fun(sort_specs) when is_list(sort_specs) do
-    Logger.debug("running: eval_sort_fun(#{inspect sort_specs})...")
+    Logger.debug("running: eval_sort_fun(#{inspect(sort_specs)})...")
     {sort_fun, []} =
       sort_specs
       |> cond_fun()
@@ -145,15 +166,15 @@ defmodule MapSorter.Support do
 
   defp cond_clauses({:asc, key}) do
     """
-    &1[#{inspect key}] < &2[#{inspect key}] -> true
-    &1[#{inspect key}] > &2[#{inspect key}] -> false
+    &1[#{inspect(key)}] < &2[#{inspect(key)}] -> true
+    &1[#{inspect(key)}] > &2[#{inspect(key)}] -> false
     """
   end
 
   defp cond_clauses({:desc, key}) do
     """
-    &1[#{inspect key}] > &2[#{inspect key}] -> true
-    &1[#{inspect key}] < &2[#{inspect key}] -> false
+    &1[#{inspect(key)}] > &2[#{inspect(key)}] -> true
+    &1[#{inspect(key)}] < &2[#{inspect(key)}] -> false
     """
   end
 
