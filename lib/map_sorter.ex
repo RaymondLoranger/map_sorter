@@ -1,91 +1,53 @@
 defmodule MapSorter do
   @moduledoc """
-  Sorts a list of `maps`¹ as per a list of `sort specs`
+  Sorts a list of `maps` as per a list of `sort specs`
   (ascending/descending keys).
 
-  ¹_Or keywords or structures implementing the Access behaviour._
+  Also works for keywords or structures implementing the Access behaviour.
   """
 
   require Logger
 
   @doc """
-  Takes a list of `maps`¹ and either a list of `sort specs` or an AST
-  that will evaluate to a list of `sort specs` at runtime.
-
-  Returns the AST to sort the `maps`¹ as per the `sort specs`.
+  Sorts the `maps` as per the `sort specs` (compile time or runtime).
 
   `sort specs` can be implicit, explicit or mixed:
 
-  - [:dob, :name] is _implicit_ and same as => [asc: :dob, asc: :name]
-  - [:dob, desc: :name] is _mixed_ and like => [asc: :dob, desc: :name]
-  - [asc: :dob, desc: :name] is _explicit_
-
-  ¹_Or keywords or structures implementing the Access behaviour._
+  - [:dob, :name]            - _implicit_ ≡ [_asc:_ :dob, _asc:_ :name]
+  - [:dob, desc: :name]      - _mixed_    ≡ [_asc:_ :dob, desc: :name]
+  - [asc: :dob, desc: :name] - _explicit_
 
   ## Examples
 
-      iex> # Sorting maps...
       iex> require MapSorter
       iex> people = [
-      ...>   %{name: "Mike", likes: {:ski, :arts}, dob: ~D[1992-04-15]},
-      ...>   %{name: "Mary", likes: ["travels"]  , dob: ~D[1992-04-15]},
-      ...>   %{name: "Ann" , likes: ['reading']  , dob: ~D[1992-04-15]},
-      ...>   %{name: "Ray" , likes: ["cycling"]  , dob: ~D[1977-08-28]},
-      ...>   %{name: "Bill", likes: ["karate"]   , dob: ~D[1977-08-28]},
-      ...>   %{name: "Joe" , likes: ["boxing"]   , dob: ~D[1977-08-28]},
-      ...>   %{name: "Jill", likes: ["cooking"]  , dob: ~D[1976-09-28]}
+      ...>   %{name: "Mike", likes: "movies" , dob: ~D[1992-04-15]},
+      ...>   %{name: "Mary", likes: "travels", dob: ~D[1992-04-15]},
+      ...>   %{name: "Ann" , likes: "reading", dob: ~D[1992-04-15]},
+      ...>   %{name: "Ray" , likes: "cycling", dob: ~D[1977-08-28]},
+      ...>   %{name: "Bill", likes: "karate" , dob: ~D[1977-08-28]},
+      ...>   %{name: "Joe" , likes: "boxing" , dob: ~D[1977-08-28]},
+      ...>   %{name: "Jill", likes: "cooking", dob: ~D[1976-09-28]}
       ...> ]
       iex> fun = & &1
-      iex> MapSorter.log_level(:info) # :debug => debug messages
+      iex> MapSorter.log_level(:info) # :debug → debug messages
       iex> sorted = %{
       ...>   explicit: MapSorter.sort(people, asc: :dob, desc: :likes),
       ...>   mixed:    MapSorter.sort(people, [:dob, desc: :likes]),
       ...>   runtime:  MapSorter.sort(people, fun.([:dob, desc: :likes]))
       ...> }
-      iex> MapSorter.log_level(:info) # :info => no debug messages
+      iex> MapSorter.log_level(:info) # :info → no debug messages
       iex> sorted.explicit == sorted.mixed and
       ...> sorted.explicit == sorted.runtime and
       ...> sorted.explicit
       [
-        %{name: "Jill", likes: ["cooking"]  , dob: ~D[1976-09-28]},
-        %{name: "Bill", likes: ["karate"]   , dob: ~D[1977-08-28]},
-        %{name: "Ray" , likes: ["cycling"]  , dob: ~D[1977-08-28]},
-        %{name: "Joe" , likes: ["boxing"]   , dob: ~D[1977-08-28]},
-        %{name: "Mary", likes: ["travels"]  , dob: ~D[1992-04-15]},
-        %{name: "Ann" , likes: ['reading']  , dob: ~D[1992-04-15]},
-        %{name: "Mike", likes: {:ski, :arts}, dob: ~D[1992-04-15]}
-      ]
-
-      iex> # Sorting keywords...
-      iex> require MapSorter
-      iex> people = [
-      ...>   [name: "Mike", likes: {:ski, :arts}, dob: ~D[1992-04-15]],
-      ...>   [name: "Mary", likes: ["travels"]  , dob: ~D[1992-04-15]],
-      ...>   [name: "Ann" , likes: ['reading']  , dob: ~D[1992-04-15]],
-      ...>   [name: "Ray" , likes: ["cycling"]  , dob: ~D[1977-08-28]],
-      ...>   [name: "Bill", likes: ["karate"]   , dob: ~D[1977-08-28]],
-      ...>   [name: "Joe" , likes: ["boxing"]   , dob: ~D[1977-08-28]],
-      ...>   [name: "Jill", likes: ["cooking"]  , dob: ~D[1976-09-28]]
-      ...> ]
-      iex> fun = & &1
-      iex> MapSorter.log_level(:info) # :debug => debug messages
-      iex> sorted = %{
-      ...>   explicit: MapSorter.sort(people, asc: :dob, desc: :name),
-      ...>   mixed:    MapSorter.sort(people, [:dob, desc: :name]),
-      ...>   runtime:  MapSorter.sort(people, fun.([:dob, desc: :name]))
-      ...> }
-      iex> MapSorter.log_level(:info) # :info => no debug messages
-      iex> sorted.explicit == sorted.mixed and
-      ...> sorted.explicit == sorted.runtime and
-      ...> sorted.explicit
-      [
-        [name: "Jill", likes: ["cooking"]  , dob: ~D[1976-09-28]],
-        [name: "Ray" , likes: ["cycling"]  , dob: ~D[1977-08-28]],
-        [name: "Joe" , likes: ["boxing"]   , dob: ~D[1977-08-28]],
-        [name: "Bill", likes: ["karate"]   , dob: ~D[1977-08-28]],
-        [name: "Mike", likes: {:ski, :arts}, dob: ~D[1992-04-15]],
-        [name: "Mary", likes: ["travels"]  , dob: ~D[1992-04-15]],
-        [name: "Ann" , likes: ['reading']  , dob: ~D[1992-04-15]]
+        %{name: "Jill", likes: "cooking", dob: ~D[1976-09-28]},
+        %{name: "Bill", likes: "karate" , dob: ~D[1977-08-28]},
+        %{name: "Ray" , likes: "cycling", dob: ~D[1977-08-28]},
+        %{name: "Joe" , likes: "boxing" , dob: ~D[1977-08-28]},
+        %{name: "Mary", likes: "travels", dob: ~D[1992-04-15]},
+        %{name: "Ann" , likes: "reading", dob: ~D[1992-04-15]},
+        %{name: "Mike", likes: "movies" , dob: ~D[1992-04-15]}
       ]
   """
   defmacro sort(maps, sort_specs) do
