@@ -1,9 +1,10 @@
 # Map Sorter
 
-Sorts a list of `maps`¹ as per a list of sort specs
+Sorts a list of `maps` as per a list of sort specs
 (ascending/descending keys).
 
-¹<em>Or keywords or structures implementing the Access behaviour.</em>
+Also works for keywords or structures implementing the Access behaviour.
+
 ## Installation
 
 The package can be installed by adding `:map_sorter` to your list of
@@ -24,18 +25,13 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-Takes a list of `maps`¹ and either a list of `sort specs` or an AST
-that will evaluate to a list of `sort specs` at runtime.
+Sorts the `maps` as per the `sort specs` (compile time or runtime).
 
-Returns the AST to sort the `maps`¹ as per the `sort specs`.
+  `sort specs` can be implicit, explicit or mixed:
 
-`sort specs` can be implicit, explicit or mixed:
-
-- [:dob, :name] is <em>implicit</em> and same as => [asc: :dob, asc: :name]
-- [:dob, desc: :name] is <em>mixed</em> and like => [asc: :dob, desc: :name]
-- [asc: :dob, desc: :name] is <em>explicit</em>
-
-¹<em>Or keywords or structures implementing the Access behaviour.</em>
+  - [:dob, :name]            - _implicit_ ≡ [_asc:_ :dob, _asc:_ :name]
+  - [:dob, desc: :name]      - _mixed_    ≡ [_asc:_ :dob, desc: :name]
+  - [asc: :dob, desc: :name] - _explicit_
 
 ## Examples
 
