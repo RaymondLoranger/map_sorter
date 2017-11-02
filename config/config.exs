@@ -8,12 +8,12 @@ config :elixir, ansi_enabled: true
 # Comment out the following line to compile debug messages...
 config :logger, compile_time_purge_level: :info # → purges debug messages
 
-config :logger, level: :info # ⟹ prevents runtime debug messages
+config :logger, level: :info # → prevents runtime debug messages
 
 # Listed by ascending log level...
 config :logger, :console, colors: [
   debug: :light_cyan,
-  info: :light_green,
-  warn: :light_yellow,
+  info:  :light_green,
+  warn:  :light_yellow,
   error: :light_red
 ]
