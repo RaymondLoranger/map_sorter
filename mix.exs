@@ -4,7 +4,7 @@ defmodule MapSorter.Mixfile do
   def project() do
     [
       app: :map_sorter,
-      version: "0.1.9",
+      version: "0.1.10",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       name: "Map Sorter",
