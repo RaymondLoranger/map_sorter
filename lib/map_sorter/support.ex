@@ -86,7 +86,6 @@ defmodule MapSorter.Support do
   end
 
   @spec cond_clauses_doc(sort_spec) :: String.t
-
   defp cond_clauses_doc({:asc, key}) do
     key = inspect(key)
     """
@@ -94,7 +93,6 @@ defmodule MapSorter.Support do
     &1[#{key}] > &2[#{key}] -> false
     """
   end
-
   defp cond_clauses_doc({:desc, key}) do
     key = inspect(key)
     """
@@ -102,7 +100,6 @@ defmodule MapSorter.Support do
     &1[#{key}] < &2[#{key}] -> false
     """
   end
-
   defp cond_clauses_doc(key), do: cond_clauses_doc({:asc, key})
 
   @doc """
