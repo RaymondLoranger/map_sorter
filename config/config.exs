@@ -6,7 +6,7 @@ use Mix.Config
 config :elixir, ansi_enabled: true
 
 # Comment out the following line to compile debug messages...
-config :logger, compile_time_purge_level: :info # ⟹ purges debug messages
+config :logger, compile_time_purge_level: :info # → purges debug messages
 
 config :logger, level: :info # ⟹ prevents runtime debug messages
 
