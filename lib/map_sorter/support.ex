@@ -122,7 +122,7 @@ defmodule MapSorter.Support do
   @spec adapt(String.t) :: String.t
   def adapt(string) do
     # &1[~D[2017-11-02]] < &2[~D[2017-11-02]] -> true
-    regex = ~r/(&[12]\[.+?])( +[><-])/
+    regex = ~r/(&[12]\[.+?])( +[<>-])/
     String.replace(string, regex, "MapSorter.Support.sortable(\\1)\\2")
   end
 
