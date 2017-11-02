@@ -105,7 +105,6 @@ defmodule MapSorterTest do
       mixed_bags = setup.mixed_bags
       sort_specs = setup.mixed_bags_sort_specs
       sorted_mixed_bags = setup.sorted_mixed_bags
-      sorted = MapSorter.sort(mixed_bags, sort_specs)
       assert MapSorter.sort(mixed_bags, sort_specs) == sorted_mixed_bags
     end
   end
