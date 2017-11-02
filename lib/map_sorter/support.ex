@@ -7,7 +7,7 @@ defmodule MapSorter.Support do
 
   @type sort_dir :: :asc | :desc
   @type sort_fun :: (map, map -> boolean)
-  @type sort_spec :: Map.key | {sort_dir, Map.key}
+  @type sort_spec :: any | {sort_dir, any}
 
   @doc """
   Takes a list of `sort specs` (ascending/descending keys).
