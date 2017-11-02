@@ -22,10 +22,10 @@ defmodule MapSorter.Mixfile do
 
   defp description() do
     """
-    Sorts a list of maps¹ as per a list of sort specs
+    Sorts a list of maps as per a list of sort specs
     (ascending/descending keys).
 
-    ¹Or keywords or structures implementing the Access behaviour.
+    Also works for keywords or structures implementing the Access behaviour.
     """
   end
 
