@@ -29,7 +29,7 @@ defmodule MapSorterTest do
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
     ]
     people_sort_specs = [asc: :dob, desc: :likes]
-    sorted_people = [
+    people_sorted = [
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
       %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
       %Person{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
@@ -48,7 +48,7 @@ defmodule MapSorterTest do
       [name: "Jill", likes: "cooking"  , dob: "1976-09-28"]
     ]
     keywords_sort_specs = [asc: :dob, desc: :likes]
-    sorted_keywords = [
+    keywords_sorted = [
       [name: "Jill", likes: "cooking"  , dob: "1976-09-28"],
       [name: "Bill", likes: "karate"   , dob: "1977-08-28"],
       [name: "Ray" , likes: "cycling"  , dob: "1977-08-28"],
@@ -65,7 +65,7 @@ defmodule MapSorterTest do
       %{{1.0} => {"5"}, ['2'] => ['5'], ~D[2003-03-03] => ~T[14:30:55]}
     ]
     mixed_bags_sort_specs = [desc: ~D[2003-03-03], desc: {1.0}]
-    sorted_mixed_bags = [
+    mixed_bags_sorted = [
       %{{1.0} => {"5"}, ['2'] => ['5'], ~D[2003-03-03] => ~T[14:30:55]},
       %{{1.0} => {"4"}, ['2'] => ['4'], ~D[2003-03-03] => ~T[14:30:52]},
       %{{1.0} => {"3"}, ['2'] => ['3'], ~D[2003-03-03] => ~T[14:30:52]},
@@ -75,13 +75,13 @@ defmodule MapSorterTest do
     setup = %{
       people:                people,
       people_sort_specs:     people_sort_specs,
-      sorted_people:         sorted_people,
+      people_sorted:         people_sorted,
       keywords:              keywords,
       keywords_sort_specs:   keywords_sort_specs,
-      sorted_keywords:       sorted_keywords,
+      keywords_sorted:       keywords_sorted,
       mixed_bags:            mixed_bags,
       mixed_bags_sort_specs: mixed_bags_sort_specs,
-      sorted_mixed_bags:     sorted_mixed_bags
+      mixed_bags_sorted:     mixed_bags_sorted
     }
     {:ok, setup: setup}
   end
@@ -90,22 +90,22 @@ defmodule MapSorterTest do
     test "sorts structs implementing the Access behaviour", %{setup: setup} do
       people = setup.people
       sort_specs = setup.people_sort_specs
-      sorted_people = setup.sorted_people
-      assert MapSorter.sort(people, sort_specs) == sorted_people
+      people_sorted = setup.people_sorted
+      assert MapSorter.sort(people, sort_specs) == people_sorted
     end
 
     test "sorts keywords", %{setup: setup} do
       keywords = setup.keywords
       sort_specs = setup.keywords_sort_specs
-      sorted_keywords = setup.sorted_keywords
-      assert MapSorter.sort(keywords, sort_specs) == sorted_keywords
+      keywords_sorted = setup.keywords_sorted
+      assert MapSorter.sort(keywords, sort_specs) == keywords_sorted
     end
 
     test "sorts maps with any keys or values", %{setup: setup} do
       mixed_bags = setup.mixed_bags
       sort_specs = setup.mixed_bags_sort_specs
-      sorted_mixed_bags = setup.sorted_mixed_bags
-      assert MapSorter.sort(mixed_bags, sort_specs) == sorted_mixed_bags
+      mixed_bags_sorted = setup.mixed_bags_sorted
+      assert MapSorter.sort(mixed_bags, sort_specs) == mixed_bags_sorted
     end
   end
 end
