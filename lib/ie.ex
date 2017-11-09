@@ -1,7 +1,7 @@
 defmodule IE do
   @moduledoc false
 
-  alias MapSorter.Support
+  alias MapSorter.Impl
 
   require MapSorter
 
@@ -24,22 +24,15 @@ defmodule IE do
   #   people_as_keywords()
   #   sort(people(), asc: :dob, desc: :likes)
   #   sort(people_as_keywords(), asc: :dob, desc: :likes)
-  #   sort(people(), asc: :dob, desc: :name)
-  #   sort(people_as_keywords(), asc: :dob, desc: :name)
-  #   sort(people(), desc: :dob, asc: :likes)
-  #   sort(people_as_keywords(), desc: :dob, asc: :likes)
-  #   sort(people(), desc: :dob, asc: :name)
-  #   sort(people_as_keywords(), desc: :dob, asc: :name)
   #   eval_sort_fun([:dob, desc: :likes])
-  #   sort_fun_ast([:dob, desc: :likes])
-  #   sort_fun_ast(quote do: Tuple.to_list({:dob, {:desc, :likes}}))
-  #   adapt("&1[:dob] < ...\n&2[:likes] -> ...") |> IO.puts()
+  #   sort_fun([:dob, desc: :likes])
+  #   sort_fun(quote do: Tuple.to_list({:dob, {:desc, :likes}}))
   #   adapt("&1[~D[2017-11-02]] < ...") |> IO.puts()
 
   defmacro use() do
     quote do
       import IE
-      alias MapSorter.Support
+      alias MapSorter.Impl
       require MapSorter
       :ok
     end
@@ -53,9 +46,7 @@ defmodule IE do
 
   def sort(maps, sort_specs), do: MapSorter.sort(maps, sort_specs)
 
-  defdelegate eval_sort_fun(sort_specs), to: Support
-
-  defdelegate sort_fun_ast(sort_specs), to: Support
-
-  defdelegate adapt(string), to: Support
+  defdelegate adapt(string), to: Impl
+  defdelegate eval_sort_fun(sort_specs), to: Impl
+  defdelegate sort_fun(sort_specs), to: Impl
 end

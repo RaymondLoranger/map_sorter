@@ -9,7 +9,7 @@ defmodule MapSorter do
   require Logger
 
   @doc """
-  Sorts the `maps` as per the `sort specs` (compile time or runtime).
+  Sorts `maps` as per its `sort specs` (compile time or runtime).
 
   `sort specs` can be implicit, explicit or mixed:
 
@@ -36,7 +36,7 @@ defmodule MapSorter do
       ...>   mixed:    MapSorter.sort(people, [:dob, desc: :likes]),
       ...>   runtime:  MapSorter.sort(people, fun.([:dob, desc: :likes]))
       ...> }
-      iex> MapSorter.log_level(:info) # :info → no debug messages
+      iex> MapSorter.log_level(:info)
       iex> sorted.explicit == sorted.mixed and
       ...> sorted.explicit == sorted.runtime and
       ...> sorted.explicit
@@ -52,13 +52,13 @@ defmodule MapSorter do
   """
   defmacro sort(maps, sort_specs) do
     Logger.debug("sort specs: #{inspect(sort_specs)}...")
-    sort_fun_ast =
+    sort_fun =
       case sort_specs do
         specs when is_list(specs) -> specs
         specs -> Macro.expand(specs, __CALLER__) # in case module attribute
       end
-      |> MapSorter.Support.sort_fun_ast()
-    quote do: Enum.sort(unquote(maps), unquote(sort_fun_ast))
+      |> MapSorter.Impl.sort_fun()
+    quote do: Enum.sort(unquote(maps), unquote(sort_fun))
   end
 
   @doc """
