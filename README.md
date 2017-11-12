@@ -55,7 +55,7 @@ And then you should recompile the `:map_sorter` dependency:
 mix deps.compile map_sorter
 ```
 
-## Examples
+## Example 1
 
 ```elixir
 require MapSorter
@@ -86,7 +86,7 @@ descendingly by `:likes` as follows:
 ]
 ```
 
-
+## Example 2
 
 ```elixir
 require MapSorter
