@@ -16,6 +16,8 @@ defmodule MapSorterTest do
 
   use ExUnit.Case, async: false
 
+  require MapSorter
+
   doctest MapSorter
 
   setup_all do
@@ -94,22 +96,38 @@ defmodule MapSorterTest do
       %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
       %{id: "(abc)def$" , regex: ~r/(abc)def$/ }
     ]
+    nested_data = [
+      %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
+      %{name: [first: "Meg", last: "Howe"], birth: [date: ~D[1966-01-23]]},
+      %{name: [first: "Joe", last: "Holt"], birth: [date: ~D[1988-01-23]]},
+      %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1955-01-23]]}
+    ]
+    nested_data_sort_specs = [asc: [:name, :first], desc: [:birth, :date]]
+    nested_data_sorted = [
+      %{name: [first: "Joe", last: "Holt"], birth: [date: ~D[1988-01-23]]},
+      %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
+      %{name: [first: "Meg", last: "Howe"], birth: [date: ~D[1966-01-23]]},
+      %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1955-01-23]]}
+    ]
     setup = %{
-      people:                people,
-      people_sort_specs:     people_sort_specs,
-      people_sorted:         people_sorted,
-      keywords:              keywords,
-      keywords_sort_specs:   keywords_sort_specs,
-      keywords_sorted:       keywords_sorted,
-      mixed_bags:            mixed_bags,
-      mixed_bags_sort_specs: mixed_bags_sort_specs,
-      mixed_bags_sorted:     mixed_bags_sorted,
-      versions:              versions,
-      versions_sort_specs:   versions_sort_specs,
-      versions_sorted:       versions_sorted,
-      regexs:                regexs,
-      regexs_sort_specs:     regexs_sort_specs,
-      regexs_sorted:         regexs_sorted
+      people:                 people,
+      people_sort_specs:      people_sort_specs,
+      people_sorted:          people_sorted,
+      keywords:               keywords,
+      keywords_sort_specs:    keywords_sort_specs,
+      keywords_sorted:        keywords_sorted,
+      mixed_bags:             mixed_bags,
+      mixed_bags_sort_specs:  mixed_bags_sort_specs,
+      mixed_bags_sorted:      mixed_bags_sorted,
+      versions:               versions,
+      versions_sort_specs:    versions_sort_specs,
+      versions_sorted:        versions_sorted,
+      regexs:                 regexs,
+      regexs_sort_specs:      regexs_sort_specs,
+      regexs_sorted:          regexs_sorted,
+      nested_data:            nested_data,
+      nested_data_sort_specs: nested_data_sort_specs,
+      nested_data_sorted:     nested_data_sorted
     }
     {:ok, setup: setup}
   end
@@ -129,6 +147,7 @@ defmodule MapSorterTest do
       assert MapSorter.sort(keywords, sort_specs) == keywords_sorted
     end
 
+    @tag :sorting_on_structs
     test "sorts maps on Time structs", %{setup: setup} do
       mixed_bags = setup.mixed_bags
       sort_specs = setup.mixed_bags_sort_specs
@@ -136,6 +155,7 @@ defmodule MapSorterTest do
       assert MapSorter.sort(mixed_bags, sort_specs) == mixed_bags_sorted
     end
 
+    @tag :sorting_on_structs
     test "sorts maps on Version structs", %{setup: setup} do
       versions = setup.versions
       sort_specs = setup.versions_sort_specs
@@ -143,11 +163,20 @@ defmodule MapSorterTest do
       assert MapSorter.sort(versions, sort_specs) == versions_sorted
     end
 
+    @tag :sorting_on_structs
     test "sorts maps on Regex structs", %{setup: setup} do
       regexs = setup.regexs
       sort_specs = setup.regexs_sort_specs
       regexs_sorted = setup.regexs_sorted
       assert MapSorter.sort(regexs, sort_specs) == regexs_sorted
+    end
+
+    @tag :sorting_on_structs
+    test "sorts nested data structures", %{setup: setup} do
+      nested_data = setup.nested_data
+      sort_specs = setup.nested_data_sort_specs
+      nested_data_sorted = setup.nested_data_sorted
+      assert MapSorter.sort(nested_data, sort_specs) == nested_data_sorted
     end
   end
 end

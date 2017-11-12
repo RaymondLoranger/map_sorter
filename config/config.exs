@@ -5,10 +5,11 @@ use Mix.Config
 # To allow mix messages in colors...
 config :elixir, ansi_enabled: true
 
-# Comment out the following line to compile debug messages...
-config :logger, compile_time_purge_level: :info # → purges debug messages
+# Comment out to compile debug messages...
+config :logger, compile_time_purge_level: :info
 
-config :logger, level: :info # → prevents runtime debug messages
+# Prevents runtime debug messages...
+config :logger, level: :info
 
 # Listed by ascending log level...
 config :logger, :console, colors: [
@@ -17,3 +18,9 @@ config :logger, :console, colors: [
   warn:  :light_yellow,
   error: :light_red
 ]
+
+config :map_sorter, comparable_protocol_url:
+  "https://groups.google.com/forum/#!topic/elixir-lang-core/eE_mMWKdVYY"
+
+# When false, will simplify the sort function AST...
+config :map_sorter, sorting_on_structs?: false

@@ -1,14 +1,17 @@
 # Map Sorter
 
-Sorts a list of `maps` as per a list of sort specs
+Sorts a list of `maps` as per a list of `sort specs`
 (ascending/descending keys).
 
-Also works for keywords or structures implementing the Access behaviour.
+Also supports:
+
+- keywords
+- structs implementing the Access behaviour
+- nested maps, keywords or structs implementing the Access behaviour
 
 ## Installation
 
-The package can be installed by adding `:map_sorter` to your list of
-dependencies in `mix.exs`:
+Add the `:map_sorter` dependency to your `mix.exs` file:
 
 ```elixir
 def deps() do
@@ -25,13 +28,36 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-Sorts the `maps` as per the `sort specs` (compile time or runtime).
+Sorts `maps` as per its `sort specs` (compile time or runtime).
 
-  `sort specs` can be implicit, explicit or mixed:
+`sort specs` can be implicit, explicit or mixed:
 
-  - [:dob, :name]            - _implicit_ ≡ [_asc:_ :dob, _asc:_ :name]
-  - [:dob, desc: :name]      - _mixed_    ≡ [_asc:_ :dob, desc: :name]
-  - [asc: :dob, desc: :name] - _explicit_
+- implicit: - [:dob, :name]
+- mixed:    - [:dob, desc: :name]
+- explicit: - [asc: :dob, desc: :name]
+
+`sort specs` for nested data structures:
+
+- implicit: - [[:birth, :date], [:name, :first]]
+- mixed:    - [[:birth, :date], desc: [:name, :first]]
+- explicit: - [asc: [:birth, :date], desc: [:name, :first]]
+
+## Note
+
+By default, the app won't properly sort on structs because not
+[comparable]("https://groups.google.com/forum/#!topic/elixir-lang-core/eE_mMWKdVYY").
+To allow sorting on structs like %NaiveDateTime{} or %Time{},
+you should add the following to your `config/config.exs` file:
+
+```elixir
+config :map_sorter, sorting_on_structs?: true
+```
+
+And then you should recompile the `:map_sorter` dependency:
+
+```
+mix deps.compile map_sorter
+```
 
 ## Examples
 
@@ -61,5 +87,28 @@ descendingly by `:likes` as follows:
   %{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
   %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
   %{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
+]
+```
+
+```elixir
+require MapSorter
+people = [
+  %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
+  %{name: [first: "Meg", last: "Howe"], birth: [date: ~D[1966-01-23]]},
+  %{name: [first: "Joe", last: "Holt"], birth: [date: ~D[1988-01-23]]},
+  %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1955-01-23]]}
+]
+MapSorter.sort(people, asc: [:name, :first], desc: [:birth, :date])
+```
+
+The above code will sort `people` ascendingly by `first name` and
+descendingly by `birth date` as follows (see note above though):
+
+```elixir
+[
+  %{name: [first: "Joe", last: "Holt"], birth: [date: ~D[1988-01-23]]},
+  %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
+  %{name: [first: "Meg", last: "Howe"], birth: [date: ~D[1966-01-23]]},
+  %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1955-01-23]]}
 ]
 ```

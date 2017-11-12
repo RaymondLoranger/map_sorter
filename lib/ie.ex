@@ -18,8 +18,13 @@ defmodule IE do
   # Functions for iex session...
   #
   # Examples:
+  #
   #   require IE
   #   IE.use
+  #   people()
+  #   sort(people(), asc: :dob, desc: :likes)
+  #   Application.put_env(:map_sorter, :sorting_on_structs?, true)
+  #   r(Impl)
   #   people()
   #   people_as_keywords()
   #   sort(people(), asc: :dob, desc: :likes)
@@ -27,7 +32,8 @@ defmodule IE do
   #   eval_sort_fun([:dob, desc: :likes])
   #   sort_fun([:dob, desc: :likes])
   #   sort_fun(quote do: Tuple.to_list({:dob, {:desc, :likes}}))
-  #   adapt("&1[~D[2017-11-02]] < ...") |> IO.puts()
+  #   adapt_string("&1[~D[2017-11-02]] < ...", true)
+  #   adapt_string("&1[~D[2017-11-02]] < ...", false)
 
   defmacro use() do
     quote do
@@ -44,9 +50,10 @@ defmodule IE do
     Enum.map(@people, &Keyword.new/1)
   end
 
+  # Delegation only works with functions...
   def sort(maps, sort_specs), do: MapSorter.sort(maps, sort_specs)
 
-  defdelegate adapt(string), to: Impl
+  defdelegate adapt_string(string, sorting_on_structs?), to: Impl
   defdelegate eval_sort_fun(sort_specs), to: Impl
   defdelegate sort_fun(sort_specs), to: Impl
 end
