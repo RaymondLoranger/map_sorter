@@ -42,7 +42,7 @@ Sorts `maps` as per its `sort specs` (compile time or runtime).
 
 ## Note
 
-To allow sorting on structs like %NaiveDateTime{} or %Time{},
+To allow sorting on structs like `%DateTime{}` or `%Time{}`,
 you should add the following to your `config/config.exs` file:
 
 ```elixir
