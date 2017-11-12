@@ -25,7 +25,11 @@ defmodule MapSorter.Mixfile do
     Sorts a list of maps as per a list of sort specs
     (ascending/descending keys).
 
-    Also works for keywords or structures implementing the Access behaviour.
+    Also supports:
+
+    - keywords
+    - structs implementing the Access behaviour
+    - nested maps, keywords or structs implementing the Access behaviour
     """
   end
 
