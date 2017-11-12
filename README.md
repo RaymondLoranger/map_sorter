@@ -31,14 +31,14 @@ MapSorter.sort(maps, sort_specs)
 Sorts `maps` as per its `sort specs` (compile time or runtime).
 
 `sort specs` can be implicit, explicit or mixed:
-  - implicit: - [:dob, :name]
-  - mixed:    - [:dob, desc: :name]
-  - explicit: - [asc: :dob, desc: :name]
+  - implicit: [:dob, :name]
+  - mixed:    [:dob, desc: :name]
+  - explicit: [asc: :dob, desc: :name]
 
 `sort specs` for nested data structures:
-  - implicit: - [[:birth, :date], [:name, :first]]
-  - mixed:    - [[:birth, :date], desc: [:name, :first]]
-  - explicit: - [asc: [:birth, :date], desc: [:name, :first]]
+  - implicit: [[:birth, :date], [:name, :first]]
+  - mixed:    [[:birth, :date], desc: [:name, :first]]
+  - explicit: [asc: [:birth, :date], desc: [:name, :first]]
 
 ## Note
 
