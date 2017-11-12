@@ -43,10 +43,10 @@ Sorts `maps` as per its `sort specs` (compile time or runtime).
 ## Note
 
 To allow sorting on structs like `%DateTime{}` or `%Time{}`,
-you should add the following to your `config/config.exs` file:
+you should add the following to your `config.exs` file:
 
 ```elixir
-config :map_sorter, sorting_on_structs?: true
+config :map_sorter, structs_enabled?: true
 ```
 
 And then you should recompile the `:map_sorter` dependency:
@@ -85,6 +85,8 @@ descendingly by `:likes` as follows:
   %{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
 ]
 ```
+
+
 
 ```elixir
 require MapSorter
