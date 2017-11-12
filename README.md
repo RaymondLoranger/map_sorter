@@ -98,7 +98,7 @@ MapSorter.sort(people, asc: [:name, :first], desc: [:birth, :date])
 ```
 
 The above code will sort `people` ascendingly by `first name` and
-descendingly by `birth date` as follows (see note above though):
+descendingly by `birth date` as follows (see note above):
 
 ```elixir
 [

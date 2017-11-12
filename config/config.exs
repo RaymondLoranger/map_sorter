@@ -23,4 +23,4 @@ config :map_sorter, comparable_protocol_url:
   "https://groups.google.com/forum/#!topic/elixir-lang-core/eE_mMWKdVYY"
 
 # When false, will simplify the sort function AST...
-config :map_sorter, sorting_on_structs?: false
+config :map_sorter, structs_enabled?: false

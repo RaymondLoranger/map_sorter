@@ -6,7 +6,7 @@ defmodule MapSorter.ImplTest do
   alias MapSorter.Impl
 
   @app Mix.Project.config[:app]
-  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
+  @structs_enabled? Application.get_env(@app, :structs_enabled?)
 
   doctest Impl
 
@@ -23,11 +23,11 @@ defmodule MapSorter.ImplTest do
       """
     {:ok, here_ast} =
       here_doc
-      |> Impl.adapt_string(@sorting_on_structs?)
+      |> Impl.adapt_string(@structs_enabled?)
       |> Code.string_to_quoted()
     {here_fun, []} =
       here_doc
-      |> Impl.adapt_string(@sorting_on_structs?)
+      |> Impl.adapt_string(@structs_enabled?)
       |> Code.eval_string()
     sort_specs = [:dob, desc: :likes]
     tuple = List.to_tuple(sort_specs)

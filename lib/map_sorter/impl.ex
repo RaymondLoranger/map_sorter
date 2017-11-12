@@ -11,9 +11,9 @@ defmodule MapSorter.Impl do
   @type sort_spec :: any | {sort_dir, any}
 
   @app Mix.Project.config[:app]
-  @structs? Application.get_env(@app, :sorting_on_structs?)
-  @prefix @structs? && "#{__MODULE__}.comparable(" || ""
-  @suffix @structs? && ")" || ""
+  @structs_enabled? Application.get_env(@app, :structs_enabled?)
+  @prefix @structs_enabled? && "#{__MODULE__}.comparable(" || ""
+  @suffix @structs_enabled? && ")" || ""
   @url Application.get_env(@app, :comparable_protocol_url)
 
   @doc """

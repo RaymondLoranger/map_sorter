@@ -1,8 +1,4 @@
 app = Mix.Project.config[:app]
-sorting_on_structs? = Application.get_env(app, :sorting_on_structs?)
-unless sorting_on_structs?, do: ExUnit.configure(exclude: :sorting_on_structs)
-# case sorting_on_structs? do
-#   true -> nil # all tests
-#   false -> ExUnit.configure exclude: [sorting_on_structs: true]
-# end
+structs_enabled? = Application.get_env(app, :structs_enabled?)
+unless structs_enabled?, do: ExUnit.configure(exclude: :sorting_on_structs)
 ExUnit.start()
