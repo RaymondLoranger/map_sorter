@@ -10,7 +10,7 @@ defmodule MapSorter do
   - nested maps, keywords or structs implementing the Access behaviour
   """
 
-  alias MapSorter.Impl
+  alias MapSorter.SortSpecs
 
   require Logger
 
@@ -18,8 +18,8 @@ defmodule MapSorter do
   Sorts `maps` as per its `sort specs` (compile time or runtime).
 
   `sort specs` can be implicit, explicit or mixed:
-    - implicit: [:dob, :name]
-    - mixed:    [:dob, desc: :name]
+    - implicit: [:dob, :name]       ≡ [asc: :dob, asc: :name]
+    - mixed:    [:dob, desc: :name] ≡ [asc: :dob, desc: :name]
     - explicit: [asc: :dob, desc: :name]
 
   `sort specs` for nested data structures:
@@ -33,42 +33,61 @@ defmodule MapSorter do
       iex> people = [
       ...>   %{name: "Mike", likes: "movies" , dob: "1992-04-15"},
       ...>   %{name: "Mary", likes: "travels", dob: "1992-04-15"},
-      ...>   %{name: "Ann" , likes: "reading", dob: "1992-04-15"},
-      ...>   %{name: "Ray" , likes: "cycling", dob: "1977-08-28"},
       ...>   %{name: "Bill", likes: "karate" , dob: "1977-08-28"},
       ...>   %{name: "Joe" , likes: "boxing" , dob: "1977-08-28"},
       ...>   %{name: "Jill", likes: "cooking", dob: "1976-09-28"}
       ...> ]
-      iex> fun = & &1
+      iex> sort_specs = [:dob, desc: :likes]
       iex> MapSorter.log_level(:info) # :debug → debug messages
-      iex> sorted = %{
+      iex> sorted_people = %{
       ...>   explicit: MapSorter.sort(people, asc: :dob, desc: :likes),
       ...>   mixed:    MapSorter.sort(people, [:dob, desc: :likes]),
-      ...>   runtime:  MapSorter.sort(people, fun.([:dob, desc: :likes]))
+      ...>   runtime:  MapSorter.sort(people, sort_specs)
       ...> }
       iex> MapSorter.log_level(:info)
-      iex> sorted.explicit == sorted.mixed and
-      ...> sorted.explicit == sorted.runtime and
-      ...> sorted.explicit
+      iex> sorted_people.explicit == sorted_people.mixed and
+      ...> sorted_people.explicit == sorted_people.runtime and
+      ...> sorted_people.explicit
       [
         %{name: "Jill", likes: "cooking", dob: "1976-09-28"},
         %{name: "Bill", likes: "karate" , dob: "1977-08-28"},
-        %{name: "Ray" , likes: "cycling", dob: "1977-08-28"},
         %{name: "Joe" , likes: "boxing" , dob: "1977-08-28"},
         %{name: "Mary", likes: "travels", dob: "1992-04-15"},
-        %{name: "Ann" , likes: "reading", dob: "1992-04-15"},
         %{name: "Mike", likes: "movies" , dob: "1992-04-15"}
       ]
+
+      iex> require MapSorter
+      iex> people = [
+      ...>   %{name: "Mike", likes: "movies" , dob: "1992-04-15"},
+      ...>   %{name: "Mary", likes: "travels", dob: "1992-04-15"},
+      ...>   %{name: "Bill", likes: "karate" , dob: "1977-08-28"},
+      ...>   %{name: "Joe" , likes: "boxing" , dob: "1977-08-28"},
+      ...>   %{name: "Jill", likes: "cooking", dob: "1976-09-28"}
+      ...> ]
+      iex> bad_specs = %{asc: :dob, desc: :likes}
+      iex> MapSorter.log_level(:info) # :debug → debug messages
+      iex> sorted_people = %{
+      ...>   literal: MapSorter.sort(people, %{asc: :dob, desc: :likes}),
+      ...>   runtime: MapSorter.sort(people, bad_specs)
+      ...> }
+      iex> MapSorter.log_level(:info)
+      iex> sorted_people.literal == people and
+      ...> sorted_people.runtime == people
+      true
   """
   defmacro sort(maps, sort_specs) do
     Logger.debug("sort specs: #{inspect(sort_specs)}...")
-    sort_fun =
+    specs =
       case sort_specs do
         specs when is_list(specs) -> specs
         specs -> Macro.expand(specs, __CALLER__) # in case module attribute
       end
-      |> Impl.sort_fun()
-    quote do: Enum.sort(unquote(maps), unquote(sort_fun))
+    case SortSpecs.to_quoted(specs) do
+      {:ok, fun} -> quote do: Enum.sort(unquote(maps), unquote(fun))
+      {:error, bad_specs} ->
+        Logger.debug("bad sort specs: #{inspect(bad_specs)}")
+        maps
+    end
   end
 
   @doc """

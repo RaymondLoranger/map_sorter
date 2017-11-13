@@ -28,11 +28,9 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-Sorts `maps` as per its `sort specs` (compile time or runtime).
-
 `sort specs` can be implicit, explicit or mixed:
-  - implicit: [:dob, :name]
-  - mixed:    [:dob, desc: :name]
+  - implicit: [:dob, :name]       ≡ [asc: :dob, asc: :name]
+  - mixed:    [:dob, desc: :name] ≡ [asc: :dob, desc: :name]
   - explicit: [asc: :dob, desc: :name]
 
 `sort specs` for nested data structures:
@@ -62,8 +60,6 @@ require MapSorter
 people = [
   %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
   %{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
-  %{name: "Ann" , likes: "reading"  , dob: "1992-04-15"},
-  %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
   %{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
@@ -78,11 +74,9 @@ descendingly by `:likes` as follows:
 [
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
   %{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
-  %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
   %{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
-  %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
-  %{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
+  %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"}
 ]
 ```
 

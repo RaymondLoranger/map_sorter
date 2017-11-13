@@ -31,6 +31,7 @@ defmodule MapSorterTest do
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
     ]
     people_sort_specs = [asc: :dob, desc: :likes]
+    people_bad_specs = [ask: :dob, desk: :likes]
     people_sorted = [
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
       %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
@@ -50,6 +51,7 @@ defmodule MapSorterTest do
       [name: "Jill", likes: "cooking"  , dob: "1976-09-28"]
     ]
     keywords_sort_specs = [asc: :dob, desc: :likes]
+    keywords_bad_specs = %{asc: :dob, desc: :likes}
     keywords_sorted = [
       [name: "Jill", likes: "cooking"  , dob: "1976-09-28"],
       [name: "Bill", likes: "karate"   , dob: "1977-08-28"],
@@ -67,6 +69,7 @@ defmodule MapSorterTest do
       %{{1.0} => {"5"}, ['2'] => ['5'], ~D[2003-03-03] => ~T[14:30:55]}
     ]
     mixed_bags_sort_specs = [desc: ~D[2003-03-03], desc: {1.0}]
+    mixed_bags_bad_specs = {:desc, ~D[2003-03-03], {1.0}}
     mixed_bags_sorted = [
       %{{1.0} => {"5"}, ['2'] => ['5'], ~D[2003-03-03] => ~T[14:30:55]},
       %{{1.0} => {"4"}, ['2'] => ['4'], ~D[2003-03-03] => ~T[14:30:52]},
@@ -112,12 +115,15 @@ defmodule MapSorterTest do
     setup = %{
       people:                 people,
       people_sort_specs:      people_sort_specs,
+      people_bad_specs:       people_bad_specs,
       people_sorted:          people_sorted,
       keywords:               keywords,
       keywords_sort_specs:    keywords_sort_specs,
+      keywords_bad_specs:     keywords_bad_specs,
       keywords_sorted:        keywords_sorted,
       mixed_bags:             mixed_bags,
       mixed_bags_sort_specs:  mixed_bags_sort_specs,
+      mixed_bags_bad_specs:   mixed_bags_bad_specs,
       mixed_bags_sorted:      mixed_bags_sorted,
       versions:               versions,
       versions_sort_specs:    versions_sort_specs,
@@ -140,11 +146,30 @@ defmodule MapSorterTest do
       assert MapSorter.sort(people, sort_specs) == people_sorted
     end
 
+    test "structs not sorted given bad specs", %{setup: setup} do
+      people = setup.people
+      bad_specs = setup.people_bad_specs
+      assert MapSorter.sort(people, bad_specs) == people
+    end
+
+    test "structs not sorted given nil specs", %{setup: setup} do
+      people = setup.people
+      bad_specs = nil
+      assert MapSorter.sort(people, bad_specs) == people
+      assert MapSorter.sort(people, nil) == people
+    end
+
     test "sorts keywords", %{setup: setup} do
       keywords = setup.keywords
       sort_specs = setup.keywords_sort_specs
       keywords_sorted = setup.keywords_sorted
       assert MapSorter.sort(keywords, sort_specs) == keywords_sorted
+    end
+
+    test "keywords not sorted given bad specs", %{setup: setup} do
+      keywords = setup.keywords
+      bad_specs = setup.keywords_bad_specs
+      assert MapSorter.sort(keywords, bad_specs) == keywords
     end
 
     @tag :sorting_on_structs
@@ -153,6 +178,13 @@ defmodule MapSorterTest do
       sort_specs = setup.mixed_bags_sort_specs
       mixed_bags_sorted = setup.mixed_bags_sorted
       assert MapSorter.sort(mixed_bags, sort_specs) == mixed_bags_sorted
+    end
+
+    @tag :sorting_on_structs
+    test "maps not sorted given bad specs", %{setup: setup} do
+      mixed_bags = setup.mixed_bags
+      bad_specs = setup.mixed_bags_bad_specs
+      assert MapSorter.sort(mixed_bags, bad_specs) == mixed_bags
     end
 
     @tag :sorting_on_structs
