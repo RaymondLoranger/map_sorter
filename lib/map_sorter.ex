@@ -67,12 +67,16 @@ defmodule MapSorter do
       iex> bad_specs = %{asc: :dob, desc: :likes}
       iex> MapSorter.log_level(:info) # :debug → debug messages
       iex> sorted_people = %{
-      ...>   literal: MapSorter.sort(people, %{asc: :dob, desc: :likes}),
-      ...>   runtime: MapSorter.sort(people, bad_specs)
+      ...>   bad_literal: MapSorter.sort(people, %{asc: :dob, desc: :likes}),
+      ...>   bad_runtime: MapSorter.sort(people, bad_specs),
+      ...>   empty_specs: MapSorter.sort(people, []),
+      ...>   nihil_specs: MapSorter.sort(people, nil)
       ...> }
       iex> MapSorter.log_level(:info)
-      iex> sorted_people.literal == people and
-      ...> sorted_people.runtime == people
+      iex> sorted_people.bad_literal == people and
+      ...> sorted_people.bad_runtime == people
+      ...> sorted_people.empty_specs == people
+      ...> sorted_people.nihil_specs == people
       true
   """
   defmacro sort(maps, sort_specs) do

@@ -41,7 +41,16 @@ defmodule MapSorter.SortSpecs do
       true
 
       iex> alias MapSorter.SortSpecs
-      iex> sort_specs = {:dob, :name, :likes}
+      iex> sort_specs = []
+      iex> Logger.configure(level: :info) # :debug → debug messages
+      iex> {:ok, comp_fun} = SortSpecs.to_quoted(sort_specs)
+      iex> Logger.configure(level: :info)
+      iex> match?({:&, _meta, _args}, comp_fun) and
+      iex> match?([], sort_specs)
+      true
+
+      iex> alias MapSorter.SortSpecs
+      iex> sort_specs = nil
       iex> Logger.configure(level: :info) # :debug → debug messages
       iex> {:error, bad_specs} = SortSpecs.to_quoted(sort_specs)
       iex> Logger.configure(level: :info)
@@ -87,6 +96,24 @@ defmodule MapSorter.SortSpecs do
       ...> comp_fun.(:_1st, :_2nd) == true and
       ...> comp_fun.(:_2nd, :_1st) == true
       true
+
+      iex> alias MapSorter.SortSpecs
+      iex> Logger.configure(level: :info) # :debug → debug messages
+      iex> comp_fun = SortSpecs.to_comp_fun([])
+      iex> Logger.configure(level: :info)
+      iex> is_function(comp_fun, 2) and
+      ...> comp_fun.(:_1st, :_2nd) == true and
+      ...> comp_fun.(:_2nd, :_1st) == true
+      true
+
+      iex> alias MapSorter.SortSpecs
+      iex> Logger.configure(level: :info) # :debug → debug messages
+      iex> comp_fun = SortSpecs.to_comp_fun(nil)
+      iex> Logger.configure(level: :info)
+      iex> is_function(comp_fun, 2) and
+      ...> comp_fun.(:_1st, :_2nd) == true and
+      ...> comp_fun.(:_2nd, :_1st) == true
+      true
   """
   @spec to_comp_fun([sort_spec]) :: comp_fun
   def to_comp_fun(sort_specs) when is_list(sort_specs) do
@@ -94,7 +121,7 @@ defmodule MapSorter.SortSpecs do
     {comp_fun, []} = sort_specs |> fun_string() |> Code.eval_string()
     comp_fun
   end
-  def to_comp_fun(_sort_specs), do: fn _1st, _2nd -> true end
+  def to_comp_fun(_sort_specs), do: to_comp_fun([])
 
   @spec fun_string([sort_spec]) :: String.t
   defp fun_string(sort_specs) do
@@ -112,7 +139,7 @@ defmodule MapSorter.SortSpecs do
     """
     & cond do
     #{clauses}
-    true -> true
+    true -> true or &1 * &2
     end
     """
   end

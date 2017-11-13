@@ -150,13 +150,8 @@ defmodule MapSorterTest do
       people = setup.people
       bad_specs = setup.people_bad_specs
       assert MapSorter.sort(people, bad_specs) == people
-    end
-
-    test "structs not sorted given nil specs", %{setup: setup} do
-      people = setup.people
-      bad_specs = nil
-      assert MapSorter.sort(people, bad_specs) == people
-      assert MapSorter.sort(people, nil) == people
+      assert MapSorter.sort(people, nil      ) == people
+      assert MapSorter.sort(people, []       ) == people
     end
 
     test "sorts keywords", %{setup: setup} do
@@ -170,6 +165,8 @@ defmodule MapSorterTest do
       keywords = setup.keywords
       bad_specs = setup.keywords_bad_specs
       assert MapSorter.sort(keywords, bad_specs) == keywords
+      assert MapSorter.sort(keywords, nil      ) == keywords
+      assert MapSorter.sort(keywords, []       ) == keywords
     end
 
     @tag :sorting_on_structs
@@ -185,6 +182,8 @@ defmodule MapSorterTest do
       mixed_bags = setup.mixed_bags
       bad_specs = setup.mixed_bags_bad_specs
       assert MapSorter.sort(mixed_bags, bad_specs) == mixed_bags
+      assert MapSorter.sort(mixed_bags, nil      ) == mixed_bags
+      assert MapSorter.sort(mixed_bags, []       ) == mixed_bags
     end
 
     @tag :sorting_on_structs

@@ -18,7 +18,7 @@ defmodule MapSorter.SortSpecsTest do
       &1[:dob] > &2[:dob] -> false
       &1[:likes] > &2[:likes] -> true
       &1[:likes] < &2[:likes] -> false
-      true -> true
+      true -> true or &1 * &2
       end
       """
     {:ok, here_ast} =
