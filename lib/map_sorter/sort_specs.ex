@@ -18,43 +18,23 @@ defmodule MapSorter.SortSpecs do
   @suffix @structs_enabled? && ")" || ""
 
   @doc """
-  Converts `sort specs` to the AST of a [compare function](#{@url}).
+  Converts `sort specs` to the AST of a [compare function](#{@url})
+  (compile time or runtime).
 
   ## Examples
 
       iex> alias MapSorter.SortSpecs
       iex> sort_specs = [:dob, desc: :likes]
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> {:ok, comp_fun} = SortSpecs.to_quoted(sort_specs)
-      iex> Logger.configure(level: :info)
-      iex> match?({:&, _meta, _args}, comp_fun) and
+      iex> {:ok, comp_fun_ast} = SortSpecs.to_quoted(sort_specs)
+      iex> match?({:&, _meta, _args}, comp_fun_ast) and
       iex> match?([_, _], sort_specs)
       true
 
       iex> alias MapSorter.SortSpecs
       iex> sort_specs = quote do: Tuple.to_list({:dob, {:desc, :likes}})
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> {:ok, comp_fun} = SortSpecs.to_quoted(sort_specs)
-      iex> Logger.configure(level: :info)
-      iex> match?({{:., _, _}, _meta, _args}, comp_fun) and
+      iex> {:ok, comp_fun_ast} = SortSpecs.to_quoted(sort_specs)
+      iex> match?({{:., _, _}, _meta, _args}, comp_fun_ast) and
       iex> match?({{:., _, _}, _meta, _args}, sort_specs)
-      true
-
-      iex> alias MapSorter.SortSpecs
-      iex> sort_specs = []
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> {:ok, comp_fun} = SortSpecs.to_quoted(sort_specs)
-      iex> Logger.configure(level: :info)
-      iex> match?({:&, _meta, _args}, comp_fun) and
-      iex> match?([], sort_specs)
-      true
-
-      iex> alias MapSorter.SortSpecs
-      iex> sort_specs = nil
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> {:error, bad_specs} = SortSpecs.to_quoted(sort_specs)
-      iex> Logger.configure(level: :info)
-      iex> bad_specs == sort_specs
       true
   """
   @spec to_quoted([sort_spec] | Macro.expr) :: {:ok, Macro.expr} | {:error, any}
@@ -80,39 +60,8 @@ defmodule MapSorter.SortSpecs do
   ## Examples
 
       iex> alias MapSorter.SortSpecs
-      iex> Logger.configure(level: :info) # :debug → debug messages
       iex> comp_fun = SortSpecs.to_comp_fun([:dob, desc: :likes])
-      iex> Logger.configure(level: :info)
-      iex> is_function(comp_fun, 2) and
-      ...> comp_fun.(%{likes: "ski"}, %{likes: "art"}) == true and
-      ...> comp_fun.(%{likes: "art"}, %{likes: "ski"}) == false
-      true
-
-      iex> alias MapSorter.SortSpecs
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> comp_fun = SortSpecs.to_comp_fun({:dob, :desc, :likes})
-      iex> Logger.configure(level: :info)
-      iex> is_function(comp_fun, 2) and
-      ...> comp_fun.(:_1st, :_2nd) == true and
-      ...> comp_fun.(:_2nd, :_1st) == true
-      true
-
-      iex> alias MapSorter.SortSpecs
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> comp_fun = SortSpecs.to_comp_fun([])
-      iex> Logger.configure(level: :info)
-      iex> is_function(comp_fun, 2) and
-      ...> comp_fun.(:_1st, :_2nd) == true and
-      ...> comp_fun.(:_2nd, :_1st) == true
-      true
-
-      iex> alias MapSorter.SortSpecs
-      iex> Logger.configure(level: :info) # :debug → debug messages
-      iex> comp_fun = SortSpecs.to_comp_fun(nil)
-      iex> Logger.configure(level: :info)
-      iex> is_function(comp_fun, 2) and
-      ...> comp_fun.(:_1st, :_2nd) == true and
-      ...> comp_fun.(:_2nd, :_1st) == true
+      iex> is_function(comp_fun, 2)
       true
   """
   @spec to_comp_fun([sort_spec]) :: comp_fun
@@ -128,7 +77,6 @@ defmodule MapSorter.SortSpecs do
     fun_string =
       sort_specs
       |> Enum.map_join(&clauses_doc/1)
-      |> String.trim_trailing()
       |> fun_doc()
     Logger.debug(fun_string)
     fun_string
@@ -138,8 +86,7 @@ defmodule MapSorter.SortSpecs do
   defp fun_doc(clauses) do
     """
     & cond do
-    #{clauses}
-    true -> true or &1 * &2
+    #{clauses}true -> true or &1 * &2
     end
     """
   end

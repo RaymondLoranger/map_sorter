@@ -28,20 +28,20 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-`sort specs` can be implicit, explicit or mixed:
-  - implicit: [:dob, :name]       ≡ [asc: :dob, asc: :name]
-  - mixed:    [:dob, desc: :name] ≡ [asc: :dob, desc: :name]
+Examples of `sort specs` for flattened data structures:
+  - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
+  - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
   - explicit: [asc: :dob, desc: :name]
 
-`sort specs` for nested data structures:
-  - implicit: [[:birth, :date], [:name, :first]]
-  - mixed:    [[:birth, :date], desc: [:name, :first]]
-  - explicit: [asc: [:birth, :date], desc: [:name, :first]]
+Examples of `sort specs` for nested data structures:
+  - implicit: [[:birth, :date], :name]
+  - mixed:    [[:birth, :date], desc: :name]
+  - explicit: [asc: [:birth, :date], desc: :name]
 
 ## Note
 
 To allow sorting on structs like `%DateTime{}` or `%Time{}`,
-you should add the following to your `config.exs` file:
+you should add the following to your `config/config.exs` file:
 
 ```elixir
 config :map_sorter, structs_enabled?: true
