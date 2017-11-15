@@ -28,7 +28,7 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-Examples of `sort specs` for flattened data structures:
+Examples of `sort specs` for flat data structures:
   - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
   - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
   - explicit: [asc: :dob, desc: :name]
