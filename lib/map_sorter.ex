@@ -10,7 +10,7 @@ defmodule MapSorter do
   - nested maps, keywords or structs implementing the Access behaviour
   """
 
-  alias MapSorter.SortSpecs
+  alias MapSorter.SortSpec
 
   require Logger
 
@@ -61,7 +61,7 @@ defmodule MapSorter do
         specs when is_list(specs) -> specs
         specs -> Macro.expand(specs, __CALLER__) # in case module attribute
       end
-    case SortSpecs.to_quoted(specs) do
+    case SortSpec.to_quoted(specs) do
       {:ok, comp_fun} -> quote do: Enum.sort(unquote(maps), unquote(comp_fun))
       {:error, bad_specs} ->
         Logger.warn("bad sort specs: #{inspect(bad_specs)}")
