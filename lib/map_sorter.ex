@@ -17,7 +17,7 @@ defmodule MapSorter do
   @doc """
   Sorts `maps` as per the given `sort specs` (compile time or runtime).
 
-  Examples of `sort specs` for flattened data structures:
+  Examples of `sort specs` for flat data structures:
     - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
     - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
     - explicit: [asc: :dob, desc: :name]
