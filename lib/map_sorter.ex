@@ -72,5 +72,6 @@ defmodule MapSorter do
   @doc """
   Allows to change the log `level` at compile time.
   """
+  @doc false
   defmacro log_level(level), do: Logger.configure(level: level)
 end

@@ -7,6 +7,8 @@ defmodule MapSorter.SortSpecs do
   (ascending/descending keys).
   """
 
+  @moduledoc false
+
   require Logger
 
   @type comp_fun :: (Access.container, Access.container -> boolean)
