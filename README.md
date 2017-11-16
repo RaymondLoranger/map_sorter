@@ -4,7 +4,6 @@ Sorts a list of `maps` as per a list of `sort specs`
 (ascending/descending keys).
 
 Also supports:
-
 - keywords
 - structs implementing the Access behaviour
 - nested maps, keywords or structs implementing the Access behaviour
@@ -29,14 +28,14 @@ MapSorter.sort(maps, sort_specs)
 ```
 
 Examples of `sort specs` for flat data structures:
-  - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
-  - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
-  - explicit: [asc: :dob, desc: :name]
+- implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
+- mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
+- explicit: [asc: :dob, desc: :name]
 
 Examples of `sort specs` for nested data structures:
-  - implicit: [[:birth, :date], :name]
-  - mixed:    [[:birth, :date], desc: :name]
-  - explicit: [asc: [:birth, :date], desc: :name]
+- implicit: [[:birth, :date], :name]
+- mixed:    [[:birth, :date], desc: :name]
+- explicit: [asc: [:birth, :date], desc: :name]
 
 ## Note
 

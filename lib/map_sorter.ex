@@ -4,7 +4,6 @@ defmodule MapSorter do
   (ascending/descending keys).
 
   Also supports:
-
   - keywords
   - structs implementing the Access behaviour
   - nested maps, keywords or structs implementing the Access behaviour
@@ -18,14 +17,14 @@ defmodule MapSorter do
   Sorts `maps` as per the given `sort specs` (compile time or runtime).
 
   Examples of `sort specs` for flat data structures:
-    - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
-    - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
-    - explicit: [asc: :dob, desc: :name]
+  - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
+  - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
+  - explicit: [asc: :dob, desc: :name]
 
   Examples of `sort specs` for nested data structures:
-    - implicit: [[:birth, :date], :name]
-    - mixed:    [[:birth, :date], desc: :name]
-    - explicit: [asc: [:birth, :date], desc: :name]
+  - implicit: [[:birth, :date], :name]
+  - mixed:    [[:birth, :date], desc: :name]
+  - explicit: [asc: [:birth, :date], desc: :name]
 
   ## Examples
 
@@ -69,9 +68,10 @@ defmodule MapSorter do
     end
   end
 
-  @doc """
-  Allows to change the log `level` at compile time.
-  """
+
+  # @doc """
+  # Allows to change the log `level` at compile time.
+  # """
   @doc false
   defmacro log_level(level), do: Logger.configure(level: level)
 end

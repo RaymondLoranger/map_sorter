@@ -2,11 +2,10 @@ defmodule MapSorter.SortSpec do
   @app Mix.Project.config[:app]
   @url Application.get_env(@app, :compare_function_url)
 
-  @moduledoc """
-  Generates a [compare function](#{@url}) from a list of `sort specs`
-  (ascending/descending keys).
-  """
-
+  # @moduledoc """
+  # Generates a [compare function](#{@url}) from a list of `sort specs`
+  # (ascending/descending keys).
+  # """
   @moduledoc false
 
   require Logger
