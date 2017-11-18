@@ -6,7 +6,7 @@ defmodule MapSorter.SortSpecTest do
   alias MapSorter.SortSpec
 
   @app Mix.Project.config[:app]
-  @structs_enabled? Application.get_env(@app, :structs_enabled?)
+  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
 
   doctest SortSpec
 
@@ -32,11 +32,11 @@ defmodule MapSorter.SortSpecTest do
       """
     {:ok, here_ast} =
       here_doc
-      |> SortSpec.adapt_string(@structs_enabled?)
+      |> SortSpec.adapt_string(@sorting_on_structs?)
       |> Code.string_to_quoted()
     {here_fun, []} =
       here_doc
-      |> SortSpec.adapt_string(@structs_enabled?)
+      |> SortSpec.adapt_string(@sorting_on_structs?)
       |> Code.eval_string()
 
     sort_specs = [:dob, desc: :likes]

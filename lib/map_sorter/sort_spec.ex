@@ -14,9 +14,9 @@ defmodule MapSorter.SortSpec do
   @type sort_dir :: :asc | :desc
   @type t :: any | {sort_dir, any}
 
-  @structs_enabled? Application.get_env(@app, :structs_enabled?)
-  @prefix @structs_enabled? && "#{__MODULE__}.comparable(" || ""
-  @suffix @structs_enabled? && ")" || ""
+  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
+  @prefix @sorting_on_structs? && "#{__MODULE__}.comparable(" || ""
+  @suffix @sorting_on_structs? && ")" || ""
 
   @doc """
   Converts `sort specs` to the AST of a [compare function](#{@url})

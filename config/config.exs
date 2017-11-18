@@ -28,4 +28,4 @@ config :map_sorter, compare_function_url:
   "https://hexdocs.pm/elixir/Enum.html#sort/2"
 
 # When false, will simplify the compare function AST...
-config :map_sorter, structs_enabled?: false
+config :map_sorter, sorting_on_structs?: false

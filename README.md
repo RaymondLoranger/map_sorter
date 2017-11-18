@@ -15,7 +15,7 @@ Add the `:map_sorter` dependency to your `mix.exs` file:
 ```elixir
 def deps() do
   [
-    {:map_sorter, "~> 0.1"}
+    {:map_sorter, "~> 0.2"}
   ]
 end
 ```
@@ -43,7 +43,7 @@ To allow sorting on structs like `%DateTime{}` or `%Time{}`,
 you should add the following to your `config/config.exs` file:
 
 ```elixir
-config :map_sorter, structs_enabled?: true
+config :map_sorter, sorting_on_structs?: true
 ```
 
 And then you should recompile the `:map_sorter` dependency:

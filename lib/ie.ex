@@ -21,7 +21,7 @@ defmodule IE do
   #   IE.use
   #   people()
   #   sort(people(), asc: :dob, desc: :likes)
-  #   Application.put_env(:map_sorter, :structs_enabled?, true)
+  #   Application.put_env(:map_sorter, :sorting_on_structs?, true)
   #   r(SortSpec)
   #   people()
   #   sort(people(), asc: :dob, desc: :likes)
@@ -55,7 +55,7 @@ defmodule IE do
   # Delegation only works with functions...
   def sort(maps, sort_specs), do: MapSorter.sort(maps, sort_specs)
 
-  defdelegate adapt_string(string, structs_enabled?), to: SortSpec
+  defdelegate adapt_string(string, sorting_on_structs?), to: SortSpec
   defdelegate to_comp_fun(sort_specs), to: SortSpec
   defdelegate to_quoted(sort_specs), to: SortSpec
 end
