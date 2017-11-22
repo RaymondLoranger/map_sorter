@@ -1,24 +1,11 @@
 defmodule MapSorter.IE do
   @moduledoc false
 
-  alias MapSorter.SortSpec
-
-  require MapSorter
-
-  @people [
-    %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15]},
-    %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15]},
-    %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28]},
-    %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28]},
-    %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28]}
-  ]
-
   # Functions for iex session...
   #
   # Examples:
   #
-  #   require MapSorter.IE
-  #   MapSorter.IE.use
+  #   use MapSorter.IE
   #   people()
   #   sort(people(), asc: :dob, desc: :likes)
   #   Application.put_env(:map_sorter, :sorting_on_structs?, true)
@@ -37,7 +24,19 @@ defmodule MapSorter.IE do
   #   adapt_string("&1[~D[2017-11-02]] < ...", true)
   #   adapt_string("&1[~D[2017-11-02]] < ...", false)
 
-  defmacro use() do
+  alias MapSorter.SortSpec
+
+  require MapSorter
+
+  @people [
+    %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15]},
+    %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15]},
+    %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28]},
+    %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28]},
+    %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28]}
+  ]
+
+  defmacro __using__(_options) do
     quote do
       import MapSorter.IE
       alias MapSorter.SortSpec
