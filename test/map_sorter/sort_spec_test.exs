@@ -5,35 +5,36 @@ defmodule MapSorter.SortSpecTest do
 
   alias MapSorter.SortSpec
 
-  @app Mix.Project.config[:app]
+  @app Mix.Project.config()[:app]
   @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
 
   doctest SortSpec
 
   setup_all do
-    true_doc =
-      """
-      & cond do
-      true -> true or &1 * &2
-      end
-      """
+    true_doc = """
+    & cond do
+    true -> true or &1 * &2
+    end
+    """
+
     {:ok, true_ast} = true_doc |> Code.string_to_quoted()
     {true_fun, []} = true_doc |> Code.eval_string()
 
-    here_doc =
-      """
-      & cond do
-      &1[:dob] < &2[:dob] -> true
-      &1[:dob] > &2[:dob] -> false
-      &1[:likes] > &2[:likes] -> true
-      &1[:likes] < &2[:likes] -> false
-      true -> true or &1 * &2
-      end
-      """
+    here_doc = """
+    & cond do
+    &1[:dob] < &2[:dob] -> true
+    &1[:dob] > &2[:dob] -> false
+    &1[:likes] > &2[:likes] -> true
+    &1[:likes] < &2[:likes] -> false
+    true -> true or &1 * &2
+    end
+    """
+
     {:ok, here_ast} =
       here_doc
       |> SortSpec.adapt_string(@sorting_on_structs?)
       |> Code.string_to_quoted()
+
     {here_fun, []} =
       here_doc
       |> SortSpec.adapt_string(@sorting_on_structs?)
@@ -44,23 +45,22 @@ defmodule MapSorter.SortSpecTest do
     tuple_ast = quote do: Tuple.to_list(unquote(tuple))
 
     setup = %{
-      true_doc:   true_doc,
-      true_ast:   true_ast,
-      true_fun:   true_fun,
-
-      here_doc:   here_doc,
-      here_ast:   here_ast,
-      here_fun:   here_fun,
-
+      true_doc: true_doc,
+      true_ast: true_ast,
+      true_fun: true_fun,
+      here_doc: here_doc,
+      here_ast: here_ast,
+      here_fun: here_fun,
       sort_specs: sort_specs,
-      tuple:      tuple,
-      tuple_ast:  tuple_ast
+      tuple: tuple,
+      tuple_ast: tuple_ast
     }
 
     {:ok, setup: setup}
   end
 
-  @level :error # :debug → debug, info and warn messages
+  # :debug → debug, info and warn messages
+  @level :error
 
   # mix test --only debug<n>
 

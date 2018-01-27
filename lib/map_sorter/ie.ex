@@ -30,10 +30,10 @@ defmodule MapSorter.IE do
 
   @people [
     %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15]},
-    %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15]},
-    %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28]},
-    %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28]},
-    %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28]}
+    %{name: "Mary", likes: "travels", dob: ~D[1992-04-15]},
+    %{name: "Bill", likes: "karate", dob: ~D[1977-08-28]},
+    %{name: "Joe", likes: "boxing", dob: ~D[1977-08-28]},
+    %{name: "Jill", likes: "cooking", dob: ~D[1976-09-28]}
   ]
 
   defmacro __using__(_options) do

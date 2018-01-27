@@ -1,5 +1,6 @@
 defmodule MapSorter.SortSpec do
-  @app Mix.Project.config[:app]
+  use PersistConfig
+
   @url Application.get_env(@app, :compare_function_url)
 
   # @moduledoc """
@@ -10,13 +11,13 @@ defmodule MapSorter.SortSpec do
 
   require Logger
 
-  @type comp_fun :: (Access.container, Access.container -> boolean)
+  @type comp_fun :: (Access.container(), Access.container() -> boolean)
   @type sort_dir :: :asc | :desc
   @type t :: any | {sort_dir, any}
 
   @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
-  @prefix @sorting_on_structs? && "#{__MODULE__}.comparable(" || ""
-  @suffix @sorting_on_structs? && ")" || ""
+  @prefix if @sorting_on_structs?, do: "#{__MODULE__}.comparable(", else: ""
+  @suffix if @sorting_on_structs?, do: ")", else: ""
 
   @doc """
   Converts `sort specs` to the AST of a [compare function](#{@url})
@@ -38,13 +39,15 @@ defmodule MapSorter.SortSpec do
       iex> match?({{:., _, _}, _meta, _args}, sort_specs)
       true
   """
-  @spec to_quoted([t] | Macro.expr) :: {:ok, Macro.expr} | {:error, any}
+  @spec to_quoted([t] | Macro.expr()) :: {:ok, Macro.expr()} | {:error, any}
   def to_quoted(sort_specs) when is_list(sort_specs) do
     Logger.debug("expanding: to_quoted(#{inspect(sort_specs)})...")
     sort_specs |> fun_string() |> Code.string_to_quoted()
   end
+
   def to_quoted({:%{}, _, _} = sort_specs), do: {:error, sort_specs}
   def to_quoted({:{}, _, _} = sort_specs), do: {:error, sort_specs}
+
   def to_quoted({_, meta, _} = sort_specs) do
     if Keyword.keyword?(meta) do
       Logger.debug("injecting: to_comp_fun(#{inspect(sort_specs)})...")
@@ -53,6 +56,7 @@ defmodule MapSorter.SortSpec do
       {:error, sort_specs}
     end
   end
+
   def to_quoted(sort_specs), do: {:error, sort_specs}
 
   @doc """
@@ -71,19 +75,21 @@ defmodule MapSorter.SortSpec do
     {comp_fun, []} = sort_specs |> fun_string() |> Code.eval_string()
     comp_fun
   end
+
   def to_comp_fun(_sort_specs), do: to_comp_fun([])
 
-  @spec fun_string([t]) :: String.t
+  @spec fun_string([t]) :: String.t()
   defp fun_string(sort_specs) do
     fun_string =
       sort_specs
       |> Enum.map_join(&clauses_doc/1)
       |> fun_doc()
+
     Logger.debug(fun_string)
     fun_string
   end
 
-  @spec fun_doc(String.t) :: String.t
+  @spec fun_doc(String.t()) :: String.t()
   defp fun_doc(clauses) do
     """
     & cond do
@@ -92,29 +98,33 @@ defmodule MapSorter.SortSpec do
     """
   end
 
-  @spec clauses_doc(t) :: String.t
+  @spec clauses_doc(t) :: String.t()
   defp clauses_doc({:asc, key}) do
     """
     #{comparand(1, key)} < #{comparand(2, key)} -> true
     #{comparand(1, key)} > #{comparand(2, key)} -> false
     """
   end
+
   defp clauses_doc({:desc, key}) do
     """
     #{comparand(1, key)} > #{comparand(2, key)} -> true
     #{comparand(1, key)} < #{comparand(2, key)} -> false
     """
   end
+
   defp clauses_doc(key), do: clauses_doc({:asc, key})
 
-  @spec comparand(non_neg_integer, any) :: String.t
+  @spec comparand(non_neg_integer, any) :: String.t()
   defp comparand(rank, key) do
     "#{@prefix}&#{rank}#{brackets(key)}#{@suffix}"
   end
 
+  @spec brackets(any) :: String.t()
   defp brackets(key) when is_list(key) do
     Enum.map_join(key, &"[#{inspect(&1)}]")
   end
+
   defp brackets(key) do
     "[#{inspect(key)}]"
   end
@@ -148,7 +158,7 @@ defmodule MapSorter.SortSpec do
       &2[:likes] -> ...
       \"""
   """
-  @spec adapt_string(String.t, boolean) :: String.t
+  @spec adapt_string(String.t(), boolean) :: String.t()
   def adapt_string(string, maybe) do
     # &1[:branch][:dept] < &2[:branch][:dept] -> true
     regex = ~r/(&[12]\[.+?])( +[<>-])/
@@ -156,11 +166,11 @@ defmodule MapSorter.SortSpec do
     String.replace(string, regex, replacement)
   end
 
-  @spec prefix(boolean) :: String.t
-  defp prefix(maybe), do: maybe && "#{__MODULE__}.comparable(" || ""
+  @spec prefix(boolean) :: String.t()
+  defp prefix(maybe), do: (maybe && "#{__MODULE__}.comparable(") || ""
 
-  @spec suffix(boolean) :: String.t
-  defp suffix(maybe), do: maybe && ")" || ""
+  @spec suffix(boolean) :: String.t()
+  defp suffix(maybe), do: (maybe && ")") || ""
 
   @url Application.get_env(@app, :comparable_protocol_url)
 
@@ -178,11 +188,11 @@ defmodule MapSorter.SortSpec do
       3.1416
   """
   @spec comparable(any) :: any
-  def comparable(%Date{}          = value), do: Date.to_string(value)
-  def comparable(%DateTime{}      = value), do: DateTime.to_string(value)
+  def comparable(%Date{} = value), do: Date.to_string(value)
+  def comparable(%DateTime{} = value), do: DateTime.to_string(value)
   def comparable(%NaiveDateTime{} = value), do: NaiveDateTime.to_string(value)
-  def comparable(%Time{}          = value), do: Time.to_string(value)
-  def comparable(%Version{}       = value), do: to_string(value)
-  def comparable(%Regex{}         = value), do: Regex.source(value)
-  def comparable(value            = value), do: value
+  def comparable(%Time{} = value), do: Time.to_string(value)
+  def comparable(%Version{} = value), do: to_string(value)
+  def comparable(%Regex{} = value), do: Regex.source(value)
+  def comparable(value = value), do: value
 end
