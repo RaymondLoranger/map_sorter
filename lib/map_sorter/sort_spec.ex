@@ -167,10 +167,10 @@ defmodule MapSorter.SortSpec do
   end
 
   @spec prefix(boolean) :: String.t()
-  defp prefix(maybe), do: (maybe && "#{__MODULE__}.comparable(") || ""
+  defp prefix(maybe), do: if(maybe, do: "#{__MODULE__}.comparable(", else: "")
 
   @spec suffix(boolean) :: String.t()
-  defp suffix(maybe), do: (maybe && ")") || ""
+  defp suffix(maybe), do: if(maybe, do: ")", else: "")
 
   @url Application.get_env(@app, :comparable_protocol_url)
 

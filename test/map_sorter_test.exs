@@ -23,46 +23,46 @@ defmodule MapSorterTest do
   setup_all do
     people = [
       %Person{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
-      %Person{name: "Mary", likes: "travels", dob: "1992-04-15"},
-      %Person{name: "Ann", likes: "reading", dob: "1992-04-15"},
-      %Person{name: "Ray", likes: "cycling", dob: "1977-08-28"},
-      %Person{name: "Bill", likes: "karate", dob: "1977-08-28"},
-      %Person{name: "Joe", likes: "boxing", dob: "1977-08-28"},
-      %Person{name: "Jill", likes: "cooking", dob: "1976-09-28"}
+      %Person{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
+      %Person{name: "Ann" , likes: "reading"  , dob: "1992-04-15"},
+      %Person{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
+      %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
+      %Person{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
+      %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
     ]
 
     people_sort_specs = [asc: :dob, desc: :likes]
 
     people_sorted = [
-      %Person{name: "Jill", likes: "cooking", dob: "1976-09-28"},
-      %Person{name: "Bill", likes: "karate", dob: "1977-08-28"},
-      %Person{name: "Ray", likes: "cycling", dob: "1977-08-28"},
-      %Person{name: "Joe", likes: "boxing", dob: "1977-08-28"},
-      %Person{name: "Mary", likes: "travels", dob: "1992-04-15"},
+      %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
+      %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
+      %Person{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
+      %Person{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
+      %Person{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
       %Person{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
-      %Person{name: "Ann", likes: "reading", dob: "1992-04-15"}
+      %Person{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
     ]
 
     keywords = [
       [name: "Mike", likes: "ski, arts", dob: "1992-04-15"],
-      [name: "Mary", likes: "travels", dob: "1992-04-15"],
-      [name: "Ann", likes: "reading", dob: "1992-04-15"],
-      [name: "Ray", likes: "cycling", dob: "1977-08-28"],
-      [name: "Bill", likes: "karate", dob: "1977-08-28"],
-      [name: "Joe", likes: "boxing", dob: "1977-08-28"],
-      [name: "Jill", likes: "cooking", dob: "1976-09-28"]
+      [name: "Mary", likes: "travels"  , dob: "1992-04-15"],
+      [name: "Ann" , likes: "reading"  , dob: "1992-04-15"],
+      [name: "Ray" , likes: "cycling"  , dob: "1977-08-28"],
+      [name: "Bill", likes: "karate"   , dob: "1977-08-28"],
+      [name: "Joe" , likes: "boxing"   , dob: "1977-08-28"],
+      [name: "Jill", likes: "cooking"  , dob: "1976-09-28"]
     ]
 
     keywords_sort_specs = [asc: :dob, desc: :likes]
 
     keywords_sorted = [
-      [name: "Jill", likes: "cooking", dob: "1976-09-28"],
-      [name: "Bill", likes: "karate", dob: "1977-08-28"],
-      [name: "Ray", likes: "cycling", dob: "1977-08-28"],
-      [name: "Joe", likes: "boxing", dob: "1977-08-28"],
-      [name: "Mary", likes: "travels", dob: "1992-04-15"],
+      [name: "Jill", likes: "cooking"  , dob: "1976-09-28"],
+      [name: "Bill", likes: "karate"   , dob: "1977-08-28"],
+      [name: "Ray" , likes: "cycling"  , dob: "1977-08-28"],
+      [name: "Joe" , likes: "boxing"   , dob: "1977-08-28"],
+      [name: "Mary", likes: "travels"  , dob: "1992-04-15"],
       [name: "Mike", likes: "ski, arts", dob: "1992-04-15"],
-      [name: "Ann", likes: "reading", dob: "1992-04-15"]
+      [name: "Ann" , likes: "reading"  , dob: "1992-04-15"]
     ]
 
     mixed_bags = [
@@ -84,7 +84,7 @@ defmodule MapSorterTest do
     ]
 
     versions = [
-      %{id: "2.0.1-beta", version: Version.parse!("2.0.1-beta")},
+      %{id: "2.0.1-beta" , version: Version.parse!("2.0.1-beta" )},
       %{id: "2.0.1-omega", version: Version.parse!("2.0.1-omega")},
       %{id: "2.0.1-alpha", version: Version.parse!("2.0.1-alpha")}
     ]
@@ -93,22 +93,22 @@ defmodule MapSorterTest do
 
     versions_sorted = [
       %{id: "2.0.1-omega", version: Version.parse!("2.0.1-omega")},
-      %{id: "2.0.1-beta", version: Version.parse!("2.0.1-beta")},
+      %{id: "2.0.1-beta" , version: Version.parse!("2.0.1-beta" )},
       %{id: "2.0.1-alpha", version: Version.parse!("2.0.1-alpha")}
     ]
 
     regexs = [
-      %{id: "abc.*def", regex: ~r/abc.*def/},
-      %{id: "(abc)def$", regex: ~r/(abc)def$/},
+      %{id: "abc.*def"  , regex: ~r/abc.*def/  },
+      %{id: "(abc)def$" , regex: ~r/(abc)def$/ },
       %{id: "^abc.*def$", regex: ~r/^abc.*def$/}
     ]
 
     regexs_sort_specs = [desc: :regex]
 
     regexs_sorted = [
-      %{id: "abc.*def", regex: ~r/abc.*def/},
+      %{id: "abc.*def"  , regex: ~r/abc.*def/  },
       %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
-      %{id: "(abc)def$", regex: ~r/(abc)def$/}
+      %{id: "(abc)def$" , regex: ~r/(abc)def$/ }
     ]
 
     nested_data = [

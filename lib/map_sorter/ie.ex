@@ -8,12 +8,14 @@ defmodule MapSorter.IE do
   #   use MapSorter.IE
   #   people()
   #   sort(people(), asc: :dob, desc: :likes)
-  #   Application.put_env(:map_sorter, :sorting_on_structs?, true)
-  #   r(SortSpec)
-  #   people()
-  #   sort(people(), asc: :dob, desc: :likes)
   #   people_as_keywords()
   #   sort(people_as_keywords(), asc: :dob, desc: :likes)
+  #
+  #   1. Change :sorting_on_structs? to false in config/config.exs
+  #   2. Recompile
+  #   3. Retest above
+  #   4. Change :sorting_on_structs? back to true
+  #
   #   to_comp_fun([:dob, desc: :likes])
   #   to_quoted([:dob, desc: :likes])
   #   to_quoted(quote do: Tuple.to_list({:dob, {:desc, :likes}}))
@@ -30,10 +32,10 @@ defmodule MapSorter.IE do
 
   @people [
     %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15]},
-    %{name: "Mary", likes: "travels", dob: ~D[1992-04-15]},
-    %{name: "Bill", likes: "karate", dob: ~D[1977-08-28]},
-    %{name: "Joe", likes: "boxing", dob: ~D[1977-08-28]},
-    %{name: "Jill", likes: "cooking", dob: ~D[1976-09-28]}
+    %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15]},
+    %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28]},
+    %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28]},
+    %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28]}
   ]
 
   defmacro __using__(_options) do
