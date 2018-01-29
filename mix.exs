@@ -4,7 +4,7 @@ defmodule MapSorter.Mixfile do
   def project do
     [
       app: :map_sorter,
-      version: "0.2.9",
+      version: "0.2.10",
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       name: "Map Sorter",
@@ -28,7 +28,7 @@ defmodule MapSorter.Mixfile do
 
   defp package do
     [
-      files: ["lib", "mix.exs", "README*", "config/config.exs"],
+      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}

@@ -20,14 +20,4 @@ config :logger, :console,
     error: :light_red
   ]
 
-# Proposal of a Comparable protocol...
-config :map_sorter,
-  comparable_protocol_url:
-    "https://groups.google.com/forum/#!topic/elixir-lang-core/eE_mMWKdVYY"
-
-# Compare function for Enum.sort/2...
-config :map_sorter,
-  compare_function_url: "https://hexdocs.pm/elixir/Enum.html#sort/2"
-
-# When false, will simplify the compare function AST...
-config :map_sorter, sorting_on_structs?: false
+import_config "persist.exs"

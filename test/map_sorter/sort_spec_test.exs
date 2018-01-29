@@ -2,10 +2,10 @@ defmodule MapSorter.SortSpecTest do
   @moduledoc false
 
   use ExUnit.Case, async: false
+  use PersistConfig
 
   alias MapSorter.SortSpec
 
-  @app Mix.Project.config()[:app]
   @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
 
   doctest SortSpec
