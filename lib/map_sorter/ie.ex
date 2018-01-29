@@ -6,15 +6,16 @@ defmodule MapSorter.IE do
   # Examples:
   #
   #   use MapSorter.IE
+  #   to_quoted([asc: :dob, desc: :likes]) # check for :comparable
   #   people()
   #   sort(people(), asc: :dob, desc: :likes)
   #   people_as_keywords()
   #   sort(people_as_keywords(), asc: :dob, desc: :likes)
   #
-  #   1. Change :sorting_on_structs? to false in config/config.exs
+  #   1. Change :sorting_on_structs? to true in config/config.exs
   #   2. Recompile
   #   3. Retest above
-  #   4. Change :sorting_on_structs? back to true
+  #   4. Change :sorting_on_structs? back to false (or comment out)
   #
   #   to_comp_fun([:dob, desc: :likes])
   #   to_quoted([:dob, desc: :likes])
@@ -49,9 +50,7 @@ defmodule MapSorter.IE do
 
   def people(), do: @people
 
-  def people_as_keywords() do
-    Enum.map(@people, &Keyword.new/1)
-  end
+  def people_as_keywords(), do: Enum.map(@people, &Keyword.new/1)
 
   # Delegation only works with functions...
   def sort(maps, sort_specs), do: MapSorter.sort(maps, sort_specs)

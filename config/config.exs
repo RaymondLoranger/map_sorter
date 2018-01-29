@@ -20,4 +20,7 @@ config :logger, :console,
     error: :light_red
   ]
 
+# When false (or nil), will simplify the compare function AST...
+# config :map_sorter, sorting_on_structs?: true
+
 import_config "persist.exs"

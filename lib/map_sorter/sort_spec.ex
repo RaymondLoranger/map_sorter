@@ -158,7 +158,7 @@ defmodule MapSorter.SortSpec do
       &2[:likes] -> ...
       \"""
   """
-  @spec adapt_string(String.t(), boolean) :: String.t()
+  @spec adapt_string(String.t(), any) :: String.t()
   def adapt_string(string, maybe) do
     # &1[:branch][:dept] < &2[:branch][:dept] -> true
     regex = ~r/(&[12]\[.+?])( +[<>-])/
@@ -166,10 +166,10 @@ defmodule MapSorter.SortSpec do
     String.replace(string, regex, replacement)
   end
 
-  @spec prefix(boolean) :: String.t()
+  @spec prefix(any) :: String.t()
   defp prefix(maybe), do: if(maybe, do: "#{__MODULE__}.comparable(", else: "")
 
-  @spec suffix(boolean) :: String.t()
+  @spec suffix(any) :: String.t()
   defp suffix(maybe), do: if(maybe, do: ")", else: "")
 
   @url Application.get_env(@app, :comparable_protocol_url)
