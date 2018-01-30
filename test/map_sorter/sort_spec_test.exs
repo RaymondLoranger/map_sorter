@@ -6,7 +6,7 @@ defmodule MapSorter.SortSpecTest do
 
   alias MapSorter.SortSpec
 
-  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
+  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?, false)
 
   doctest SortSpec
 

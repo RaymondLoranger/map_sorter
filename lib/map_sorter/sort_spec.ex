@@ -15,7 +15,7 @@ defmodule MapSorter.SortSpec do
   @type sort_dir :: :asc | :desc
   @type t :: any | {sort_dir, any}
 
-  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?)
+  @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?, false)
   @prefix if @sorting_on_structs?, do: "#{__MODULE__}.comparable(", else: ""
   @suffix if @sorting_on_structs?, do: ")", else: ""
 
@@ -158,7 +158,7 @@ defmodule MapSorter.SortSpec do
       &2[:likes] -> ...
       \"""
   """
-  @spec adapt_string(String.t(), any) :: String.t()
+  @spec adapt_string(String.t(), boolean) :: String.t()
   def adapt_string(string, maybe) do
     # &1[:branch][:dept] < &2[:branch][:dept] -> true
     regex = ~r/(&[12]\[.+?])( +[<>-])/
@@ -166,10 +166,10 @@ defmodule MapSorter.SortSpec do
     String.replace(string, regex, replacement)
   end
 
-  @spec prefix(any) :: String.t()
+  @spec prefix(boolean) :: String.t()
   defp prefix(maybe), do: if(maybe, do: "#{__MODULE__}.comparable(", else: "")
 
-  @spec suffix(any) :: String.t()
+  @spec suffix(boolean) :: String.t()
   defp suffix(maybe), do: if(maybe, do: ")", else: "")
 
   @url Application.get_env(@app, :comparable_protocol_url)

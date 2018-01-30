@@ -1,7 +1,10 @@
 defmodule TestHelper do
   @moduledoc false
   use PersistConfig
-  def sorting_on_structs?, do: Application.get_env(@app, :sorting_on_structs?)
+
+  def sorting_on_structs? do
+    Application.get_env(@app, :sorting_on_structs?, false)
+  end
 end
 
 unless TestHelper.sorting_on_structs?(),
