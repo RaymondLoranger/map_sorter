@@ -9,6 +9,8 @@ defmodule MapSorter do
   - nested maps, keywords or structs implementing the Access behaviour
   """
 
+  use PersistConfig
+
   alias __MODULE__.SortSpec
 
   require Logger
