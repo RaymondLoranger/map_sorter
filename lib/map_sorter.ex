@@ -15,18 +15,25 @@ defmodule MapSorter do
 
   require Logger
 
+  @purge_level Application.get_env(@app, :purge_level, :debug)
+  Application.put_env(:logger, :compile_time_purge_level, @purge_level)
+
   @doc """
   Sorts `maps` as per the given `sort specs` (compile time or runtime).
 
   Examples of `sort specs` for flat data structures:
-  - implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
-  - mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
+  ```
+  - implicit: [:dob, :name]
+  - mixed:    [:dob, desc: :name]
   - explicit: [asc: :dob, desc: :name]
+  ```
 
   Examples of `sort specs` for nested data structures:
+  ```
   - implicit: [[:birth, :date], :name]
-  - mixed:    [[:birth, :date], desc: :name]
+  - mixed   : [[:birth, :date], desc: :name]
   - explicit: [asc: [:birth, :date], desc: :name]
+  ```
 
   ## Examples
 

@@ -5,11 +5,22 @@ use Mix.Config
 # To allow mix messages in colors...
 config :elixir, ansi_enabled: true
 
-# When false (or nil), will simplify the compare function AST...
-# config :map_sorter, sorting_on_structs?: true
+# Listed by ascending log level...
+config :logger, :console,
+  colors: [
+    debug: :light_cyan,
+    info: :light_green,
+    warn: :light_yellow,
+    error: :light_red
+  ]
 
-# Should both be overridden by "persist.exs"...
-config :logger, compile_time_purge_level: :debug
-config :logger, level: :debug
+# Comment out to compile debug, info and warn messages...
+# config :logger, compile_time_purge_level: :error
+
+# Comment out to prevent runtime debug, info and warn messages...
+# config :logger, level: :error
+
+# When false (or nil), will simplify the AST of the compare function...
+# config :map_sorter, sorting_on_structs?: true
 
 import_config "persist.exs"

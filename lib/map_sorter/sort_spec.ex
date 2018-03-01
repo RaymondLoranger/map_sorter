@@ -18,6 +18,8 @@ defmodule MapSorter.SortSpec do
   @sorting_on_structs? Application.get_env(@app, :sorting_on_structs?, false)
   @prefix if @sorting_on_structs?, do: "#{__MODULE__}.comparable(", else: ""
   @suffix if @sorting_on_structs?, do: ")", else: ""
+  @purge_level Application.get_env(@app, :purge_level, :debug)
+  Application.put_env(:logger, :compile_time_purge_level, @purge_level)
 
   @doc """
   Converts `sort specs` to the AST of a [compare function](#{@url})

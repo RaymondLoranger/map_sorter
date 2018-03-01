@@ -28,14 +28,18 @@ MapSorter.sort(maps, sort_specs)
 ```
 
 Examples of `sort specs` for flat data structures:
-- implicit: [:dob, :name]       ≡ [_asc:_ :dob, _asc:_ :name]
-- mixed:    [:dob, desc: :name] ≡ [_asc:_ :dob, desc: :name]
+```
+- implicit: [:dob, :name]
+- mixed:    [:dob, desc: :name]
 - explicit: [asc: :dob, desc: :name]
+```
 
 Examples of `sort specs` for nested data structures:
+```
 - implicit: [[:birth, :date], :name]
 - mixed:    [[:birth, :date], desc: :name]
 - explicit: [asc: [:birth, :date], desc: :name]
+```
 
 ## Note
 

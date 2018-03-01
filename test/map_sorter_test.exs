@@ -153,7 +153,7 @@ defmodule MapSorterTest do
 
   describe "MapSorter.sort/2" do
     test "sorts structs with various forms of specs", %{setup: setup} do
-      # :debug → debug, info and warn messages
+      # :debug → debug, info, warn and error messages (at compile time)
       MapSorter.log_level(:error)
 
       people_sorted = %{
@@ -170,7 +170,7 @@ defmodule MapSorterTest do
 
     test "structs not sorted given bad specs", %{setup: setup} do
       bad_specs = [ask: :dob, desk: :likes]
-      # :debug → debug, info and warn messages
+      # :debug → debug, info, warn and error messages (at compile time)
       MapSorter.log_level(:error)
 
       people_sorted = %{

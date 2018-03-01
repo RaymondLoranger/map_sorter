@@ -59,7 +59,7 @@ defmodule MapSorter.SortSpecTest do
     {:ok, setup: setup}
   end
 
-  # :debug → debug, info and warn messages
+  # :debug → debug, info, warn and error messages (at runtime)
   @level :error
 
   # mix test --only debug<n>
