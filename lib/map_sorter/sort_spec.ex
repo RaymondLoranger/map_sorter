@@ -197,4 +197,6 @@ defmodule MapSorter.SortSpec do
   def comparable(%Version{} = value), do: to_string(value)
   def comparable(%Regex{} = value), do: Regex.source(value)
   def comparable(value = value), do: value
+
+  Application.delete_env(:logger, :compile_time_purge_level)
 end

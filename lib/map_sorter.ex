@@ -90,4 +90,6 @@ defmodule MapSorter do
   # """
   @doc false
   defmacro log_level(level), do: Logger.configure(level: level)
+
+  Application.delete_env(:logger, :compile_time_purge_level)
 end
