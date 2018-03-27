@@ -4,7 +4,7 @@ defmodule MapSorter.Mixfile do
   def project do
     [
       app: :map_sorter,
-      version: "0.2.16",
+      version: "0.2.17",
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       name: "Map Sorter",
@@ -45,7 +45,8 @@ defmodule MapSorter.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:mix_tasks, path: "../mix_tasks", only: :dev, runtime: false},
+      {:mix_tasks,
+       github: "RaymondLoranger/mix_tasks", only: :dev, runtime: false},
       {:persist_config, "~> 0.1"},
       {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},

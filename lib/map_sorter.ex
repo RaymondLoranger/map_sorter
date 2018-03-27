@@ -70,8 +70,8 @@ defmodule MapSorter do
         specs when is_list(specs) ->
           specs
 
-        # In case any module attribute(s)...
         specs ->
+          # In case any module attribute(s)...
           Macro.expand(specs, __CALLER__)
       end
 
