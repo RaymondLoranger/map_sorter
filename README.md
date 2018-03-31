@@ -1,5 +1,7 @@
 # Map Sorter
 
+[![Build Status](https://travis-ci.org/RaymondLoranger/map_sorter.svg?branch=master)](https://travis-ci.org/RaymondLoranger/map_sorter)
+
 Sorts a list of `maps` as per a list of `sort specs`
 (ascending/descending keys).
 
