@@ -3,11 +3,10 @@ defmodule MapSorter.SortSpec do
 
   @url Application.get_env(@app, :compare_function_url)
 
-  # @moduledoc """
-  # Generates a [compare function](#{@url}) from a list of `sort specs`
-  # (ascending/descending keys).
-  # """
-  @moduledoc false
+  @moduledoc """
+  Generates a [compare function](#{@url}) from a list of `sort specs`
+  (ascending/descending keys).
+  """
 
   require Logger
 

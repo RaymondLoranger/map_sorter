@@ -1,6 +1,4 @@
 defmodule Person do
-  @moduledoc false
-
   @behaviour Access
 
   defstruct [:name, :likes, :dob]
@@ -12,8 +10,6 @@ defmodule Person do
 end
 
 defmodule MapSorterTest do
-  @moduledoc false
-
   use ExUnit.Case, async: false
 
   require MapSorter

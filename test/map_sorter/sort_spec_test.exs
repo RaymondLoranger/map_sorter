@@ -1,6 +1,4 @@
 defmodule MapSorter.SortSpecTest do
-  @moduledoc false
-
   use ExUnit.Case, async: false
   use PersistConfig
 

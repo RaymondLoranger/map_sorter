@@ -1,5 +1,4 @@
 defmodule TestHelper do
-  @moduledoc false
   use PersistConfig
 
   def sorting_on_structs? do

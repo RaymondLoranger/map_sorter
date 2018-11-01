@@ -41,7 +41,8 @@ defmodule MapSorter.IE do
 
   defmacro __using__(_options) do
     quote do
-      import MapSorter.IE
+      import unquote(__MODULE__)
+      alias unquote(__MODULE__)
       alias MapSorter.SortSpec
       require MapSorter
       :ok
