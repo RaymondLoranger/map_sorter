@@ -52,7 +52,7 @@ you should add the following to your `config/config.exs` file:
 config :map_sorter, sorting_on_structs?: true
 ```
 
-And then you should recompile the `:map_sorter` dependency:
+And then you should recompile the `map_sorter` dependency:
 
 ```
 mix deps.compile map_sorter
