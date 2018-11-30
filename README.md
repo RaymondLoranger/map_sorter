@@ -12,7 +12,7 @@ Also supports:
 
 ## Installation
 
-Add the `:map_sorter` dependency to your `mix.exs` file:
+Add `map_sorter` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps() do
