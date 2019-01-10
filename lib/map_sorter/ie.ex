@@ -1,9 +1,7 @@
 defmodule MapSorter.IE do
   @moduledoc false
 
-  # Functions for iex session...
-  #
-  # Examples:
+  # Example of an IEx session...
   #
   #   use MapSorter.IE
   #   to_quoted([asc: :dob, desc: :likes]) # check for :comparable
