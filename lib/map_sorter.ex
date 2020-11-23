@@ -1,25 +1,18 @@
 defmodule MapSorter do
   @moduledoc """
-  Sorts a list of `maps` as per a list of `sort specs`
-  (ascending/descending keys).
+  Sorts a list of `maps` per a list of `sort specs`.
 
   Also supports:
+
   - keywords
   - structs implementing the Access behaviour
   - nested maps, keywords or structs implementing the Access behaviour
   """
 
-  use PersistConfig
-
-  alias __MODULE__.SortSpec
-
-  require Logger
-
-  @purge_level Application.get_env(@app, :purge_level, :debug)
-  Application.put_env(:logger, :compile_time_purge_level, @purge_level)
+  alias __MODULE__.{Log, SortSpecs}
 
   @doc """
-  Sorts `maps` as per the given `sort specs` (compile time or runtime).
+  Sorts `maps` per the given `sort specs` (compile time or runtime).
 
   Examples of `sort specs` for flat data structures:
   ```
@@ -28,11 +21,25 @@ defmodule MapSorter do
   - explicit: [asc: :dob, desc: :name]
   ```
 
+  Examples of `sort specs` with a `Date` key for flat data structures:
+  ```
+  - implicit: [{:dob Date}, :name]
+  - mixed:    [{:dob Date}, desc: :name]
+  - explicit: [asc: {:dob Date}, desc: :name]
+  ```
+
   Examples of `sort specs` for nested data structures:
   ```
   - implicit: [[:birth, :date], :name]
   - mixed   : [[:birth, :date], desc: :name]
   - explicit: [asc: [:birth, :date], desc: :name]
+  ```
+
+  Examples of `sort specs` with a `Date` key for nested data structures:
+  ```
+  - implicit: [{[:birth, :date], Date}, :name]
+  - mixed:    [{[:birth, :date], Date}, desc: :name]
+  - explicit: [asc: {[:birth, :date], Date}, desc: :name]
   ```
 
   ## Examples
@@ -45,7 +52,7 @@ defmodule MapSorter do
       ...>   %{name: "Joe" , likes: "boxing" , dob: "1977-08-28"},
       ...>   %{name: "Jill", likes: "cooking", dob: "1976-09-28"}
       ...> ]
-      iex> sort_specs = [:dob, desc: :likes]
+      iex> sort_specs = Tuple.to_list({:dob, {:desc, :likes}})
       iex> sorted_people = %{
       ...>   explicit: MapSorter.sort(people, asc: :dob, desc: :likes),
       ...>   mixed:    MapSorter.sort(people, [:dob, desc: :likes]),
@@ -63,33 +70,28 @@ defmodule MapSorter do
       ]
   """
   defmacro sort(maps, sort_specs) do
-    Logger.debug("sort specs: #{inspect(sort_specs)}...")
-
     specs =
       case sort_specs do
         specs when is_list(specs) ->
+          # [asc: {:dob, {:__aliases__, [line: 7], [:Date]}}] =>
+          # [asc: {:dob, Date}]
+          {specs, []} = Code.eval_quoted(specs)
           specs
 
         specs ->
-          # In case any module attribute(s)...
+          # In case any module attributes...
           Macro.expand(specs, __CALLER__)
       end
 
-    case SortSpec.to_quoted(specs) do
-      {:ok, comp_fun} ->
-        quote do: Enum.sort(unquote(maps), unquote(comp_fun))
+    :ok = Log.debug(:sort_specs, {__ENV__, __CALLER__, sort_specs, specs})
 
-      {:error, bad_specs} ->
-        Logger.warn("bad sort specs: #{inspect(bad_specs)}")
+    case SortSpecs.to_quoted(specs) do
+      {:ok, fun_ast} ->
+        quote do: Enum.sort(unquote(maps), unquote(fun_ast))
+
+      {:error, invalid_specs} ->
+        :ok = Log.warn(:invalid_specs, {__ENV__, __CALLER__, invalid_specs})
         maps
     end
   end
-
-  # @doc """
-  # Allows to change the log `level` at compile time.
-  # """
-  @doc false
-  defmacro log_level(level), do: Logger.configure(level: level)
-
-  Application.delete_env(:logger, :compile_time_purge_level)
 end

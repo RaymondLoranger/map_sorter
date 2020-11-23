@@ -1,249 +1,270 @@
-defmodule Person do
-  @behaviour Access
-
-  defstruct [:name, :likes, :dob]
-
-  defdelegate fetch(person, key), to: Map
-  defdelegate get(person, key, default), to: Map
-  defdelegate get_and_update(person, key, fun), to: Map
-  defdelegate pop(person, key), to: Map
-end
-
 defmodule MapSorterTest do
   use ExUnit.Case, async: false
 
   require MapSorter
 
-  doctest MapSorter
+  doctest MapSorter, only: TestHelper.doctest(MapSorter)
 
-  setup_all do
-    people = [
-      %Person{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
-      %Person{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
-      %Person{name: "Ann" , likes: "reading"  , dob: "1992-04-15"},
-      %Person{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
-      %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
-      %Person{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
-      %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
-    ]
-
-    people_sort_specs = [asc: :dob, desc: :likes]
-
-    people_sorted = [
-      %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
-      %Person{name: "Bill", likes: "karate"   , dob: "1977-08-28"},
-      %Person{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"},
-      %Person{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
-      %Person{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
-      %Person{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
-      %Person{name: "Ann" , likes: "reading"  , dob: "1992-04-15"}
-    ]
-
-    keywords = [
-      [name: "Mike", likes: "ski, arts", dob: "1992-04-15"],
-      [name: "Mary", likes: "travels"  , dob: "1992-04-15"],
-      [name: "Ann" , likes: "reading"  , dob: "1992-04-15"],
-      [name: "Ray" , likes: "cycling"  , dob: "1977-08-28"],
-      [name: "Bill", likes: "karate"   , dob: "1977-08-28"],
-      [name: "Joe" , likes: "boxing"   , dob: "1977-08-28"],
-      [name: "Jill", likes: "cooking"  , dob: "1976-09-28"]
-    ]
-
-    keywords_sort_specs = [asc: :dob, desc: :likes]
-
-    keywords_sorted = [
-      [name: "Jill", likes: "cooking"  , dob: "1976-09-28"],
-      [name: "Bill", likes: "karate"   , dob: "1977-08-28"],
-      [name: "Ray" , likes: "cycling"  , dob: "1977-08-28"],
-      [name: "Joe" , likes: "boxing"   , dob: "1977-08-28"],
-      [name: "Mary", likes: "travels"  , dob: "1992-04-15"],
-      [name: "Mike", likes: "ski, arts", dob: "1992-04-15"],
-      [name: "Ann" , likes: "reading"  , dob: "1992-04-15"]
-    ]
-
-    mixed_bags = [
-      %{{1.0} => {"1"}, ['2'] => ['1'], ~D[2003-03-03] => ~T[14:30:51]},
-      %{{1.0} => {"2"}, ['2'] => ['2'], ~D[2003-03-03] => ~T[14:30:52]},
-      %{{1.0} => {"3"}, ['2'] => ['3'], ~D[2003-03-03] => ~T[14:30:52]},
-      %{{1.0} => {"4"}, ['2'] => ['4'], ~D[2003-03-03] => ~T[14:30:52]},
-      %{{1.0} => {"5"}, ['2'] => ['5'], ~D[2003-03-03] => ~T[14:30:55]}
-    ]
-
-    mixed_bags_sort_specs = [desc: ~D[2003-03-03], desc: {1.0}]
-
-    mixed_bags_sorted = [
-      %{{1.0} => {"5"}, ['2'] => ['5'], ~D[2003-03-03] => ~T[14:30:55]},
-      %{{1.0} => {"4"}, ['2'] => ['4'], ~D[2003-03-03] => ~T[14:30:52]},
-      %{{1.0} => {"3"}, ['2'] => ['3'], ~D[2003-03-03] => ~T[14:30:52]},
-      %{{1.0} => {"2"}, ['2'] => ['2'], ~D[2003-03-03] => ~T[14:30:52]},
-      %{{1.0} => {"1"}, ['2'] => ['1'], ~D[2003-03-03] => ~T[14:30:51]}
-    ]
-
-    versions = [
-      %{id: "2.0.1-beta" , version: Version.parse!("2.0.1-beta" )},
-      %{id: "2.0.1-omega", version: Version.parse!("2.0.1-omega")},
-      %{id: "2.0.1-alpha", version: Version.parse!("2.0.1-alpha")}
-    ]
-
-    versions_sort_specs = [desc: :version]
-
-    versions_sorted = [
-      %{id: "2.0.1-omega", version: Version.parse!("2.0.1-omega")},
-      %{id: "2.0.1-beta" , version: Version.parse!("2.0.1-beta" )},
-      %{id: "2.0.1-alpha", version: Version.parse!("2.0.1-alpha")}
-    ]
-
-    regexs = [
-      %{id: "abc.*def"  , regex: ~r/abc.*def/  },
-      %{id: "(abc)def$" , regex: ~r/(abc)def$/ },
-      %{id: "^abc.*def$", regex: ~r/^abc.*def$/}
-    ]
-
-    regexs_sort_specs = [desc: :regex]
-
-    regexs_sorted = [
-      %{id: "abc.*def"  , regex: ~r/abc.*def/  },
-      %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
-      %{id: "(abc)def$" , regex: ~r/(abc)def$/ }
-    ]
-
-    nested_data = [
-      %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
-      %{name: [first: "Meg", last: "Howe"], birth: [date: ~D[1966-01-23]]},
-      %{name: [first: "Joe", last: "Holt"], birth: [date: ~D[1988-01-23]]},
-      %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1955-01-23]]}
-    ]
-
-    nested_data_sort_specs = [asc: [:name, :first], desc: [:birth, :date]]
-
-    nested_data_sorted = [
-      %{name: [first: "Joe", last: "Holt"], birth: [date: ~D[1988-01-23]]},
-      %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
-      %{name: [first: "Meg", last: "Howe"], birth: [date: ~D[1966-01-23]]},
-      %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1955-01-23]]}
-    ]
-
-    setup = %{
-      people: people,
-      people_sort_specs: people_sort_specs,
-      people_sorted: people_sorted,
-      keywords: keywords,
-      keywords_sort_specs: keywords_sort_specs,
-      keywords_sorted: keywords_sorted,
-      mixed_bags: mixed_bags,
-      mixed_bags_sort_specs: mixed_bags_sort_specs,
-      mixed_bags_sorted: mixed_bags_sorted,
-      versions: versions,
-      versions_sort_specs: versions_sort_specs,
-      versions_sorted: versions_sorted,
-      regexs: regexs,
-      regexs_sort_specs: regexs_sort_specs,
-      regexs_sorted: regexs_sorted,
-      nested_data: nested_data,
-      nested_data_sort_specs: nested_data_sort_specs,
-      nested_data_sorted: nested_data_sorted
-    }
-
-    {:ok, setup: setup}
-  end
+  setup_all do: SetupTest.setup_all(__MODULE__)
 
   describe "MapSorter.sort/2" do
-    test "sorts structs with various forms of specs", %{setup: setup} do
-      # :debug → debug, info, warn and error messages (at compile time)
-      MapSorter.log_level(:error)
+    @tag :map_sorter_test_1
+    TestHelper.config_level(__MODULE__)
 
-      people_sorted = %{
-        explicit: MapSorter.sort(setup.people, asc: :dob, desc: :likes),
-        mixed: MapSorter.sort(setup.people, [:dob, desc: :likes]),
-        runtime: MapSorter.sort(setup.people, setup.people_sort_specs)
-      }
-
-      MapSorter.log_level(:error)
-      assert people_sorted.explicit == people_sorted.mixed
-      assert people_sorted.explicit == people_sorted.runtime
-      assert people_sorted.explicit == setup.people_sorted
+    test "sorts structs given explicit specs", context do
+      people_sorted = MapSorter.sort(context.people, asc: :dob, desc: :likes)
+      assert people_sorted == context.people_sorted
     end
 
-    test "structs not sorted given bad specs", %{setup: setup} do
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_2
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts structs given mixed specs", context do
+      people_sorted = MapSorter.sort(context.people, [:dob, desc: :likes])
+      assert people_sorted == context.people_sorted
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_3
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts structs given runtime specs", context do
+      people_sorted = MapSorter.sort(context.people, context.people_sort_specs)
+      assert people_sorted == context.people_sorted
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_4
+    TestHelper.config_level(__MODULE__)
+
+    test "structs not sorted given map specs", context do
+      people_sorted = MapSorter.sort(context.people, %{asc: :dob, desc: :likes})
+      assert people_sorted == context.people
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_5
+    TestHelper.config_level(__MODULE__)
+
+    test "structs not sorted given bad runtime specs", context do
       bad_specs = [ask: :dob, desk: :likes]
-      # :debug → debug, info, warn and error messages (at compile time)
-      MapSorter.log_level(:error)
-
-      people_sorted = %{
-        bad_literal: MapSorter.sort(setup.people, %{asc: :dob, desc: :likes}),
-        bad_runtime: MapSorter.sort(setup.people, bad_specs),
-        empty_specs: MapSorter.sort(setup.people, []),
-        nihil_specs: MapSorter.sort(setup.people, nil)
-      }
-
-      MapSorter.log_level(:error)
-      assert people_sorted.bad_literal == setup.people
-      assert people_sorted.bad_runtime == setup.people
-      assert people_sorted.empty_specs == setup.people
-      assert people_sorted.nihil_specs == setup.people
+      people_sorted = MapSorter.sort(context.people, bad_specs)
+      assert people_sorted == context.people
     end
 
-    test "sorts structs implementing the Access behaviour", %{setup: setup} do
-      people = setup.people
-      sort_specs = setup.people_sort_specs
-      people_sorted = setup.people_sorted
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_6
+    TestHelper.config_level(__MODULE__)
+
+    test "structs not sorted given bad compile time specs", context do
+      people_sorted = MapSorter.sort(context.people, ask: :dob, desk: :likes)
+      assert people_sorted == context.people
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_7
+    TestHelper.config_level(__MODULE__)
+
+    test "structs not sorted given empty list specs", context do
+      assert MapSorter.sort(context.people, []) == context.people
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_8
+    TestHelper.config_level(__MODULE__)
+
+    test "structs not sorted given nil specs", context do
+      assert MapSorter.sort(context.people, nil) == context.people
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_9
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts structs implementing the Access behaviour", context do
+      people = context.people
+      sort_specs = context.people_sort_specs
+      people_sorted = context.people_sorted
       assert MapSorter.sort(people, sort_specs) == people_sorted
     end
 
-    test "sorts keywords", %{setup: setup} do
-      keywords = setup.keywords
-      sort_specs = setup.keywords_sort_specs
-      keywords_sorted = setup.keywords_sorted
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_10
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts keywords", context do
+      keywords = context.keywords
+      sort_specs = context.keywords_sort_specs
+      keywords_sorted = context.keywords_sorted
       assert MapSorter.sort(keywords, sort_specs) == keywords_sorted
     end
 
-    test "keywords not sorted given bad specs", %{setup: setup} do
-      keywords = setup.keywords
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_11
+    TestHelper.config_level(__MODULE__)
+
+    test "keywords not sorted given map specs", context do
+      keywords = context.keywords
       bad_specs = %{asc: :dob, desc: :likes}
       assert MapSorter.sort(keywords, bad_specs) == keywords
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_12
+    TestHelper.config_level(__MODULE__)
+
+    test "keywords not sorted given nil specs", context do
+      keywords = context.keywords
       assert MapSorter.sort(keywords, nil) == keywords
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_13
+    TestHelper.config_level(__MODULE__)
+
+    test "keywords not sorted given empty list specs", context do
+      keywords = context.keywords
       assert MapSorter.sort(keywords, []) == keywords
     end
 
-    @tag :sorting_on_structs
-    test "sorts maps on Time structs", %{setup: setup} do
-      mixed_bags = setup.mixed_bags
-      sort_specs = setup.mixed_bags_sort_specs
-      mixed_bags_sorted = setup.mixed_bags_sorted
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_14
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts maps on Time structs", context do
+      mixed_bags = context.mixed_bags
+      sort_specs = context.mixed_bags_sort_specs
+      mixed_bags_sorted = context.mixed_bags_sorted
       assert MapSorter.sort(mixed_bags, sort_specs) == mixed_bags_sorted
     end
 
-    @tag :sorting_on_structs
-    test "maps not sorted given bad specs", %{setup: setup} do
-      mixed_bags = setup.mixed_bags
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_15
+    TestHelper.config_level(__MODULE__)
+
+    test "maps not sorted given tuple specs", context do
+      mixed_bags = context.mixed_bags
       bad_specs = {:desc, ~D[2003-03-03], {1.0}}
       assert MapSorter.sort(mixed_bags, bad_specs) == mixed_bags
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_16
+    TestHelper.config_level(__MODULE__)
+
+    test "maps not sorted given nil specs", context do
+      mixed_bags = context.mixed_bags
       assert MapSorter.sort(mixed_bags, nil) == mixed_bags
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_17
+    TestHelper.config_level(__MODULE__)
+
+    test "maps not sorted given empty list specs", context do
+      mixed_bags = context.mixed_bags
       assert MapSorter.sort(mixed_bags, []) == mixed_bags
     end
 
-    @tag :sorting_on_structs
-    test "sorts maps on Version structs", %{setup: setup} do
-      versions = setup.versions
-      sort_specs = setup.versions_sort_specs
-      versions_sorted = setup.versions_sorted
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_18
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts maps on Version structs", context do
+      versions = context.versions
+      sort_specs = context.versions_sort_specs
+      versions_sorted = context.versions_sorted
       assert MapSorter.sort(versions, sort_specs) == versions_sorted
     end
 
-    @tag :sorting_on_structs
-    test "sorts maps on Regex structs", %{setup: setup} do
-      regexs = setup.regexs
-      sort_specs = setup.regexs_sort_specs
-      regexs_sorted = setup.regexs_sorted
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_19
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts maps on Regex structs", context do
+      regexs = context.regexs
+      sort_specs = context.regexs_sort_specs
+      regexs_sorted = context.regexs_sorted
       assert MapSorter.sort(regexs, sort_specs) == regexs_sorted
     end
 
-    @tag :sorting_on_structs
-    test "sorts nested data structures", %{setup: setup} do
-      nested_data = setup.nested_data
-      sort_specs = setup.nested_data_sort_specs
-      nested_data_sorted = setup.nested_data_sorted
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_20
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts on Date or NaiveDateTime given runtime specs", context do
+      clients = context.clients
+      specs = context.clients_sort_specs
+      clients_sorted = context.clients_sorted
+      assert MapSorter.sort(clients, specs) == clients_sorted
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_21
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts on Date or NaiveDateTime given compile time specs", context do
+      clients = context.clients
+      sorted = context.clients_sorted
+      assert MapSorter.sort(clients, asc: {:dob, Date}, desc: :likes) == sorted
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_22
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts NOT on Date structs given bad key at runtime", context do
+      clients = context.clients
+      bad_key_specs = [{'--dob--', Date}, desc: :likes]
+      badly_sorted = MapSorter.sort(clients, bad_key_specs)
+      assert MapSorter.sort(clients, desc: :likes) == badly_sorted
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_23
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts NOT on Date structs given bad key at compile time", context do
+      clients = context.clients
+      badly_sorted = MapSorter.sort(clients, [{'--dob--', Date}, desc: :likes])
+      assert MapSorter.sort(clients, desc: :likes) == badly_sorted
+    end
+
+    Logger.configure(level: :all)
+
+    @tag :map_sorter_test_24
+    TestHelper.config_level(__MODULE__)
+
+    test "sorts nested data structures", context do
+      nested_data = context.nested_data
+      sort_specs = context.nested_data_sort_specs
+      nested_data_sorted = context.nested_data_sorted
       assert MapSorter.sort(nested_data, sort_specs) == nested_data_sorted
     end
+
+    Logger.configure(level: :all)
   end
 end
