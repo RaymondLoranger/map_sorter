@@ -61,6 +61,7 @@ Examples of `sort specs` with a `Date` key for nested data structures:
 
 ```elixir
 require MapSorter
+
 people = [
   %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
   %{name: "Mary", likes: "travels"  , dob: "1992-04-15"},
@@ -68,6 +69,7 @@ people = [
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28"},
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28"}
 ]
+
 MapSorter.sort(people, asc: :dob, desc: :likes)
 ```
 
@@ -88,6 +90,7 @@ descendingly by `:likes` as follows:
 
 ```elixir
 require MapSorter
+
 people = [
   %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15]},
   %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15]},
@@ -95,6 +98,7 @@ people = [
   %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28]},
   %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28]}
 ]
+
 MapSorter.sort(people, asc: {:dob, Date}, desc: :likes)
 ```
 
@@ -115,12 +119,14 @@ descendingly by `:likes` as follows:
 
 ```elixir
 require MapSorter
+
 people = [
   %{name: [first: "Meg", last: "Hill"], birth: [date: ~D[1977-01-23]]},
   %{name: [first: "Meg", last: "Howe"], birth: [date: ~N[1977-01-23 01:02:03]]},
   %{name: [first: "Joe", last: "Holt"], birth: [date: ~N[1988-01-23 23:59:59]]},
   %{name: [first: "Meg", last: "Hunt"], birth: [date: ~D[1988-01-23]]}
 ]
+
 MapSorter.sort(people, desc: {[:birth, :date], Date}, asc: [:name, :last])
 ```
 

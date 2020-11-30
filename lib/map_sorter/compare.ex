@@ -25,13 +25,13 @@ defmodule MapSorter.Compare do
   """
   @spec fun(SortSpecs.t()) :: fun
   def fun(sort_specs) when is_list(sort_specs) do
-    Log.debug(:generating_runtime_comp_fun, {__ENV__, sort_specs})
+    Log.debug(:generating_runtime_comp_fun, {sort_specs, __ENV__})
     {fun, []} = sort_specs |> heredoc() |> Code.eval_string()
     fun
   end
 
   def fun(sort_specs) do
-    Log.warn(:generating_no_op_sort, {__ENV__, sort_specs})
+    Log.error(:generating_no_op_sort, {sort_specs, __ENV__})
     fun([])
   end
 
@@ -82,7 +82,7 @@ defmodule MapSorter.Compare do
     end
     """
 
-    Log.debug(:comp_fun_heredoc, {__ENV__, sort_specs, heredoc})
+    Log.debug(:comp_fun_heredoc, {sort_specs, heredoc, __ENV__})
     heredoc
   end
 end

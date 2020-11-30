@@ -83,14 +83,14 @@ defmodule MapSorter do
           Macro.expand(specs, __CALLER__)
       end
 
-    :ok = Log.debug(:sort_specs, {__ENV__, __CALLER__, sort_specs, specs})
+    :ok = Log.debug(:sort_specs, {sort_specs, specs, __ENV__, __CALLER__})
 
     case SortSpecs.to_quoted(specs) do
       {:ok, fun_ast} ->
         quote do: Enum.sort(unquote(maps), unquote(fun_ast))
 
       {:error, invalid_specs} ->
-        :ok = Log.warn(:invalid_specs, {__ENV__, __CALLER__, invalid_specs})
+        :ok = Log.error(:invalid_specs, {invalid_specs, __ENV__, __CALLER__})
         maps
     end
   end

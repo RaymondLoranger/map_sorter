@@ -47,60 +47,60 @@ defmodule MapSorter.SortSpecs do
   """
   @spec to_quoted(t | Macro.t()) :: {:ok, Macro.t()} | {:error, t}
   def to_quoted(sort_specs) when is_list(sort_specs) do
-    Log.debug(:generating_compile_time_comp_fun, {__ENV__, sort_specs})
+    Log.debug(:generating_compile_time_comp_fun, {sort_specs, __ENV__})
     {:ok, fun_ast} = sort_specs |> Compare.heredoc() |> Code.string_to_quoted()
-    :ok = Log.debug(:compile_time_comp_fun_ast, {__ENV__, sort_specs, fun_ast})
+    :ok = Log.debug(:compile_time_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
   end
 
   def to_quoted({:%{}, _, _} = sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'map'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'map'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted({:{}, _, _} = sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'tuple'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'tuple'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted({_, meta, _} = sort_specs) when is_list(meta) do
     fun_ast = quote do: MapSorter.Compare.fun(unquote(sort_specs))
-    :ok = Log.debug(:runtime_comp_fun_ast, {__ENV__, sort_specs, fun_ast})
+    :ok = Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
   end
 
   def to_quoted(sort_specs) when is_map(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'map'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'map'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted(sort_specs) when is_tuple(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'tuple'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'tuple'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted(sort_specs) when is_number(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'number'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'number'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted(sort_specs) when is_boolean(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'boolean'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'boolean'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted(sort_specs) when is_atom(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "an 'atom'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "an 'atom'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted(sort_specs) when is_binary(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'binary'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'binary'", __ENV__})
     {:error, sort_specs}
   end
 
   def to_quoted(sort_specs) do
-    :ok = Log.warn(:sort_specs_cannot_be, {__ENV__, sort_specs, "a 'literal'"})
+    :ok = Log.error(:sort_specs_cannot_be, {sort_specs, "a 'literal'", __ENV__})
     {:error, sort_specs}
   end
 end
