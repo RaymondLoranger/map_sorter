@@ -1,6 +1,6 @@
 defmodule MapSorter.SortSpec do
   @moduledoc """
-  Defines type `SortSpec`.
+  Defines the `sort spec` types.
   """
 
   # :dob | [:birth, :date]
