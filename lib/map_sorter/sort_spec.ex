@@ -4,7 +4,7 @@ defmodule MapSorter.SortSpec do
   """
 
   # :dob | [:birth, :date]
-  @type key :: term | [term]
+  @type key :: Map.key() | [Map.key()]
 
   # For ascending or descending order...
   @type sort_dir :: :asc | :desc
