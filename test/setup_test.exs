@@ -4,7 +4,6 @@ defmodule SetupTest.Person do
   defstruct [:name, :likes, :dob]
 
   defdelegate fetch(person, key), to: Map
-  defdelegate get(person, key, default), to: Map
   defdelegate get_and_update(person, key, fun), to: Map
   defdelegate pop(person, key), to: Map
 end

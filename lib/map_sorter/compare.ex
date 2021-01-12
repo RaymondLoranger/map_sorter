@@ -26,7 +26,7 @@ defmodule MapSorter.Compare do
   @spec fun(SortSpecs.t()) :: fun
   def fun(sort_specs) when is_list(sort_specs) do
     Log.debug(:generating_runtime_comp_fun, {sort_specs, __ENV__})
-    {fun, []} = sort_specs |> heredoc() |> Code.eval_string()
+    {fun, []} = heredoc(sort_specs) |> Code.eval_string()
     fun
   end
 

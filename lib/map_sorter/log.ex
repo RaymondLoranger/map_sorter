@@ -63,7 +63,7 @@ defmodule MapSorter.Log do
     • Sort specs:
       #{inspect(sort_specs)}
     • Heredoc:
-      #{heredoc |> String.trim_trailing() |> String.replace("\n", "\n  ")}
+      #{String.trim_trailing(heredoc) |> String.replace("\n", "\n  ")}
     #{from()}
     """
   end

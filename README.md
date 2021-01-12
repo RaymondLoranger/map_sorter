@@ -7,8 +7,8 @@ Sorts a list of `maps` per a list of `sort specs`.
 Also supports:
 
 - keywords
-- structs implementing the Access behaviour
-- nested maps, keywords or structs implementing the Access behaviour
+- structs implementing the [Access][Access] behaviour
+- nested maps, keywords or structs implementing the [Access][Access] behaviour
 
 ## Installation
 
@@ -141,3 +141,5 @@ ascendingly by `last name` as follows:
   %{name: [first: "Meg", last: "Howe"], birth: [date: ~N[1977-01-23 01:02:03]]}
 ]
 ```
+
+[Access]: https://hexdocs.pm/elixir/Access.html

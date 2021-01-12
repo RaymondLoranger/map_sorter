@@ -12,7 +12,7 @@ defmodule MapSorter.SortSpecs do
   @type t :: [SortSpec.t()]
 
   @doc """
-  Converts `sort specs` to the AST of a #{@compare_function}
+  Converts `sort specs` into the AST of a #{@compare_function}
   (compile time or runtime).
 
   ## Examples
@@ -48,7 +48,7 @@ defmodule MapSorter.SortSpecs do
   @spec to_quoted(t | Macro.t()) :: {:ok, Macro.t()} | {:error, t}
   def to_quoted(sort_specs) when is_list(sort_specs) do
     Log.debug(:generating_compile_time_comp_fun, {sort_specs, __ENV__})
-    {:ok, fun_ast} = sort_specs |> Compare.heredoc() |> Code.string_to_quoted()
+    {:ok, fun_ast} = Compare.heredoc(sort_specs) |> Code.string_to_quoted()
     :ok = Log.debug(:compile_time_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
   end

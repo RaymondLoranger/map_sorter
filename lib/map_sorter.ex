@@ -5,8 +5,10 @@ defmodule MapSorter do
   Also supports:
 
   - keywords
-  - structs implementing the Access behaviour
-  - nested maps, keywords or structs implementing the Access behaviour
+  - structs implementing the [Access](https://hexdocs.pm/elixir/Access.html)
+    behaviour
+  - nested maps, keywords or structs implementing the
+    [Access](https://hexdocs.pm/elixir/Access.html) behaviour
   """
 
   alias __MODULE__.{Log, SortSpecs}
