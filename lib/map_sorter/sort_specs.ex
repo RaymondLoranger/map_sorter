@@ -68,7 +68,9 @@ defmodule MapSorter.SortSpecs do
     fun_ast = quote do: MapSorter.Compare.fun(unquote(sort_specs))
     :ok = Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     # Ensure message logged before returning...
+    IO.puts("Sleeping 10 ms.")
     Process.sleep(@wait)
+    IO.puts("Done sleeping.")
     {:ok, fun_ast}
   end
 
