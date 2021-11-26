@@ -2,6 +2,7 @@ defmodule MapSorter.SortSpecs do
   use PersistConfig
 
   @compare_function get_env(:compare_function)
+  @wait 10
 
   @moduledoc """
   Generates the AST of a #{@compare_function} from a list of `sort specs`.
@@ -65,8 +66,9 @@ defmodule MapSorter.SortSpecs do
 
   def to_quoted({_, meta, _} = sort_specs) when is_list(meta) do
     fun_ast = quote do: MapSorter.Compare.fun(unquote(sort_specs))
-    Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
-    Process.sleep(50)
+    :ok = Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
+    # Ensure message logged before returning...
+    Process.sleep(@wait)
     {:ok, fun_ast}
   end
 
