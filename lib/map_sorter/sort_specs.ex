@@ -66,6 +66,7 @@ defmodule MapSorter.SortSpecs do
   def to_quoted({_, meta, _} = sort_specs) when is_list(meta) do
     fun_ast = quote do: MapSorter.Compare.fun(unquote(sort_specs))
     :ok = Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
+    Process.sleep(50)
     {:ok, fun_ast}
   end
 
