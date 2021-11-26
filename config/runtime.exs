@@ -1,7 +1,7 @@
 import Config
 
-# config :log_reset, levels: :all
-# config :file_only_logger, log?: true
+config :log_reset, levels: :none
+config :file_only_logger, log?: true
 
 # For testing purposes only...
 config :map_sorter,
