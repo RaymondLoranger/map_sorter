@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RaymondLoranger/map_sorter.svg?branch=master)](https://travis-ci.org/RaymondLoranger/map_sorter)
 
-Sorts a list of `maps` per a list of `sort specs`.
+Sorts a list of maps per a list of sort specs.
 
 Also supports:
 
@@ -29,28 +29,28 @@ require MapSorter
 MapSorter.sort(maps, sort_specs)
 ```
 
-Examples of `sort specs` for flat data structures:
+Examples of sort specs for flat data structures:
 ```
 - implicit: [:dob, :name]
 - mixed:    [:dob, desc: :name]
 - explicit: [asc: :dob, desc: :name]
 ```
 
-Examples of `sort specs` with a `Date` key for flat data structures:
+Examples of sort specs with a [Date][Date] key for flat data structures:
 ```
 - implicit: [{:dob Date}, :name]
 - mixed:    [{:dob Date}, desc: :name]
 - explicit: [asc: {:dob Date}, desc: :name]
 ```
 
-Examples of `sort specs` for nested data structures:
+Examples of sort specs for nested data structures:
 ```
 - implicit: [[:birth, :date], :name]
 - mixed:    [[:birth, :date], desc: :name]
 - explicit: [asc: [:birth, :date], desc: :name]
 ```
 
-Examples of `sort specs` with a `Date` key for nested data structures:
+Examples of sort specs with a [Date][Date] key for nested data structures:
 ```
 - implicit: [{[:birth, :date], Date}, :name]
 - mixed:    [{[:birth, :date], Date}, desc: :name]
@@ -130,8 +130,8 @@ people = [
 MapSorter.sort(people, desc: {[:birth, :date], Date}, asc: [:name, :last])
 ```
 
-The above code will sort `people` descendingly by `birth date` and
-ascendingly by `last name` as follows:
+The above code will sort `people` descendingly by birth date and
+ascendingly by last name as follows:
 
 ```elixir
 [
@@ -143,3 +143,4 @@ ascendingly by `last name` as follows:
 ```
 
 [Access]: https://hexdocs.pm/elixir/Access.html
+[Date]: https://hexdocs.pm/elixir/Date.html
