@@ -1,9 +1,9 @@
 defmodule MapSorter do
   @moduledoc """
   Sorts a list of maps per a list of sort specs.
-
+  
   Also supports:
-
+  
   - keywords
   - structs implementing the `Access` behaviour
   - nested maps, keywords or structs implementing the `Access` behaviour
@@ -18,37 +18,37 @@ defmodule MapSorter do
 
   @doc """
   Sorts `maps` per the given `sort_specs` (compile time or runtime).
-
+  
   Examples of sort specs for flat data structures:
   ```
   - implicit: [:dob, :name]
   - mixed:    [:dob, desc: :name]
   - explicit: [asc: :dob, desc: :name]
   ```
-
+  
   Examples of sort specs with a `Date` key for flat data structures:
   ```
   - implicit: [{:dob Date}, :name]
   - mixed:    [{:dob Date}, desc: :name]
   - explicit: [asc: {:dob Date}, desc: :name]
   ```
-
+  
   Examples of sort specs for nested data structures:
   ```
   - implicit: [[:birth, :date], :name]
   - mixed   : [[:birth, :date], desc: :name]
   - explicit: [asc: [:birth, :date], desc: :name]
   ```
-
+  
   Examples of sort specs with a `Date` key for nested data structures:
   ```
   - implicit: [{[:birth, :date], Date}, :name]
   - mixed:    [{[:birth, :date], Date}, desc: :name]
   - explicit: [asc: {[:birth, :date], Date}, desc: :name]
   ```
-
+  
   ## Examples
-
+  
       iex> require MapSorter
       iex> people = [
       ...>   %{name: "Mike", likes: "movies" , dob: "1992-04-15"},
