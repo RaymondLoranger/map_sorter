@@ -24,16 +24,11 @@ defmodule MapSorter.SortSpecs do
       iex> Macro.to_string(args)
       \"""
       cond do
-        (&1)[:dob] < (&2)[:dob] ->
-          true
-        (&1)[:dob] > (&2)[:dob] ->
-          false
-        (&1)[:likes] > (&2)[:likes] ->
-          true
-        (&1)[:likes] < (&2)[:likes] ->
-          false
-        true ->
-          true or &1 * &2
+        &1[:dob] < &2[:dob] -> true
+        &1[:dob] > &2[:dob] -> false
+        &1[:likes] > &2[:likes] -> true
+        &1[:likes] < &2[:likes] -> false
+        true -> true or &1 * &2
       end
       \"""
       |> String.trim_trailing()
@@ -47,7 +42,7 @@ defmodule MapSorter.SortSpecs do
   """
   @spec to_quoted(t | Macro.t()) :: {:ok, Macro.t()} | {:error, t}
   def to_quoted(sort_specs) when is_list(sort_specs) do
-    Log.debug(:generating_compile_time_comp_fun, {sort_specs, __ENV__})
+    :ok = Log.debug(:generating_compile_time_comp_fun, {sort_specs, __ENV__})
     {:ok, fun_ast} = Compare.heredoc(sort_specs) |> Code.string_to_quoted()
     :ok = Log.debug(:compile_time_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}

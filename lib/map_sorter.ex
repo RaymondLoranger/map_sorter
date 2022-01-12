@@ -11,7 +11,12 @@ defmodule MapSorter do
     [Access](https://hexdocs.pm/elixir/Access.html) behaviour
   """
 
+  require Logger
+
   alias __MODULE__.{Log, SortSpecs}
+
+  @logger_all_env Application.get_all_env(:logger)
+  @modules for {mod, id} <- @logger_all_env[:backends], do: {id, mod}
 
   @doc """
   Sorts `maps` per the given `sort specs` (compile time or runtime).
@@ -72,6 +77,21 @@ defmodule MapSorter do
       ]
   """
   defmacro sort(maps, sort_specs) do
+    # To enforce Logger configuration at compile-time.
+    # Otherwise Logger will use default configuration.
+    Enum.each(@logger_all_env, fn
+      {:console, v} ->
+        Logger.configure_backend(:console, v)
+
+      {k, v} ->
+        if Keyword.keyword?(v) and Keyword.has_key?(v, :path) do
+          Logger.add_backend({@modules[k], k}, v)
+          Logger.configure_backend({@modules[k], k}, v)
+        else
+          Logger.configure([{k, v}])
+        end
+    end)
+
     specs =
       case sort_specs do
         specs when is_list(specs) ->
