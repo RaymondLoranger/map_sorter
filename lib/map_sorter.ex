@@ -1,14 +1,12 @@
 defmodule MapSorter do
   @moduledoc """
-  Sorts a list of `maps` per a list of `sort specs`.
+  Sorts a list of maps per a list of sort specs.
 
   Also supports:
 
   - keywords
-  - structs implementing the [Access](https://hexdocs.pm/elixir/Access.html)
-    behaviour
-  - nested maps, keywords or structs implementing the
-    [Access](https://hexdocs.pm/elixir/Access.html) behaviour
+  - structs implementing the `Access` behaviour
+  - nested maps, keywords or structs implementing the `Access` behaviour
   """
 
   require Logger
@@ -19,30 +17,30 @@ defmodule MapSorter do
   @modules for {mod, id} <- @logger_all_env[:backends], do: {id, mod}
 
   @doc """
-  Sorts `maps` per the given `sort specs` (compile time or runtime).
+  Sorts `maps` per the given `sort_specs` (compile time or runtime).
 
-  Examples of `sort specs` for flat data structures:
+  Examples of sort specs for flat data structures:
   ```
   - implicit: [:dob, :name]
   - mixed:    [:dob, desc: :name]
   - explicit: [asc: :dob, desc: :name]
   ```
 
-  Examples of `sort specs` with a `Date` key for flat data structures:
+  Examples of sort specs with a `Date` key for flat data structures:
   ```
   - implicit: [{:dob Date}, :name]
   - mixed:    [{:dob Date}, desc: :name]
   - explicit: [asc: {:dob Date}, desc: :name]
   ```
 
-  Examples of `sort specs` for nested data structures:
+  Examples of sort specs for nested data structures:
   ```
   - implicit: [[:birth, :date], :name]
   - mixed   : [[:birth, :date], desc: :name]
   - explicit: [asc: [:birth, :date], desc: :name]
   ```
 
-  Examples of `sort specs` with a `Date` key for nested data structures:
+  Examples of sort specs with a `Date` key for nested data structures:
   ```
   - implicit: [{[:birth, :date], Date}, :name]
   - mixed:    [{[:birth, :date], Date}, desc: :name]
@@ -77,7 +75,7 @@ defmodule MapSorter do
       ]
   """
   defmacro sort(maps, sort_specs) do
-    # To enforce Logger configuration at compile-time.
+    # To enforce Logger configuration at compile time.
     # Otherwise Logger will use default configuration.
     Enum.each(@logger_all_env, fn
       {:console, v} ->

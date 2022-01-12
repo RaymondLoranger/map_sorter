@@ -3,5 +3,5 @@ defmodule MapSorter.ContainerTest do
 
   alias MapSorter.Container
 
-  doctest Container, only: TestHelper.doctest(Container)
+  doctest Container, only: TestHelper.doctests(Container)
 end

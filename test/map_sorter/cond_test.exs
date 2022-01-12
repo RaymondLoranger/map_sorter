@@ -3,5 +3,5 @@ defmodule MapSorter.CondTest do
 
   alias MapSorter.Cond
 
-  doctest Cond, only: TestHelper.doctest(Cond)
+  doctest Cond, only: TestHelper.doctests(Cond)
 end

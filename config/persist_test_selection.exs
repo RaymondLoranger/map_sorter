@@ -2,7 +2,7 @@ import Config
 
 # Allows to run the doctest(s) of one function at a time...
 config :map_sorter,
-  doctest: %{
+  doctests: %{
     MapSorter.Compare => [
       fun: 1,
       heredoc: 1,
