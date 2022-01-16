@@ -22,6 +22,12 @@ defmodule MapSorter.Compare do
       true
 
       iex> alias MapSorter.Compare
+      iex> sort_specs = fn -> [:dob, desc: :likes] end
+      iex> fun = Compare.fun(sort_specs.())
+      iex> is_function(fun, 2)
+      true
+
+      iex> alias MapSorter.Compare
       iex> sort_specs = Tuple.to_list({:dob, {:desc, :likes}})
       iex> fun = Compare.fun(sort_specs)
       iex> is_function(fun, 2)
