@@ -6,17 +6,25 @@ defmodule MapSorter.Log do
     \nSort specs...
     • 'Received' sort specs: #{inspect(sort_specs) |> maybe_break(25)}
     • 'Adjusted' sort specs: #{inspect(specs) |> maybe_break(25)}
-    #{from(caller, __MODULE__)}
     • Macro: #{fun(env)}
+    #{from(caller, __MODULE__)}
     """
   end
 
-  error :invalid_specs, {bad_specs, env, caller} do
+  warn :invalid_specs, {bad_specs, env, caller} do
     """
     \nSort 'declined' given invalid sort specs...
     • 'Invalid' sort specs: #{inspect(bad_specs) |> maybe_break(24)}
-    #{from(caller, __MODULE__)}
     • Macro: #{fun(env)}
+    #{from(caller, __MODULE__)}
+    """
+  end
+
+  warn :invalid_specs, {bad_specs, env} do
+    """
+    \nInvalid sort specs detected...
+    • 'Invalid' sort specs: #{inspect(bad_specs) |> maybe_break(24)}
+    #{from(env, __MODULE__)}
     """
   end
 
@@ -48,34 +56,26 @@ defmodule MapSorter.Log do
     """
   end
 
-  debug :generating_compile_time_comp_fun, {sort_specs, env} do
+  debug :generating_compile_time_heredoc, {sort_specs, env} do
     """
-    \nGenerating 'compile time' compare function...
+    \nGenerating 'compile time' heredoc of compare function...
     • Sort specs: #{inspect(sort_specs) |> maybe_break(14)}
     #{from(env, __MODULE__)}
     """
   end
 
-  debug :generating_runtime_comp_fun, {sort_specs, env} do
+  debug :generating_runtime_heredoc, {sort_specs, env} do
     """
-    \nGenerating 'runtime' compare function...
+    \nGenerating 'runtime' heredoc of compare function...
     • Sort specs: #{inspect(sort_specs) |> maybe_break(14)}
     #{from(env, __MODULE__)}
     """
   end
 
-  error :generating_no_op_sort, {sort_specs, env} do
+  warn :generating_no_op_sort, {sort_specs, env} do
     """
     \nGenerating 'no-op sort' as sort specs not a list...
     • Sort specs: #{inspect(sort_specs) |> maybe_break(14)}
-    #{from(env, __MODULE__)}
-    """
-  end
-
-  error :sort_specs_cannot_be, {sort_specs, what, env} do
-    """
-    \nSort specs cannot be #{what}...
-    • 'Invalid' sort specs: #{inspect(sort_specs) |> maybe_break(24)}
     #{from(env, __MODULE__)}
     """
   end

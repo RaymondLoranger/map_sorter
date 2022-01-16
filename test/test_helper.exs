@@ -10,9 +10,14 @@ defmodule TestHelper do
   def excluded_tags do
     get_env(:excluded_tags, [])
   end
+
+  # Excludes logging at compile time when called after excluded @tag...
+  @spec config_level(module) :: :ok | nil
+  def config_level(module) when is_atom(module) do
+    [tag] = Module.get_attribute(module, :tag)
+    if tag in excluded_tags(), do: Logger.configure(level: :none)
+  end
 end
 
-# Disable file logging for tests.
-Application.put_env(:file_only_logger, :level, :none, persistent: true)
 ExUnit.configure(exclude: TestHelper.excluded_tags())
 ExUnit.start()

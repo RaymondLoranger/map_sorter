@@ -17,7 +17,7 @@ defmodule MapSorter do
   @modules for {mod, id} <- @logger_all_env[:backends], do: {id, mod}
 
   @doc """
-  Sorts `maps` per the given `sort_specs` (compile time or runtime).
+  Sorts `maps` per the given `sort_specs`.
   
   Examples of sort specs for flat data structures:
   ```
@@ -110,7 +110,7 @@ defmodule MapSorter do
         quote do: Enum.sort(unquote(maps), unquote(fun_ast))
 
       {:error, invalid_specs} ->
-        :ok = Log.error(:invalid_specs, {invalid_specs, __ENV__, __CALLER__})
+        :ok = Log.warn(:invalid_specs, {invalid_specs, __ENV__, __CALLER__})
         maps
     end
   end

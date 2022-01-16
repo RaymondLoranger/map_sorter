@@ -23,6 +23,7 @@ defmodule SetupTest do
     ]
 
     people_sort_specs = [asc: :dob, desc: :likes]
+    partly_sort_specs = [asc: :dob, asc: :what, desc: :likes, desc: :where]
 
     people_sorted = [
       %Person{name: "Jill", likes: "cooking"  , dob: "1976-09-28"},
@@ -81,7 +82,7 @@ defmodule SetupTest do
       %{id: "0.0.1"      , version: Version.parse!("0.0.1"      )}
     ]
 
-    versions_sort_specs = [desc: {:version, MapSorter.Version}]
+    versions_sort_specs = [desc: {:version, Version}]
 
     versions_sorted = [
       %{id: "2.0.1-omega", version: Version.parse!("2.0.1-omega")},
@@ -152,6 +153,7 @@ defmodule SetupTest do
     %{
       people: people,
       people_sort_specs: people_sort_specs,
+      partly_sort_specs: partly_sort_specs,
       people_sorted: people_sorted,
 
       keywords: keywords,

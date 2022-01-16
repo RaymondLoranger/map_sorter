@@ -10,7 +10,7 @@ config :map_sorter,
     MapSorter.Cond => [
       clauses: 1,
     ],
-    MapSorter.Container => [
+    MapSorter.SortSpec => [
       brackets: 1,
     ],
     MapSorter.SortSpecs => [
@@ -27,10 +27,10 @@ config :map_sorter,
     # :compare_test_1,
     # :compare_test_2,
 
-    # :sort_spec_test_1,
-    # :sort_spec_test_2,
-    # :sort_spec_test_3,
-    # :sort_spec_test_4,
+    # :sort_specs_test_1,
+    # :sort_specs_test_2,
+    # :sort_specs_test_3,
+    # :sort_specs_test_4,
 
     # :map_sorter_test_1,
     # :map_sorter_test_2,
@@ -56,4 +56,5 @@ config :map_sorter,
     # :map_sorter_test_22,
     # :map_sorter_test_23,
     # :map_sorter_test_24,
+    # :map_sorter_test_25,
   ]

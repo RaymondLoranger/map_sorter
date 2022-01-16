@@ -9,6 +9,8 @@ defmodule MapSorter.CompareTest do
 
   describe "Compare.fun/1" do
     @tag :compare_test_1
+    TestHelper.config_level(__MODULE__)
+
     test "returns a sort function", context do
       comp_fun = Compare.fun([:dob, desc: :likes])
       assert comp_fun == context.here_fun
@@ -17,7 +19,11 @@ defmodule MapSorter.CompareTest do
       refute comp_fun.(%{likes: "art"}, %{likes: "ski"})
     end
 
+    Logger.configure(level: :all)
+
     @tag :compare_test_2
+    TestHelper.config_level(__MODULE__)
+
     test ~S[returns a "true" function given bad specs], context do
       tuple_comp_fun = Compare.fun({:dob, :desc, :likes})
       empty_comp_fun = Compare.fun([])
@@ -35,5 +41,7 @@ defmodule MapSorter.CompareTest do
       assert nihil_comp_fun.(%{any: 0}, %{any: 9})
       assert nihil_comp_fun.(%{any: 9}, %{any: 0})
     end
+
+    Logger.configure(level: :all)
   end
 end
