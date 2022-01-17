@@ -24,7 +24,7 @@ config :map_sorter,
 # Allows to run one test at a time...
 config :map_sorter,
   excluded_tags: [
-    # :compare_test_1,
+    :compare_test_1,
     :compare_test_2,
 
     :sort_specs_test_1,
@@ -36,7 +36,7 @@ config :map_sorter,
     :map_sorter_test_2,
     :map_sorter_test_3,
     :map_sorter_test_4,
-    :map_sorter_test_5,
+    # :map_sorter_test_5,
     :map_sorter_test_6,
     :map_sorter_test_7,
     :map_sorter_test_8,

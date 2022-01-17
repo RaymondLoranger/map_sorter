@@ -43,7 +43,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_4
     TestHelper.config_level(__MODULE__)
 
-    test "structs not sorted given map specs", context do
+    test "sorts NOT structs given map specs", context do
       people_sorted = MapSorter.sort(context.people, %{asc: :dob, desc: :likes})
       assert people_sorted == context.people
     end
@@ -53,7 +53,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_5
     TestHelper.config_level(__MODULE__)
 
-    test "structs not sorted given tuple specs", context do
+    test "sorts NOT structs given tuple specs", context do
       people_sorted = MapSorter.sort(context.people, {:dob, desc: :likes})
       assert people_sorted == context.people
     end

@@ -12,28 +12,28 @@ defmodule MapSorter.Compare do
 
   @doc """
   Generates an `Enum.sort/2` compare function from a list of sort specs.
-
+  
   ## Examples
-
+  
       iex> alias MapSorter.Compare
       iex> sort_specs = [:dob, desc: :likes]
       iex> fun = Compare.fun(sort_specs)
       iex> is_function(fun, 2)
       true
-
+  
       # Compare function always true => no reordering...
       iex> alias MapSorter.Compare
       iex> sort_specs = {:dob, desc: :likes}
       iex> fun = Compare.fun(sort_specs)
       iex> is_function(fun, 2) and fun.(1, 2) and fun.(:any, 'any')
       true
-
+  
       iex> alias MapSorter.Compare
       iex> sort_specs = fn -> [:dob, desc: :likes] end
       iex> fun = Compare.fun(sort_specs.())
       iex> is_function(fun, 2)
       true
-
+  
       iex> alias MapSorter.Compare
       iex> sort_specs = Tuple.to_list({:dob, {:desc, :likes}})
       iex> fun = Compare.fun(sort_specs)
@@ -53,14 +53,14 @@ defmodule MapSorter.Compare do
 
   @doc ~S'''
   Generates a `cond/1` expression as a heredoc to become a compare function.
-
+  
   The heredoc may be converted into its quoted form at compile time or else
   have its contents evaluated at runtime.
-
+  
   This function cannot be named `cond` as it is among the `Kernel.SpecialForms`.
-
+  
   ## Examples
-
+  
       iex> alias MapSorter.Compare
       iex> Compare.heredoc([])
       """
@@ -68,7 +68,7 @@ defmodule MapSorter.Compare do
       true -> true or &1 * &2
       end
       """
-
+  
       iex> alias MapSorter.Compare
       iex> sort_specs = [:name, {:desc, :dob}]
       iex> Compare.heredoc(sort_specs)
@@ -81,7 +81,7 @@ defmodule MapSorter.Compare do
       true -> true or &1 * &2
       end
       """
-
+  
       iex> alias MapSorter.Compare
       iex> sort_specs = [:name, {:desc, {:dob, Date}}]
       iex> Compare.heredoc(sort_specs)
@@ -94,7 +94,7 @@ defmodule MapSorter.Compare do
       true -> true or &1 * &2
       end
       """
-
+  
       iex> alias MapSorter.Compare
       iex> sort_specs = [:name, {:desc, {:account, Path}}]
       iex> Compare.heredoc(sort_specs)
