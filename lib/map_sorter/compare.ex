@@ -21,6 +21,13 @@ defmodule MapSorter.Compare do
       iex> is_function(fun, 2)
       true
 
+      # Compare function always true => no reordering...
+      iex> alias MapSorter.Compare
+      iex> sort_specs = {:dob, desc: :likes}
+      iex> fun = Compare.fun(sort_specs)
+      iex> is_function(fun, 2) and fun.(1, 2) and fun.(:any, 'any')
+      true
+
       iex> alias MapSorter.Compare
       iex> sort_specs = fn -> [:dob, desc: :likes] end
       iex> fun = Compare.fun(sort_specs.())
@@ -35,13 +42,12 @@ defmodule MapSorter.Compare do
   """
   @spec fun(SortSpecs.t()) :: comp_fun
   def fun(sort_specs) when is_list(sort_specs) do
-    :ok = Log.debug(:generating_runtime_heredoc, {sort_specs, __ENV__})
     {fun, []} = heredoc(sort_specs) |> Code.eval_string()
     fun
   end
 
   def fun(sort_specs) do
-    :ok = Log.warn(:generating_no_op_sort, {sort_specs, __ENV__})
+    :ok = Log.warn(:no_reordering, {sort_specs, __ENV__})
     fun([])
   end
 
@@ -104,13 +110,10 @@ defmodule MapSorter.Compare do
   '''
   @spec heredoc(SortSpecs.t()) :: String.t()
   def heredoc(sort_specs) when is_list(sort_specs) do
-    heredoc = """
+    """
     & cond do
     #{Cond.clauses(sort_specs)}true -> true or &1 * &2
     end
     """
-
-    :ok = Log.debug(:comp_fun_heredoc, {sort_specs, heredoc, __ENV__})
-    heredoc
   end
 end

@@ -32,16 +32,17 @@ defmodule MapSorter.SortSpecs do
 
       # Compile time sort specs...
       iex> alias MapSorter.SortSpecs
-      iex> key_field = fn -> :dob end
-      iex> sort_specs = [key_field.()]
-      iex> {:ok, comp_fun_ast} = SortSpecs.to_quoted(sort_specs)
+      iex> sort_specs = fn -> [desc: :dob, asc: :bmi] end
+      iex> {:ok, comp_fun_ast} = sort_specs.() |> SortSpecs.to_quoted()
       iex> {:&, _meta, [args]} = comp_fun_ast
       iex> {comp_fun, []} = Code.eval_quoted(comp_fun_ast)
       iex> is_function(comp_fun, 2) and Macro.to_string(args)
       """
       cond do
-        &1[:dob] < &2[:dob] -> true
-        &1[:dob] > &2[:dob] -> false
+        &1[:dob] > &2[:dob] -> true
+        &1[:dob] < &2[:dob] -> false
+        &1[:bmi] < &2[:bmi] -> true
+        &1[:bmi] > &2[:bmi] -> false
         true -> true or &1 * &2
       end
       """
@@ -77,7 +78,6 @@ defmodule MapSorter.SortSpecs do
   '''
   @spec to_quoted(t | Macro.t()) :: {:ok, Macro.t()} | {:error, Macro.t()}
   def to_quoted(sort_specs) when is_list(sort_specs) do
-    :ok = Log.debug(:generating_compile_time_heredoc, {sort_specs, __ENV__})
     {:ok, fun_ast} = Compare.heredoc(sort_specs) |> Code.string_to_quoted()
     :ok = Log.debug(:compile_time_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
@@ -85,13 +85,11 @@ defmodule MapSorter.SortSpecs do
 
   # Sort specs cannot be a map...
   def to_quoted({:%{}, _, _} = sort_specs) do
-    :ok = Log.warn(:invalid_specs, {sort_specs, __ENV__})
     {:error, sort_specs}
   end
 
   # Sort specs cannot be a tuple...
   def to_quoted({:{}, _, _} = sort_specs) do
-    :ok = Log.warn(:invalid_specs, {sort_specs, __ENV__})
     {:error, sort_specs}
   end
 
@@ -105,7 +103,6 @@ defmodule MapSorter.SortSpecs do
 
   # Sort specs cannot be other terms...
   def to_quoted(sort_specs) do
-    :ok = Log.warn(:invalid_specs, {sort_specs, __ENV__})
     {:error, sort_specs}
   end
 end
