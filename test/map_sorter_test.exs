@@ -63,7 +63,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_6
     TestHelper.config_level(__MODULE__)
 
-    test "structs not sorted given bad runtime specs", context do
+    test "sorts NOT structs given bad runtime specs", context do
       bad_specs = [ask: :dob, desk: :likes]
       people_sorted = MapSorter.sort(context.people, bad_specs)
       assert people_sorted == context.people
