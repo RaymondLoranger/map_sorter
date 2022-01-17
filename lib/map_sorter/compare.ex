@@ -41,9 +41,12 @@ defmodule MapSorter.Compare do
       true
   """
   if Mix.env() == :test do
+    # Logging only in test...
     @spec fun(SortSpecs.t()) :: comp_fun
     def fun(sort_specs) when is_list(sort_specs) do
-      {fun, []} = heredoc(sort_specs) |> Code.eval_string()
+      heredoc = heredoc(sort_specs)
+      :ok = Log.debug(:runtime_comp_fun_heredoc, {sort_specs, heredoc, __ENV__})
+      {fun, []} = Code.eval_string(heredoc)
       fun
     end
 
@@ -53,6 +56,7 @@ defmodule MapSorter.Compare do
       fun([])
     end
   else
+    # No logging in dev or prod...
     @spec fun(SortSpecs.t()) :: comp_fun
     def fun(sort_specs) when is_list(sort_specs) do
       {fun, []} = heredoc(sort_specs) |> Code.eval_string()
