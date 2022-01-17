@@ -1,17 +1,17 @@
 defmodule MapSorter.CompareTest do
   use ExUnit.Case, async: false
 
-  alias MapSorter.Compare
+  alias MapSorter.{Compare, TestSetup}
 
   doctest Compare, only: TestHelper.doctests(Compare)
 
-  setup_all do: SetupTest.setup_all(__MODULE__)
+  setup_all do: TestSetup.setup_all(__MODULE__)
 
   describe "Compare.fun/1" do
     @tag :compare_test_1
     TestHelper.config_level(__MODULE__)
 
-    test "returns a sort function", context do
+    test "returns a compare function", context do
       comp_fun = Compare.fun([:dob, desc: :likes])
       assert comp_fun == context.here_fun
       assert is_function(comp_fun, 2)
@@ -36,10 +36,10 @@ defmodule MapSorter.CompareTest do
       assert is_function(nihil_comp_fun, 2)
       assert tuple_comp_fun.(%{any: 0}, %{any: 9})
       assert tuple_comp_fun.(%{any: 9}, %{any: 0})
-      assert empty_comp_fun.(%{any: 0}, %{any: 9})
-      assert empty_comp_fun.(%{any: 9}, %{any: 0})
-      assert nihil_comp_fun.(%{any: 0}, %{any: 9})
-      assert nihil_comp_fun.(%{any: 9}, %{any: 0})
+      assert empty_comp_fun.(:any, 'any')
+      assert empty_comp_fun.(:pi, 3.1416)
+      assert nihil_comp_fun.(0, :infinity)
+      assert nihil_comp_fun.({}, %{})
     end
 
     Logger.configure(level: :all)

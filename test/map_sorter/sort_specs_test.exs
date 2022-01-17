@@ -1,11 +1,11 @@
 defmodule MapSorter.SortSpecsTest do
   use ExUnit.Case, async: false
 
-  alias MapSorter.{Compare, SortSpecs}
+  alias MapSorter.{Compare, SortSpecs, TestSetup}
 
   doctest SortSpecs, only: TestHelper.doctests(SortSpecs)
 
-  setup_all do: SetupTest.setup_all(__MODULE__)
+  setup_all do: TestSetup.setup_all(__MODULE__)
 
   describe "SortSpecs.to_quoted/1" do
     @tag :sort_specs_test_1
@@ -28,6 +28,7 @@ defmodule MapSorter.SortSpecsTest do
 
     test "works for runtime sort specs", context do
       {:ok, comp_fun_ast} = SortSpecs.to_quoted(context.tuple_ast)
+      assert Macro.to_string(comp_fun_ast) == context.tuple_str
       fun = Compare.fun(context.sort_specs)
       {comp_fun, []} = Code.eval_quoted(comp_fun_ast)
       assert Tuple.to_list(context.tuple) == context.sort_specs

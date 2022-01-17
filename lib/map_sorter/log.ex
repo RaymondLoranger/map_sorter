@@ -45,6 +45,16 @@ defmodule MapSorter.Log do
     """
   end
 
+  debug :runtime_comp_fun_heredoc, {sort_specs, heredoc, env} do
+    """
+    \nHeredoc of 'runtime' compare function...
+    • Sort specs: #{inspect(sort_specs) |> maybe_break(14)}
+    • Heredoc:
+      #{String.trim_trailing(heredoc) |> String.replace("\n", "\n  ")}
+    #{from(env, __MODULE__)}
+    """
+  end
+
   warn :no_reordering, {sort_specs, env} do
     """
     \nNo reordering as sort specs not a list...

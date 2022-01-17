@@ -3,9 +3,11 @@ defmodule MapSorterTest do
 
   require MapSorter
 
+  alias MapSorter.TestSetup
+
   doctest MapSorter, only: TestHelper.doctests(MapSorter)
 
-  setup_all do: SetupTest.setup_all(__MODULE__)
+  setup_all do: TestSetup.setup_all(__MODULE__)
 
   describe "MapSorter.sort/2" do
     @tag :map_sorter_test_1

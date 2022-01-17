@@ -3,7 +3,7 @@ defmodule MapSorter.Compare do
   A compare function and a heredoc to become a compare function.
   """
 
-  alias MapSorter.{Cond, Log, SortSpecs}
+  alias MapSorter.{Cond, SortSpecs}
 
   # Cannot use type `fun` as it is a built-in type...
   # Access.container() :: keyword() | struct() | map()
@@ -41,7 +41,8 @@ defmodule MapSorter.Compare do
       true
   """
   if Mix.env() == :test do
-    # Logging only in test...
+    alias MapSorter.Log
+    # Runtime messages logged only in test...
     @spec fun(SortSpecs.t()) :: comp_fun
     def fun(sort_specs) when is_list(sort_specs) do
       heredoc = heredoc(sort_specs)
@@ -50,13 +51,12 @@ defmodule MapSorter.Compare do
       fun
     end
 
+    # Always returns true => no reordering...
     def fun(sort_specs) do
       :ok = Log.warn(:no_reordering, {sort_specs, __ENV__})
-      # Will always return true => no reordering...
       fun([])
     end
   else
-    # No logging in dev or prod...
     @spec fun(SortSpecs.t()) :: comp_fun
     def fun(sort_specs) when is_list(sort_specs) do
       {fun, []} = heredoc(sort_specs) |> Code.eval_string()
@@ -64,7 +64,6 @@ defmodule MapSorter.Compare do
     end
 
     def fun(sort_specs) do
-      # Will always return true => no reordering...
       fun([])
     end
   end
