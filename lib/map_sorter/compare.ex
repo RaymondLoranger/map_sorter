@@ -41,10 +41,10 @@ defmodule MapSorter.Compare do
       true
   """
   if Mix.env() == :test do
-    alias MapSorter.Log
     # Runtime messages logged only in test...
     @spec fun(SortSpecs.t()) :: comp_fun
     def fun(sort_specs) when is_list(sort_specs) do
+      alias MapSorter.Log
       heredoc = heredoc(sort_specs)
       :ok = Log.debug(:runtime_comp_fun_heredoc, {sort_specs, heredoc, __ENV__})
       {fun, []} = Code.eval_string(heredoc)
@@ -53,6 +53,7 @@ defmodule MapSorter.Compare do
 
     # Always returns true => no reordering...
     def fun(sort_specs) do
+      alias MapSorter.Log
       :ok = Log.warn(:no_reordering, {sort_specs, __ENV__})
       fun([])
     end
