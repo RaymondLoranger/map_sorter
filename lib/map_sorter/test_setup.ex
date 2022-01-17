@@ -11,6 +11,9 @@ end
 defmodule MapSorter.TestSetup do
   alias __MODULE__.Person
 
+  @spec setup_all(module) :: map
+  def setup_all(test_module)
+
   def setup_all(MapSorterTest) do
     people = [
       %Person{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
