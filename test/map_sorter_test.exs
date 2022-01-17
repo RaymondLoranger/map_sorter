@@ -147,7 +147,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_14
     TestHelper.config_level(__MODULE__)
 
-    test "keywords not sorted given empty list specs", context do
+    test "sorts NOT keywords given empty list specs", context do
       keywords = context.keywords
       assert MapSorter.sort(keywords, []) == keywords
     end
@@ -169,7 +169,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_16
     TestHelper.config_level(__MODULE__)
 
-    test "maps not sorted given tuple specs", context do
+    test "sorts NOT maps given tuple specs", context do
       mixed_bags = context.mixed_bags
       bad_specs = {:desc, ~D[2003-03-03], {1.0}}
       assert MapSorter.sort(mixed_bags, bad_specs) == mixed_bags
@@ -180,7 +180,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_17
     TestHelper.config_level(__MODULE__)
 
-    test "maps not sorted given nil specs", context do
+    test "sorts NOT maps given nil specs", context do
       mixed_bags = context.mixed_bags
       assert MapSorter.sort(mixed_bags, nil) == mixed_bags
     end
@@ -190,7 +190,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_18
     TestHelper.config_level(__MODULE__)
 
-    test "maps not sorted given empty list specs", context do
+    test "sorts NOT maps given empty list specs", context do
       mixed_bags = context.mixed_bags
       assert MapSorter.sort(mixed_bags, []) == mixed_bags
     end
