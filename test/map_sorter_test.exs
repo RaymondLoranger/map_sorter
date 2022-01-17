@@ -74,7 +74,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_7
     TestHelper.config_level(__MODULE__)
 
-    test "structs not sorted given bad compile time specs", context do
+    test "sorts NOT structs given bad compile time specs", context do
       people_sorted = MapSorter.sort(context.people, ask: :dob, desk: :likes)
       assert people_sorted == context.people
     end
@@ -84,7 +84,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_8
     TestHelper.config_level(__MODULE__)
 
-    test "structs not sorted given empty list specs", context do
+    test "sorts NOT structs given empty list specs", context do
       assert MapSorter.sort(context.people, []) == context.people
     end
 
@@ -93,7 +93,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_9
     TestHelper.config_level(__MODULE__)
 
-    test "structs not sorted given nil specs", context do
+    test "sorts NOT structs given nil specs", context do
       assert MapSorter.sort(context.people, nil) == context.people
     end
 
@@ -126,7 +126,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_12
     TestHelper.config_level(__MODULE__)
 
-    test "keywords not sorted given map specs", context do
+    test "sorts NOT keywords given map specs", context do
       keywords = context.keywords
       bad_specs = %{asc: :dob, desc: :likes}
       assert MapSorter.sort(keywords, bad_specs) == keywords
@@ -137,7 +137,7 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_13
     TestHelper.config_level(__MODULE__)
 
-    test "keywords not sorted given nil specs", context do
+    test "sorts NOT keywords given nil specs", context do
       keywords = context.keywords
       assert MapSorter.sort(keywords, nil) == keywords
     end
