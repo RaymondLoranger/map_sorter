@@ -63,7 +63,7 @@ defmodule MapSorter.Compare do
       fun
     end
 
-    def fun(sort_specs) do
+    def fun(_sort_specs) do
       fun([])
     end
   end
