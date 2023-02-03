@@ -11,10 +11,10 @@ defmodule TestHelper do
     get_env(:excluded_tags, [])
   end
 
-  # Excludes logging at compile time when called after excluded @tag...
+  # Prevents logging at compile time when called after excluded @tag...
   @spec config_level(module) :: :ok | nil
   def config_level(module) when is_atom(module) do
-    [tag] = Module.get_attribute(module, :tag)
+    [tag | _] = Module.get_attribute(module, :tag)
     if tag in excluded_tags(), do: Logger.configure(level: :none)
   end
 end

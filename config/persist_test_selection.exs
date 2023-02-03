@@ -1,6 +1,6 @@
 import Config
 
-# Allows to run the doctest(s) of one function at a time...
+# Allows to run the doctest(s) of one or a few functions at a time...
 config :map_sorter,
   doctests: %{
     MapSorter.Compare => [
@@ -21,7 +21,7 @@ config :map_sorter,
     ],
   }
 
-# Allows to run one test at a time...
+# Allows to run one or a few tests at a time...
 config :map_sorter,
   excluded_tags: [
     # :compare_test_1,
