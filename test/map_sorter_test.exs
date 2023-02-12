@@ -1,9 +1,9 @@
 defmodule MapSorterTest do
   use ExUnit.Case, async: false
 
-  require MapSorter
-
   alias MapSorter.TestSetup
+
+  require MapSorter
 
   doctest MapSorter, only: TestHelper.doctests(MapSorter)
 

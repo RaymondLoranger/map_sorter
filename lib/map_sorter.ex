@@ -9,9 +9,9 @@ defmodule MapSorter do
   - nested maps, keywords or structs implementing the `Access` behaviour
   """
 
-  require Logger
-
   alias __MODULE__.{Log, SortSpecs}
+
+  require Logger
 
   @logger_all_env Application.get_all_env(:logger)
   @modules for {mod, id} <- @logger_all_env[:backends], do: {id, mod}
