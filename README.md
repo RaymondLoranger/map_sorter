@@ -1,7 +1,5 @@
 # Map Sorter
 
-[![Build Status](https://travis-ci.org/RaymondLoranger/map_sorter.svg?branch=master)](https://travis-ci.org/RaymondLoranger/map_sorter)
-
 Sorts a list of maps per a list of sort specs.
 
 Also supports:
