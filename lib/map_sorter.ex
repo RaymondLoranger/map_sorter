@@ -28,9 +28,9 @@ defmodule MapSorter do
   
   Examples of sort specs with a `Date` key for flat data structures:
   ```
-  - implicit: [{:dob Date}, :name]
-  - mixed:    [{:dob Date}, desc: :name]
-  - explicit: [asc: {:dob Date}, desc: :name]
+  - implicit: [{:dob, Date}, :name]
+  - mixed:    [{:dob, Date}, desc: :name]
+  - explicit: [asc: {:dob, Date}, desc: :name]
   ```
   
   Examples of sort specs for nested data structures:
