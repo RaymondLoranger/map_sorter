@@ -1,9 +1,13 @@
 defmodule MapSorterTest do
   use ExUnit.Case, async: false
+  use PersistConfig
+
+  require Logger
+  require MapSorter
 
   alias MapSorter.TestSetup
 
-  require MapSorter
+  @env get_env(:env)
 
   doctest MapSorter, only: TestHelper.doctests(MapSorter)
 
@@ -251,7 +255,7 @@ defmodule MapSorterTest do
 
     test "sorts NOT on Date structs given bad key at runtime", context do
       clients = context.clients
-      bad_key_specs = [{'--dob--', Date}, desc: :likes]
+      bad_key_specs = [{DOB, Date}, desc: :likes]
       badly_sorted = MapSorter.sort(clients, bad_key_specs)
       assert MapSorter.sort(clients, desc: :likes) == badly_sorted
     end
@@ -263,7 +267,10 @@ defmodule MapSorterTest do
 
     test "sorts NOT on Date structs given bad key at compile time", context do
       clients = context.clients
-      badly_sorted = MapSorter.sort(clients, [{'--dob--', Date}, desc: :likes])
+
+      badly_sorted =
+        MapSorter.sort(clients, [{DOB, Date}, desc: :likes])
+
       assert MapSorter.sort(clients, desc: :likes) == badly_sorted
     end
 
@@ -280,5 +287,22 @@ defmodule MapSorterTest do
     end
 
     Logger.configure(level: :all)
+  end
+
+  describe "config/runtime.exs overrides config/config.exs" do
+    @tag :map_sorter_test_26
+    TestHelper.config_level(__MODULE__)
+
+    test "runtime.exs if present overrides config.exs" do
+      if File.exists?("config/runtime.exs") do
+        Logger.notice("'config/runtime.exs' exists...")
+        Logger.notice("env is #{@env}")
+        assert @env == "test ➔ from config/runtime.exs"
+      else
+        Logger.notice("'config/runtime.exs' does not exist...")
+        Logger.notice("env is #{@env}")
+        assert @env == "test ➔ from config/config.exs"
+      end
+    end
   end
 end

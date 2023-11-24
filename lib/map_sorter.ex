@@ -9,12 +9,12 @@ defmodule MapSorter do
   - nested maps, keywords or structs implementing the `Access` behaviour
   """
 
+  use PersistConfig
+
   alias __MODULE__.{Log, SortSpecs}
 
-  require Logger
-
-  @logger_all_env Application.get_all_env(:logger)
-  @modules for {mod, id} <- @logger_all_env[:backends], do: {id, mod}
+  @default_formatter Logger.default_formatter()
+  @logger_env get_app_env(:file_only_logger, :logger, [])
 
   @doc """
   Sorts `maps` per the given `sort_specs`.
@@ -75,20 +75,17 @@ defmodule MapSorter do
       ]
   """
   defmacro sort(maps, sort_specs) do
-    # To enforce Logger configuration at compile time.
-    # Otherwise Logger will use default configuration.
-    Enum.each(@logger_all_env, fn
-      {:console, v} ->
-        Logger.configure_backend(:console, v)
+    # To enforce logger configuration at compile time.
+    # Otherwise logger will use default configuration.
 
-      {k, v} ->
-        if Keyword.keyword?(v) and Keyword.has_key?(v, :path) do
-          Logger.add_backend({@modules[k], k}, v)
-          Logger.configure_backend({@modules[k], k}, v)
-        else
-          Logger.configure([{k, v}])
-        end
-    end)
+    :ok = :logger.set_handler_config(:default, :formatter, @default_formatter)
+
+    for {:handler, id, :logger_std_h, config} <- @logger_env do
+      case :logger.add_handler(id, :logger_std_h, config) do
+        :ok -> :ok
+        {:error, {:already_exist, ^id}} -> :ok
+      end
+    end
 
     specs =
       case sort_specs do
@@ -110,7 +107,7 @@ defmodule MapSorter do
         quote do: Enum.sort(unquote(maps), unquote(fun_ast))
 
       {:error, invalid_specs} ->
-        :ok = Log.warn(:invalid_specs, {invalid_specs, __ENV__, __CALLER__})
+        :ok = Log.warning(:invalid_specs, {invalid_specs, __ENV__, __CALLER__})
         maps
     end
   end

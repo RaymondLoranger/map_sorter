@@ -36,7 +36,7 @@ defmodule MapSorter.CompareTest do
       assert is_function(nihil_comp_fun, 2)
       assert tuple_comp_fun.(%{any: 0}, %{any: 9})
       assert tuple_comp_fun.(%{any: 9}, %{any: 0})
-      assert empty_comp_fun.(:any, 'any')
+      assert empty_comp_fun.(:any, ANY)
       assert empty_comp_fun.(:pi, 3.1416)
       assert nihil_comp_fun.(0, :infinity)
       assert nihil_comp_fun.({}, %{})

@@ -54,7 +54,7 @@ defmodule MapSorter.Compare do
     # Always returns true => no reordering...
     def fun(sort_specs) do
       alias MapSorter.Log
-      :ok = Log.warn(:no_reordering, {sort_specs, __ENV__})
+      :ok = Log.warning(:no_reordering, {sort_specs, __ENV__})
       fun([])
     end
   else

@@ -58,9 +58,8 @@ defmodule MapSorter.Cond do
     brk = brackets(key)
 
     """
-    &1#{brk} != nil and #{module}.compare(&1#{brk}, &2#{brk}) == #{inspect(op)}
+    &1#{brk} != nil and #{module}.compare(&1#{brk}, &2#{brk}) == #{inspect(op)}\
     """
-    |> String.trim_trailing()
   end
 
   @spec do_clauses(SortSpec.t()) :: String.t()

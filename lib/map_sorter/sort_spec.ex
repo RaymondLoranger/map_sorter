@@ -25,8 +25,8 @@ defmodule MapSorter.SortSpec do
       "[:birth][:date]"
 
       iex> import MapSorter.SortSpec, only: [brackets: 1]
-      iex> brackets([:address, 'city', :state])
-      "[:address]['city'][:state]"
+      iex> brackets([:address, CITY, :state])
+      ~s<[:address][CITY][:state]>
 
       iex> import MapSorter.SortSpec, only: [brackets: 1]
       iex> brackets([:dob])
@@ -37,16 +37,16 @@ defmodule MapSorter.SortSpec do
       "[:dob]"
 
       iex> import MapSorter.SortSpec, only: [brackets: 1]
-      iex> brackets('dob')
-      "['dob']"
+      iex> brackets(DOB)
+      "[DOB]"
 
       iex> import MapSorter.SortSpec, only: [brackets: 1]
-      iex> brackets([1, <<1, 2, 3>>, 3.14, 'dob'])
-      "[1][<<1, 2, 3>>][3.14]['dob']"
+      iex> brackets([1, <<1, 2, 3>>, 3.14, DOB])
+      ~s{[1][<<1, 2, 3>>][3.14][DOB]}
 
       iex> import MapSorter.SortSpec, only: [brackets: 1]
-      iex> brackets(['dob', '3.14', 3.14, 0, {1, 2}, :likes])
-      "['dob']['3.14'][3.14][0][{1, 2}][:likes]"
+      iex> brackets([DOB, "3.14", 3.14, 0, {1, 2}, :likes])
+      ~s<[DOB]["3.14"][3.14][0][{1, 2}][:likes]>
   """
   @spec brackets(key) :: String.t()
   def brackets(key) when is_list(key) do

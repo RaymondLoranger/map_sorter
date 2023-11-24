@@ -57,4 +57,5 @@ config :map_sorter,
     # :map_sorter_test_23,
     # :map_sorter_test_24,
     # :map_sorter_test_25,
+    # :map_sorter_test_26,
   ]

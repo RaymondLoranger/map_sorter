@@ -26,9 +26,8 @@ defmodule MapSorter.SortSpecs do
         &1[:dob] < &2[:dob] -> true
         &1[:dob] > &2[:dob] -> false
         true -> true or &1 * &2
-      end
+      end\
       """
-      |> String.trim_trailing()
   
       # Compile time sort specs...
       iex> alias MapSorter.SortSpecs
@@ -44,9 +43,8 @@ defmodule MapSorter.SortSpecs do
         &1[:bmi] < &2[:bmi] -> true
         &1[:bmi] > &2[:bmi] -> false
         true -> true or &1 * &2
-      end
+      end\
       """
-      |> String.trim_trailing()
   
       # Compile time sort specs...
       iex> alias MapSorter.SortSpecs
@@ -62,9 +60,8 @@ defmodule MapSorter.SortSpecs do
         &1[:likes] > &2[:likes] -> true
         &1[:likes] < &2[:likes] -> false
         true -> true or &1 * &2
-      end
+      end\
       """
-      |> String.trim_trailing()
   
       # Runtime sort specs...
       iex> alias MapSorter.SortSpecs

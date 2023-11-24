@@ -8,17 +8,17 @@ defmodule MapSorter.Log do
     • 'Adjusted' sort specs AST: #{inspect(specs) |> maybe_break(29)}
     • Sort specs: #{Macro.to_string(specs) |> maybe_break(14)}
     • Macro: #{fun(env)}
-    #{from(caller, __MODULE__)}
+    #{from(caller, __MODULE__)}\
     """
   end
 
-  warn :invalid_specs, {bad_specs, env, caller} do
+  warning :invalid_specs, {bad_specs, env, caller} do
     """
     \nSort 'declined' given invalid sort specs...
     • 'Invalid' sort specs AST: #{inspect(bad_specs) |> maybe_break(28)}
     • 'Invalid' sort specs: #{Macro.to_string(bad_specs) |> maybe_break(24)}
     • Macro: #{fun(env)}
-    #{from(caller, __MODULE__)}
+    #{from(caller, __MODULE__)}\
     """
   end
 
@@ -30,7 +30,7 @@ defmodule MapSorter.Log do
       #{inspect(ast)}
     • Compare function:
       #{Macro.to_string(ast) |> String.replace_trailing("end", "\s\send")}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -41,7 +41,7 @@ defmodule MapSorter.Log do
     • Sort specs: #{Macro.to_string(sort_specs) |> maybe_break(14)}
     • Compare function AST: #{inspect(ast) |> maybe_break(24)}
     • Compare function: #{Macro.to_string(ast) |> maybe_break(20)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -51,15 +51,15 @@ defmodule MapSorter.Log do
     • Sort specs: #{inspect(sort_specs) |> maybe_break(14)}
     • Heredoc:
       #{String.trim_trailing(heredoc) |> String.replace("\n", "\n  ")}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
-  warn :no_reordering, {sort_specs, env} do
+  warning :no_reordering, {sort_specs, env} do
     """
     \nNo reordering as sort specs not a list...
     • Sort specs: #{inspect(sort_specs) |> maybe_break(14)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 end
