@@ -4,7 +4,7 @@ defmodule MapSorter.Mixfile do
   def project do
     [
       app: :map_sorter,
-      version: "0.2.64",
+      version: "0.2.65",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Map Sorter",
@@ -47,7 +47,9 @@ defmodule MapSorter.Mixfile do
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:file_only_logger, "~> 0.2"},
+      # {:file_only_logger, path: "../file_only_logger"},
       {:log_reset, "~> 0.1"},
+      # {:log_reset, path: "../log_reset"},
       {:persist_config, "~> 0.4", runtime: false}
     ]
   end
