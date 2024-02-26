@@ -11,9 +11,9 @@ defmodule MapSorter.SortSpecs do
 
   @doc ~S'''
   Converts `sort_specs` into the AST of an `Enum.sort/2` compare function.
-  
+
   ## Examples
-  
+
       # Compile time sort specs...
       iex> alias MapSorter.SortSpecs
       iex> sort_specs = [:dob]
@@ -28,7 +28,7 @@ defmodule MapSorter.SortSpecs do
         true -> true or &1 * &2
       end\
       """
-  
+
       # Compile time sort specs...
       iex> alias MapSorter.SortSpecs
       iex> sort_specs = fn -> [desc: :dob, asc: :bmi] end
@@ -45,7 +45,7 @@ defmodule MapSorter.SortSpecs do
         true -> true or &1 * &2
       end\
       """
-  
+
       # Compile time sort specs...
       iex> alias MapSorter.SortSpecs
       iex> sort_specs = [:dob, desc: :likes]
@@ -62,7 +62,7 @@ defmodule MapSorter.SortSpecs do
         true -> true or &1 * &2
       end\
       """
-  
+
       # Runtime sort specs...
       iex> alias MapSorter.SortSpecs
       iex> sort_specs = quote do: Tuple.to_list({:dob, {:desc, :likes}})
