@@ -25,7 +25,7 @@ defmodule MapSorter.Compare do
       iex> alias MapSorter.Compare
       iex> sort_specs = {:dob, desc: :likes}
       iex> fun = Compare.fun(sort_specs)
-      iex> is_function(fun, 2) and fun.(1, 2) and fun.(:any, 'any')
+      iex> is_function(fun, 2) and fun.(1, 2) and fun.(:any, ~c'any')
       true
 
       iex> alias MapSorter.Compare

@@ -97,7 +97,7 @@ defmodule MapSorter.TestSetup do
     regexs = [
       %{id: "abc.*defi", regex: ~r{abc.*def}i},
       %{id: "ABC.*defi", regex: ~r{ABC.*def}i},
-      %{id: "(abc)def$", regex: ~r|(abc)def$|},
+      %{id: "(abc)def$", regex: ~r/(abc)def$/},
       %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
       %{id: "0.0.1", regex: ~r/0.0.1/}
     ]
@@ -105,7 +105,7 @@ defmodule MapSorter.TestSetup do
     regexs_sort_specs = [asc: {:regex, MapSorter.Regex}]
 
     regexs_sorted = [
-      %{id: "(abc)def$", regex: ~r|(abc)def$|},
+      %{id: "(abc)def$", regex: ~r/(abc)def$/},
       %{id: "0.0.1", regex: ~r/0.0.1/},
       %{id: "ABC.*defi", regex: ~r{ABC.*def}i},
       %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
