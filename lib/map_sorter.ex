@@ -13,9 +13,6 @@ defmodule MapSorter do
 
   alias __MODULE__.{Log, SortSpecs}
 
-  @default_formatter Logger.default_formatter()
-  @logger_env get_app_env(:file_only_logger, :logger, [])
-
   @doc """
   Sorts `maps` per the given `sort_specs`.
 
@@ -75,20 +72,6 @@ defmodule MapSorter do
       ]
   """
   defmacro sort(maps, sort_specs) do
-    # To enforce logger configuration at compile time.
-    # Otherwise logger will use default configuration.
-    # dbg_handler_config("Before setting/adding logger handlers...", __CALLER__)
-    :ok = :logger.set_handler_config(:default, :formatter, @default_formatter)
-
-    for {:handler, id, :logger_std_h, config} <- @logger_env do
-      case :logger.add_handler(id, :logger_std_h, config) do
-        :ok -> :ok
-        {:error, {:already_exist, ^id}} -> :ok
-      end
-    end
-
-    # dbg_handler_config("After setting/adding logger handlers...", __CALLER__)
-
     specs =
       case sort_specs do
         specs when is_list(specs) ->
@@ -113,41 +96,4 @@ defmodule MapSorter do
         maps
     end
   end
-
-  ## Private functions
-
-  # defp get_handler_config(id, color) do
-  #   case :logger.get_handler_config(id) do
-  #     {:ok, %{config: %{type: :file, file: file}, level: _level}} ->
-  #       file
-
-  #     {:ok,
-  #      %{
-  #        config: %{type: :standard_io},
-  #        level: level,
-  #        formatter: {Logger.Formatter, %Logger.Formatter{colors: colors}}
-  #      }} ->
-  #       {id, level, colors[color]}
-
-  #     {:error, {:not_found, ^id} = error} ->
-  #       error
-  #   end
-  # end
-
-  # @sep "==========================================================="
-  # @yellow "\e[33m"
-  # @light_yellow "\e[93m"
-  # @reset "\e[0m"
-
-  # defp dbg_handler_config(msg, env) do
-  #   """
-  #   #{@yellow}#{@sep}
-  #   #{@light_yellow}#{msg}
-  #   #{inspect(env.module)}.#{inspect(env.function)}:#{env.line}
-  #   #{get_handler_config(:debug_handler, :debug) |> inspect()}
-  #   #{get_handler_config(:default, :debug) |> inspect()}
-  #   #{@yellow}#{@sep}#{@reset}
-  #   """
-  #   |> IO.puts()
-  # end
 end
