@@ -76,7 +76,7 @@ defmodule MapSorter.SortSpecs do
   @spec to_quoted(t | Macro.t()) :: {:ok, Macro.t()} | {:error, Macro.t()}
   def to_quoted(sort_specs) when is_list(sort_specs) do
     {:ok, fun_ast} = Compare.heredoc(sort_specs) |> Code.string_to_quoted()
-    :ok = Log.debug(:compile_time_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
+    Log.debug(:compile_time_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
   end
 
@@ -94,7 +94,7 @@ defmodule MapSorter.SortSpecs do
   def to_quoted({_, meta, _} = sort_specs) when is_list(meta) do
     # Injected code should refer to a function by its fully qualified name...
     fun_ast = quote do: MapSorter.Compare.fun(unquote(sort_specs))
-    :ok = Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
+    Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
   end
 
