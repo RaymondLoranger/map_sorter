@@ -218,11 +218,11 @@ defmodule MapSorterTest do
     @tag :map_sorter_test_20
     TestHelper.config_level(__MODULE__)
 
-    test "sorts maps on Regex structs", context do
-      regexs = context.regexs
-      sort_specs = context.regexs_sort_specs
-      regexs_sorted = context.regexs_sorted
-      assert MapSorter.sort(regexs, sort_specs) == regexs_sorted
+    test "sorts maps on Range structs", context do
+      ranges = context.ranges
+      sort_specs = context.ranges_sort_specs
+      ranges_sorted = context.ranges_sorted
+      assert MapSorter.sort(ranges, sort_specs) == ranges_sorted
     end
 
     Logger.configure(level: :all)

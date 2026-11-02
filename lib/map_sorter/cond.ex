@@ -41,6 +41,15 @@ defmodule MapSorter.Cond do
       &1[{:dob, String}] > &2[{:dob, String}] -> true
       &1[{:dob, String}] < &2[{:dob, String}] -> false
       """
+
+      iex> alias MapSorter.Cond
+      iex> Cond.clauses([])
+      """
+      """
+
+      iex> alias MapSorter.Cond
+      iex> Cond.clauses([])
+      ""
   '''
   @spec clauses(SortSpecs.t()) :: String.t()
   def clauses(sort_specs) when is_list(sort_specs) do
@@ -49,16 +58,18 @@ defmodule MapSorter.Cond do
 
   ## Private functions
 
-  # Use short-circuit 'and' to prevent compare if key not in map...
-  @spec cond(SortSpec.key(), String.t(), atom) :: String.t()
+  @spec cond(SortSpec.key(), module, atom) :: String.t()
   defp cond(key, module, op) when op in [:lt, :gt] do
     # brackets(:dob) => "[:dob]"
-    # brackets('dob') => "['dob']"
+    # brackets(DOB) => "[DOB]"
     # brackets("dob") => ~s/["dob"]/
-    brk = brackets(key)
+    bkt = brackets(key)
+    # To prevent e.g. Date to be interpolated as "Elixir.Date".
+    mod = "#{inspect(module)}"
 
+    # Use short-circuit 'and' to prevent compare if key not in map...
     """
-    &1#{brk} != nil and #{module}.compare(&1#{brk}, &2#{brk}) == #{inspect(op)}\
+    &1#{bkt} != nil and #{mod}.compare(&1#{bkt}, &2#{bkt}) == #{inspect(op)}\
     """
   end
 
@@ -66,8 +77,6 @@ defmodule MapSorter.Cond do
   defp do_clauses({:asc, {key, module}}) when is_atom(module) do
     with {:module, module} <- Code.ensure_loaded(module),
          true <- function_exported?(module, :compare, 2) do
-      module = "#{inspect(module)}"
-
       """
       #{cond(key, module, :lt)} -> true
       #{cond(key, module, :gt)} -> false
@@ -87,8 +96,6 @@ defmodule MapSorter.Cond do
   defp do_clauses({:desc, {key, module}}) when is_atom(module) do
     with {:module, module} <- Code.ensure_loaded(module),
          true <- function_exported?(module, :compare, 2) do
-      module = "#{inspect(module)}"
-
       """
       #{cond(key, module, :gt)} -> true
       #{cond(key, module, :lt)} -> false

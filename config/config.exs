@@ -1,6 +1,6 @@
 import Config
 
-import_config "config_logger.exs"
+# import_config "config_logger.exs"
 
 # For testing purposes only...
 config :map_sorter,

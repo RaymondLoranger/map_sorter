@@ -3,8 +3,11 @@ defmodule MapSorter.TestSetup.Person do
 
   defstruct [:name, :likes, :dob]
 
+  @impl Access
   defdelegate fetch(person, key), to: Map
+  @impl Access
   defdelegate get_and_update(person, key, fun), to: Map
+  @impl Access
   defdelegate pop(person, key), to: Map
 end
 
@@ -94,22 +97,22 @@ defmodule MapSorter.TestSetup do
       %{id: "0.0.1", version: Version.parse!("0.0.1")}
     ]
 
-    regexs = [
-      %{id: "abc.*defi", regex: ~r{abc.*def}i},
-      %{id: "ABC.*defi", regex: ~r{ABC.*def}i},
-      %{id: "(abc)def$", regex: ~r/(abc)def$/},
-      %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
-      %{id: "0.0.1", regex: ~r/0.0.1/}
+    ranges = [
+      %{id: "1..9//2", range: 1..9//2},
+      %{id: "2..9//2", range: 2..9//2},
+      %{id: "1..11//3", range: 1..11//3},
+      %{id: "1..11//4", range: 1..11//4},
+      %{id: "11..1//-1", range: 11..1//-1}
     ]
 
-    regexs_sort_specs = [asc: {:regex, MapSorter.Regex}]
+    ranges_sort_specs = [asc: {:range, MapSorter.Range}]
 
-    regexs_sorted = [
-      %{id: "(abc)def$", regex: ~r/(abc)def$/},
-      %{id: "0.0.1", regex: ~r/0.0.1/},
-      %{id: "ABC.*defi", regex: ~r{ABC.*def}i},
-      %{id: "^abc.*def$", regex: ~r/^abc.*def$/},
-      %{id: "abc.*defi", regex: ~r{abc.*def}i}
+    ranges_sorted = [
+      %{id: "1..9//2", range: 1..9//2},
+      %{id: "1..11//3", range: 1..11//3},
+      %{id: "1..11//4", range: 1..11//4},
+      %{id: "2..9//2", range: 2..9//2},
+      %{id: "11..1//-1", range: 11..1//-1}
     ]
 
     clients = [
@@ -135,10 +138,22 @@ defmodule MapSorter.TestSetup do
     ]
 
     nested_data = [
-      %{name: [last: "Hill"], birth: [date: ~D[1977-01-23]]},
-      %{name: [last: "Howe"], birth: [date: ~N[1977-01-23 01:02:03]]},
-      %{name: [last: "Holt"], birth: [date: ~N[1988-01-23 23:59:59]]},
-      %{name: [last: "Hunt"], birth: [date: ~D[1988-01-23]]}
+      %{
+        name: [first: "John", last: "Hill"],
+        birth: [city: "New York", date: ~D[1977-01-23]]
+      },
+      %{
+        name: [first: "Jill", last: "Howe"],
+        birth: [city: "Los Angeles", date: ~N[1977-01-23 01:02:03]]
+      },
+      %{
+        name: [first: "Jay", last: "Holt"],
+        birth: [city: "Chicago", date: ~N[1988-01-23 23:59:59]]
+      },
+      %{
+        name: [first: "Jim", last: "Hunt"],
+        birth: [city: "Houston", date: ~D[1988-01-23]]
+      }
     ]
 
     nested_data_sort_specs = [
@@ -147,10 +162,22 @@ defmodule MapSorter.TestSetup do
     ]
 
     nested_data_sorted = [
-      %{name: [last: "Holt"], birth: [date: ~N[1988-01-23 23:59:59]]},
-      %{name: [last: "Hunt"], birth: [date: ~D[1988-01-23]]},
-      %{name: [last: "Hill"], birth: [date: ~D[1977-01-23]]},
-      %{name: [last: "Howe"], birth: [date: ~N[1977-01-23 01:02:03]]}
+      %{
+        name: [first: "Jay", last: "Holt"],
+        birth: [city: "Chicago", date: ~N[1988-01-23 23:59:59]]
+      },
+      %{
+        name: [first: "Jim", last: "Hunt"],
+        birth: [city: "Houston", date: ~D[1988-01-23]]
+      },
+      %{
+        name: [first: "John", last: "Hill"],
+        birth: [city: "New York", date: ~D[1977-01-23]]
+      },
+      %{
+        name: [first: "Jill", last: "Howe"],
+        birth: [city: "Los Angeles", date: ~N[1977-01-23 01:02:03]]
+      }
     ]
 
     %{
@@ -167,9 +194,9 @@ defmodule MapSorter.TestSetup do
       versions: versions,
       versions_sort_specs: versions_sort_specs,
       versions_sorted: versions_sorted,
-      regexs: regexs,
-      regexs_sort_specs: regexs_sort_specs,
-      regexs_sorted: regexs_sorted,
+      ranges: ranges,
+      ranges_sort_specs: ranges_sort_specs,
+      ranges_sorted: ranges_sorted,
       clients: clients,
       clients_sort_specs: clients_sort_specs,
       clients_sorted: clients_sorted,
@@ -182,12 +209,12 @@ defmodule MapSorter.TestSetup do
   def setup_all(MapSorter.SortSpecsTest) do
     true_doc = """
     & cond do
-    true -> true or &1 * &2
+    true -> true or &1 > &2
     end
     """
 
-    {:ok, true_ast} = true_doc |> Code.string_to_quoted()
-    {true_fun, []} = true_doc |> Code.eval_string()
+    {:ok, true_ast} = Code.string_to_quoted(true_doc)
+    {true_fun, []} = Code.eval_string(true_doc)
 
     here_doc = """
     & cond do
@@ -195,12 +222,12 @@ defmodule MapSorter.TestSetup do
     &1[:dob] > &2[:dob] -> false
     &1[:likes] > &2[:likes] -> true
     &1[:likes] < &2[:likes] -> false
-    true -> true or &1 * &2
+    true -> true or &1 > &2
     end
     """
 
-    {:ok, here_ast} = here_doc |> Code.string_to_quoted()
-    {here_fun, []} = here_doc |> Code.eval_string()
+    {:ok, here_ast} = Code.string_to_quoted(here_doc)
+    {here_fun, []} = Code.eval_string(here_doc)
 
     sort_specs = [:dob, desc: :likes]
     tuple = List.to_tuple(sort_specs)

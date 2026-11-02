@@ -20,33 +20,45 @@ defmodule MapSorter.SortSpec do
 
   ## Examples
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets([:birth, :date])
       "[:birth][:date]"
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets([:address, CITY, :state])
-      ~s<[:address][CITY][:state]>
+      "[:address][CITY][:state]"
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets([:dob])
       "[:dob]"
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets(:dob)
       "[:dob]"
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets(DOB)
       "[DOB]"
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets([1, <<1, 2, 3>>, 3.14, DOB])
-      ~s{[1][<<1, 2, 3>>][3.14][DOB]}
+      "[1][<<1, 2, 3>>][3.14][DOB]"
 
-      iex> import MapSorter.SortSpec, only: [brackets: 1]
+      iex> import MapSorter.SortSpec
       iex> brackets([DOB, "3.14", 3.14, 0, {1, 2}, :likes])
       ~s<[DOB]["3.14"][3.14][0][{1, 2}][:likes]>
+
+      iex> import MapSorter.SortSpec
+      iex> brackets([{[:birth, :date], Date}, :likes])
+      "[{[:birth, :date], Date}][:likes]"
+
+      iex> import MapSorter.SortSpec
+      iex> brackets([{:desc, {[:birth, :date], Date}}, :likes])
+      "[{:desc, {[:birth, :date], Date}}][:likes]"
+
+      iex> import MapSorter.SortSpec
+      iex> brackets(~c"abc")
+      ~s<[~c"abc"]>
   """
   @spec brackets(key) :: String.t()
   def brackets(key) when is_list(key) do

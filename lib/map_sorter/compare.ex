@@ -18,26 +18,32 @@ defmodule MapSorter.Compare do
       iex> alias MapSorter.Compare
       iex> sort_specs = [:dob, desc: :likes]
       iex> fun = Compare.fun(sort_specs)
-      iex> is_function(fun, 2)
+      iex> map1 = %{name: "John", dob: "2000-01-01", likes: "ski"}
+      iex> map2 = %{name: "Jane", dob: "2000-01-01", likes: "hike"}
+      iex> is_function(fun, 2) and fun.(map1, map2)
       true
 
       # Compare function always true => no reordering...
       iex> alias MapSorter.Compare
       iex> sort_specs = {:dob, desc: :likes}
       iex> fun = Compare.fun(sort_specs)
-      iex> is_function(fun, 2) and fun.(1, 2) and fun.(:any, ~c'any')
+      iex> is_function(fun, 2) and fun.(1, 2) and fun.(2, 1)
       true
 
       iex> alias MapSorter.Compare
       iex> sort_specs = fn -> [:dob, desc: :likes] end
       iex> fun = Compare.fun(sort_specs.())
-      iex> is_function(fun, 2)
+      iex> map1 = %{name: "John", dob: "2000-01-01", likes: "ski"}
+      iex> map2 = %{name: "Jane", dob: "2000-01-01", likes: "hike"}
+      iex> is_function(fun, 2) and fun.(map1, map2)
       true
 
       iex> alias MapSorter.Compare
       iex> sort_specs = Tuple.to_list({:dob, {:desc, :likes}})
       iex> fun = Compare.fun(sort_specs)
-      iex> is_function(fun, 2)
+      iex> map1 = %{name: "John", dob: "2000-01-01", likes: "ski"}
+      iex> map2 = %{name: "Jane", dob: "2000-01-01", likes: "hike"}
+      iex> is_function(fun, 2) and fun.(map1, map2)
       true
   """
   if Mix.env() == :test do
@@ -83,7 +89,7 @@ defmodule MapSorter.Compare do
       iex> Compare.heredoc([])
       """
       & cond do
-      true -> true or &1 * &2
+      true -> true or &1 > &2
       end
       """
 
@@ -96,7 +102,7 @@ defmodule MapSorter.Compare do
       &1[:name] > &2[:name] -> false
       &1[:dob] > &2[:dob] -> true
       &1[:dob] < &2[:dob] -> false
-      true -> true or &1 * &2
+      true -> true or &1 > &2
       end
       """
 
@@ -109,7 +115,7 @@ defmodule MapSorter.Compare do
       &1[:name] > &2[:name] -> false
       &1[:dob] != nil and Date.compare(&1[:dob], &2[:dob]) == :gt -> true
       &1[:dob] != nil and Date.compare(&1[:dob], &2[:dob]) == :lt -> false
-      true -> true or &1 * &2
+      true -> true or &1 > &2
       end
       """
 
@@ -122,15 +128,16 @@ defmodule MapSorter.Compare do
       &1[:name] > &2[:name] -> false
       &1[{:account, Path}] > &2[{:account, Path}] -> true
       &1[{:account, Path}] < &2[{:account, Path}] -> false
-      true -> true or &1 * &2
+      true -> true or &1 > &2
       end
       """
   '''
   @spec heredoc(SortSpecs.t()) :: String.t()
   def heredoc(sort_specs) when is_list(sort_specs) do
+    # We add " or &1 > &2" to still have an arity of 2 when sort_specs is [].
     """
     & cond do
-    #{Cond.clauses(sort_specs)}true -> true or &1 * &2
+    #{Cond.clauses(sort_specs)}true -> true or &1 > &2
     end
     """
   end

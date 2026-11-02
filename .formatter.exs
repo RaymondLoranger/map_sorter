@@ -1,10 +1,6 @@
 # Used by "mix format"
-wildcard = fn glob -> Path.wildcard(glob, match_dot: true) end
-matches = fn globs -> Enum.flat_map(globs, &wildcard.(&1)) end
-except = ["config/persist_test*.exs"]
-inputs = ["*.exs", "{config,lib,test}/**/*.{ex,exs}"]
-
 [
-  inputs: matches.(inputs) -- matches.(except),
+  inputs: ["*.exs", "{config,lib,test}/**/*.{ex,exs}"],
+  excludes: ["config/persist_test*.exs"],
   line_length: 80
 ]

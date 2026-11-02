@@ -25,7 +25,7 @@ defmodule MapSorter.SortSpecs do
       cond do
         &1[:dob] < &2[:dob] -> true
         &1[:dob] > &2[:dob] -> false
-        true -> true or &1 * &2
+        true -> true or &1 > &2
       end\
       """
 
@@ -42,7 +42,7 @@ defmodule MapSorter.SortSpecs do
         &1[:dob] < &2[:dob] -> false
         &1[:bmi] < &2[:bmi] -> true
         &1[:bmi] > &2[:bmi] -> false
-        true -> true or &1 * &2
+        true -> true or &1 > &2
       end\
       """
 
@@ -59,7 +59,7 @@ defmodule MapSorter.SortSpecs do
         &1[:dob] > &2[:dob] -> false
         &1[:likes] > &2[:likes] -> true
         &1[:likes] < &2[:likes] -> false
-        true -> true or &1 * &2
+        true -> true or &1 > &2
       end\
       """
 
@@ -92,7 +92,8 @@ defmodule MapSorter.SortSpecs do
 
   # Sort specs evaluated at runtime...
   def to_quoted({_, meta, _} = sort_specs) when is_list(meta) do
-    # Injected code should refer to a function by its fully qualified name...
+    # Injected code should refer to a function by its fully qualified name
+    # because that code executes within the context of the caller's module.
     fun_ast = quote do: MapSorter.Compare.fun(unquote(sort_specs))
     Log.debug(:runtime_comp_fun_ast, {sort_specs, fun_ast, __ENV__})
     {:ok, fun_ast}
