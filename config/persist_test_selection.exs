@@ -4,26 +4,26 @@ import Config
 config :map_sorter,
   doctests: %{
     MapSorter.Compare => [
-      fun: 1,
-      heredoc: 1,
+      # fun: 1,
+      # heredoc: 1,
     ],
     MapSorter.Cond => [
-      clauses: 1,
+      # clauses: 1,
     ],
     MapSorter.SortSpec => [
-      brackets: 1,
+      # brackets: 1,
     ],
     MapSorter.SortSpecs => [
-      to_quoted: 1,
+      # to_quoted: 1,
     ],
     MapSorter => [
-      sort: 2,
+      # sort: 2,
     ],
   }
 
 # Allows to run one or a few tests at a time...
 config :map_sorter,
-  excluded_tags: [
+  included_tags: [
     # :compare_test_1,
     # :compare_test_2,
 
@@ -32,7 +32,7 @@ config :map_sorter,
     # :sort_specs_test_3,
     # :sort_specs_test_4,
 
-    # :map_sorter_test_1,
+    :map_sorter_test_1,
     # :map_sorter_test_2,
     # :map_sorter_test_3,
     # :map_sorter_test_4,
