@@ -1,10 +1,14 @@
 defmodule MapSorterTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use PersistConfig
 
   require MapSorter
 
   @included_tags get_env(:included_tags)
+
+  if :map_sorter_test_1 in @included_tags do
+    @people_sort_specs [asc: :dob, desc: :likes]
+  end
 
   doctest MapSorter, only: TestHelper.doctests(MapSorter)
 
@@ -14,6 +18,8 @@ defmodule MapSorterTest do
     if :map_sorter_test_1 in @included_tags do
       test "sorts structs given explicit specs", context do
         people_sorted = MapSorter.sort(context.people, asc: :dob, desc: :likes)
+        assert people_sorted == context.people_sorted
+        people_sorted = MapSorter.sort(context.people, @people_sort_specs)
         assert people_sorted == context.people_sorted
       end
     end
@@ -30,9 +36,9 @@ defmodule MapSorterTest do
         import MapSorter, only: [sort: 2]
 
         people_sorted = sort(context.people, context.people_sort_specs)
-        partly_sorted = sort(context.people, context.partly_sort_specs)
+        indeed_sorted = sort(context.people, context.superfluous_specs)
         assert people_sorted == context.people_sorted
-        assert partly_sorted == context.people_sorted
+        assert indeed_sorted == context.people_sorted
       end
     end
 
@@ -216,6 +222,8 @@ defmodule MapSorterTest do
 
   describe "config/runtime.exs overrides config/config.exs" do
     if :map_sorter_test_26 in @included_tags do
+      require Logger
+
       @env get_env(:env)
 
       test "runtime.exs if present overrides config.exs" do

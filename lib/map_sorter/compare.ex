@@ -15,30 +15,32 @@ defmodule MapSorter.Compare do
 
   ## Examples
 
-      iex> alias MapSorter.Compare
+      # To run multiple doctests sequentially, remove empty lines between them.
+      iex> alias MapSorter.{Compare, Log}
+      iex> Log.debug(:doctest_id, {:compare_id_1, __ENV__})
       iex> sort_specs = [:dob, desc: :likes]
       iex> fun = Compare.fun(sort_specs)
       iex> map1 = %{name: "John", dob: "2000-01-01", likes: "ski"}
       iex> map2 = %{name: "Jane", dob: "2000-01-01", likes: "hike"}
       iex> is_function(fun, 2) and fun.(map1, map2)
       true
-
       # Compare function always true => no reordering...
-      iex> alias MapSorter.Compare
+      iex> alias MapSorter.{Compare, Log}
+      iex> Log.debug(:doctest_id, {:compare_id_2, __ENV__})
       iex> sort_specs = {:dob, desc: :likes}
       iex> fun = Compare.fun(sort_specs)
       iex> is_function(fun, 2) and fun.(1, 2) and fun.(2, 1)
       true
-
-      iex> alias MapSorter.Compare
+      iex> alias MapSorter.{Compare, Log}
+      iex> Log.debug(:doctest_id, {:compare_id_3, __ENV__})
       iex> sort_specs = fn -> [:dob, desc: :likes] end
       iex> fun = Compare.fun(sort_specs.())
       iex> map1 = %{name: "John", dob: "2000-01-01", likes: "ski"}
       iex> map2 = %{name: "Jane", dob: "2000-01-01", likes: "hike"}
       iex> is_function(fun, 2) and fun.(map1, map2)
       true
-
-      iex> alias MapSorter.Compare
+      iex> alias MapSorter.{Compare, Log}
+      iex> Log.debug(:doctest_id, {:compare_id_4, __ENV__})
       iex> sort_specs = Tuple.to_list({:dob, {:desc, :likes}})
       iex> fun = Compare.fun(sort_specs)
       iex> map1 = %{name: "John", dob: "2000-01-01", likes: "ski"}
@@ -51,8 +53,9 @@ defmodule MapSorter.Compare do
     @spec fun(SortSpecs.t()) :: comp_fun
     def fun(sort_specs) when is_list(sort_specs) do
       alias MapSorter.Log
+
       heredoc = heredoc(sort_specs)
-      Log.debug(:runtime_comp_fun_heredoc, {sort_specs, heredoc, __ENV__})
+      Log.debug(:runtime_comp_fun_call_heredoc, {sort_specs, heredoc, __ENV__})
       {fun, []} = Code.eval_string(heredoc)
       fun
     end
@@ -60,7 +63,8 @@ defmodule MapSorter.Compare do
     # Always returns true => no reordering...
     def fun(sort_specs) do
       alias MapSorter.Log
-      Log.warning(:no_reordering, {sort_specs, __ENV__})
+
+      Log.warning(:no_runtime_reordering, {sort_specs, __ENV__})
       fun([])
     end
   else

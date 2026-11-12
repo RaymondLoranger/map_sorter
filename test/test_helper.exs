@@ -38,7 +38,7 @@ defmodule TestHelper.Context do
     ]
 
     people_sort_specs = [asc: :dob, desc: :likes]
-    partly_sort_specs = [asc: :dob, asc: :what, desc: :likes, desc: :where]
+    superfluous_specs = [asc: :dob, asc: :what, desc: :likes, desc: :where]
 
     people_sorted = [
       %Person{name: "Jill", likes: "cooking", dob: "1976-09-28"},
@@ -192,7 +192,7 @@ defmodule TestHelper.Context do
     %{
       people: people,
       people_sort_specs: people_sort_specs,
-      partly_sort_specs: partly_sort_specs,
+      superfluous_specs: superfluous_specs,
       people_sorted: people_sorted,
       keywords: keywords,
       keywords_sort_specs: keywords_sort_specs,

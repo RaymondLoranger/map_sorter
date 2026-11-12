@@ -1,5 +1,5 @@
 defmodule MapSorter.SortSpecsTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use PersistConfig
 
   alias MapSorter.SortSpecs
@@ -13,11 +13,10 @@ defmodule MapSorter.SortSpecsTest do
   describe "SortSpecs.to_quoted/1" do
     if :sort_specs_test_1 in @included_tags do
       test "works for compile time sort specs", context do
-        {:ok, comp_fun_ast} = SortSpecs.to_quoted(context.sort_specs)
+        {:ok, comp_fun_ast} = SortSpecs.to_quoted([:dob, desc: :likes])
         {comp_fun, []} = Code.eval_quoted(comp_fun_ast)
         assert comp_fun_ast == context.here_ast
         assert match?({:&, _meta, _args}, comp_fun_ast)
-        assert match?([_, _], context.sort_specs)
         assert comp_fun == context.here_fun
         assert is_function(comp_fun, 2)
       end
@@ -29,8 +28,12 @@ defmodule MapSorter.SortSpecsTest do
 
         {:ok, comp_fun_ast} = SortSpecs.to_quoted(context.tuple_ast)
         assert Macro.to_string(comp_fun_ast) == context.tuple_str
+
         fun = Compare.fun(context.sort_specs)
+
+        # Will run the same code as above and log the same message...
         {comp_fun, []} = Code.eval_quoted(comp_fun_ast)
+
         assert Tuple.to_list(context.tuple) == context.sort_specs
         assert comp_fun == fun
         assert is_function(comp_fun, 2)

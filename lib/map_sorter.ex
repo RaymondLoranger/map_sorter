@@ -82,6 +82,9 @@ defmodule MapSorter do
 
         specs ->
           # In case any module attributes...
+          # @people_sort_specs [asc: :dob, desc: :likes] =>
+          # {:@, [line: 21...], [{:people_sort_specs, [line: 21...], nil}]} =>
+          # [asc: :dob, desc: :likes]
           Macro.expand(specs, __CALLER__)
       end
 
@@ -92,7 +95,7 @@ defmodule MapSorter do
         quote do: Enum.sort(unquote(maps), unquote(fun_ast))
 
       {:error, invalid_specs} ->
-        Log.warning(:invalid_specs, {invalid_specs, __ENV__, __CALLER__})
+        Log.warning(:invalid_specs, {invalid_specs, __ENV__})
         maps
     end
   end

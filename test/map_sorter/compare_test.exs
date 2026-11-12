@@ -1,5 +1,5 @@
 defmodule MapSorter.CompareTest do
-  use ExUnit.Case, async: false
+  use ExUnit.Case, async: true
   use PersistConfig
 
   alias MapSorter.Compare
@@ -13,7 +13,7 @@ defmodule MapSorter.CompareTest do
   describe "Compare.fun/1" do
     if :compare_test_1 in @included_tags do
       test "returns a compare function", context do
-        comp_fun = Compare.fun([:dob, desc: :likes])
+        comp_fun = Compare.fun(asc: :dob, desc: :likes)
         assert comp_fun == context.here_fun
         assert is_function(comp_fun, 2)
         assert comp_fun.(%{likes: "ski"}, %{likes: "art"})
