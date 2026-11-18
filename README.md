@@ -15,7 +15,7 @@ Add `map_sorter` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps() do
   [
-    {:map_sorter, "~> 0.2", runtime: false}
+    {:map_sorter, "~> 0.2"}
   ]
 end
 ```
