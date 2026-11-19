@@ -1,6 +1,6 @@
 # Map Sorter
 
-Sorts a list of maps per a list of sort specs.
+Sorts a list of maps according to the given sort specs.
 
 Also supports:
 

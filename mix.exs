@@ -4,7 +4,7 @@ defmodule MapSorter.Mixfile do
   def project do
     [
       app: :map_sorter,
-      version: "0.2.74",
+      version: "0.2.75",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "Map Sorter",
@@ -21,7 +21,7 @@ defmodule MapSorter.Mixfile do
 
   defp description do
     """
-    Sorts a list of maps per a list of sort specs.
+    Sorts a list of maps according to the given sort specs.
     """
   end
 

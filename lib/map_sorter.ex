@@ -1,6 +1,6 @@
 defmodule MapSorter do
   @moduledoc """
-  Sorts a list of maps per a list of sort specs.
+  Sorts a list of maps according to the given sort specs.
 
   Also supports:
 
@@ -14,7 +14,7 @@ defmodule MapSorter do
   alias __MODULE__.{Log, SortSpecs}
 
   @doc """
-  Sorts `maps` per the given `sort_specs`.
+  Sorts `maps` according to the given `sort_specs`.
 
   Examples of sort specs for flat data structures:
   ```
