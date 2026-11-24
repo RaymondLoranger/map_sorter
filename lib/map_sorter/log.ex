@@ -77,7 +77,7 @@ defmodule MapSorter.Log do
 
   @spec execution_phase(non_neg_integer) :: String.t()
   defp execution_phase(depth) do
-    {_, stacktrace} = self() |> Process.info(:current_stacktrace)
+    {_, stacktrace} = Process.info(self(), :current_stacktrace)
 
     case Enum.at(stacktrace, depth) do
       # If macro `MapSorter.sort/2` is a prior caller, this is compile time...
